@@ -1,0 +1,68 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-get-metrics
+============================================================
+
+​
+Request Headers
+​
+Content-Type
+stringrequired
+Enum: application/json
+​
+Authorization
+stringrequired
+Bearer authentication format, for example: Bearer {{API Key}}.
+​
+Query Parameters
+If the parameters endTime, startTime, or interval do not meet the requirements, default values will be used. There may be a delay of about one minute when retrieving real-time monitoring data.
+​
+instanceId
+stringrequired
+Instance ID.
+​
+endTime
+integer
+End time for querying monitoring data. Value range: (0, current timestamp], default: current timestamp.
+​
+startTime
+integer
+Start time for querying monitoring data. Value range: (0, endTime - 60], default: current timestamp - 60.
+​
+interval
+integer
+Time granularity for monitoring data, in seconds. Value must be greater than 15. Default: 15.
+​
+Response
+​
+cpuUtilization
+arrayrequired
+CPU utilization data.
+
+Show properties
+
+​
+memUtilization
+arrayrequired
+Memory utilization data.
+
+Show properties
+
+​
+rootDiskUtilization
+arrayrequired
+Root disk utilization data.
+
+Show properties
+
+​
+gpuUtilization
+objectrequired
+GPU utilization data.
+
+Show properties
+
+​
+gpuMemUtilization
+objectrequired
+GPU memory utilization data.
+
+Show properties

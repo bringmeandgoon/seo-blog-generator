@@ -1,0 +1,111 @@
+Source: https://novita.ai/docs/api-reference/model-apis-flux-1-kontext-pro
+============================================================
+
+- FLUX.1 Kontext Pro - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImage GeneratorFLUX.1 Kontext ProGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image GeneratorPOSTText to Image
+- POSTImage to Image
+- POSTReimagine
+- POSTFLUX.1 [schnell] Text to Image
+- POSTFLUX.1 Kontext Dev
+- POSTFLUX.1 Kontext Pro
+- POSTFLUX.1 Kontext Max
+- POSTSeedream 3.0 Text to Image
+- POSTSeedream 4.0
+- POSTSeedream 4.5
+- POSTSeedream 5.0 lite
+- POSTQwen-Image Text to Image
+- POSTHunyuan Image 3
+- POSTFlux 2 Dev Image Gen
+- POSTFlux 2 Flex Image Gen
+- POSTFlux 2 Pro Image Gen
+- POSTZ Image Turbo LoRA
+- POSTZ Image Turbo
+- POSTGLM Image Generation
+- Image Editor
+- Video Generator
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+FLUX.1 Kontext Pro cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/flux-1-kontext-pro \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"prompt": " ",
+"images": [
+" "
+],
+"guidance_scale": 123,
+"aspect_ratio": " ",
+"seed": 123,
+"safety_tolerance": " "
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+POST / v3 / async / flux-1-kontext-pro Try it FLUX.1 Kontext Pro cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/flux-1-kontext-pro \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"prompt": " ",
+"images": [
+" "
+],
+"guidance_scale": 123,
+"aspect_ratio": " ",
+"seed": 123,
+"safety_tolerance": " "
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+FLUX.1 Kontext [pro] is a model with greatly improved prompt adherence and typography generation meet premium consistency for editing without compromise on speed.
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ prompt string required The prompt to generate an image from.
+​ images string[] The images to generate an image from. Limit to a maximum of 4 images.
+​ guidance_scale number The guidance scale to use for the generation. Default is 3.5. Range [1.0 ~ 20.0].
+​ aspect_ratio string The aspect ratio of the generated image.
+Enum: 21:9 , 16:9 , 4:3 , 3:2 , 1:1 , 2:3 , 3:4 , 9:16 , 9:21
+​ seed integer The random seed to use for the generation. Default is -1. -1 means a random seed will be used. Range [-1 ~ 2147483647].
+​ safety_tolerance string Only supported in text-to-image.
+The safety tolerance level for the generated image. 1 being the most strict and 5 being the most permissive. Default is 2.
+Enum: 1 , 2 , 3 , 4 , 5
+## ​Response
+​ task_id string required Use the task_id to request the Task Result API to retrieve the generated outputs. Was this page helpful? Yes No FLUX.1 Kontext Dev FLUX.1 Kontext Max ⌘ I

@@ -1,0 +1,68 @@
+Source: https://novita.ai/docs/guides/llm-monitor
+============================================================
+
+- LLM Monitoring - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationLLMLLM MonitoringGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLMLarge Language Models
+- Vision Language Models
+- Recommended Models
+- Reasoning Models
+- DeepSeek-OCR Usage
+- Function Calling
+- Structured Outputs
+- Prompt Cache
+- Dedicated Endpoint User Manual
+- Batch Inference
+- Rate limits
+- LLM Monitoring
+- Interactive Playground
+- Anthropic SDK Compatibility
+- Interleaved Thinking Supporty
+- Common Error Codes
+- LLM FAQs
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Metric Descriptions
+Novita AI provides comprehensive monitoring metrics for the usage of large language model (LLM) APIs. These metrics help you gain deep insights into the availability and performance of your LLM API requests.
+You can view the monitoring metrics on the LLM Monitoring Page .
+## ​Metric Descriptions
+All metrics are broken down by model and sampled at the minute level . However, depending on your selected time interval, samples may not be shown for every minute. In such cases, values will be averaged across the selected time range.
+- Requests Per Minute (RPM)
+Displays the number of API requests sent per minute. This helps you understand usage patterns and the level of API concurrency.
+- Request Success Rate
+Shows the percentage of successful API responses per minute (non-5xx status codes), reflecting the API’s availability.
+- Average Token Count per Request
+Displays the average number of input and output tokens per request per minute, which helps you monitor token consumption patterns.
+- End-to-End (E2E) Latency
+Shows the total time required for the model to generate a full response in each request per minute. Metrics include the 99th percentile, 95th percentile, and average latency.
+- Time to First Token (TTFT)
+Only tracked for streaming requests where stream=true.
+Displays the time it takes to process the prompt and generate the first output token in each request per minute. Includes the 99th percentile, 95th percentile, and average latency.
+- Time Per Output Token (TPOT)
+Only tracked for streaming requests where stream=true.
+Displays the average time between consecutive output tokens in each request per minute. Includes the 99th percentile, 95th percentile, and average latency. Was this page helpful? Yes No Rate limits Interactive Playground ⌘ I

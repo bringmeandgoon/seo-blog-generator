@@ -1,0 +1,206 @@
+Source: https://novita.ai/docs/api-reference/model-apis-minimax-speech-2.8-hd-async
+============================================================
+
+- MiniMax Speech 2.8 HD Async Text-to-Speech - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationAudioMiniMax Speech 2.8 HD Async Text-to-SpeechGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video Generator
+- AudioPOSTMiniMax Speech-02-hd Text to Speech
+- POSTMiniMax Speech-02-hd Async Long TTS
+- POSTMiniMax Speech-02-turbo Text to Speech
+- POSTMiniMax Speech-02-turbo Async Long TTS
+- POSTMiniMax Speech-2.5-hd-preview Text to Speech
+- POSTMiniMax Speech-2.5-hd-preview Async Long TTS
+- POSTMiniMax Speech-2.5-turbo-preview Text to Speech
+- POSTMiniMax Speech-2.5-turbo-preview Async Long TTS
+- POSTMiniMax Speech-2.6-hd Text to Speech
+- POSTMiniMax Speech-2.6-hd Async Long TTS
+- POSTMiniMax Speech-2.6-turbo Text to Speech
+- POSTMiniMax Speech-2.6-turbo Async Long TTS
+- POSTMiniMax Speech 2.8 Turbo Async Text-to-Speech
+- POSTMiniMax Speech 2.8 HD Async Text-to-Speech
+- POSTMiniMax Speech 2.8 Turbo Sync Text-to-Speech
+- POSTMiniMax Speech 2.8 HD Sync Text-to-Speech
+- POSTMiniMax Voice Cloning
+- POSTFish Audio Text to Speech
+- POSTFish Audio Voice Cloning
+- POSTText to Speech
+- POSTGLM Text to Speech
+- POSTGLM Audio to Text
+- POSTGLM Voice Clone
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+MiniMax Speech 2.8 HD Async Text-to-Speech cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/minimax-speech-2.8-hd \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"text": " ",
+"text_file_id": 123,
+"voice_modify": {
+"pitch": 123,
+"timbre": 123,
+"intensity": 123,
+"sound_effects": " "
+},
+"audio_setting": {
+"format": " ",
+"bitrate": 123,
+"channel": 123,
+"audio_sample_rate": 123
+},
+"voice_setting": {
+"vol": 123,
+"pitch": 123,
+"speed": 123,
+"emotion": " ",
+"voice_id": " ",
+"english_normalization": true
+},
+"aigc_watermark": true,
+"language_boost": " ",
+"continuous_sound": true,
+"pronunciation_dict": {
+"tone": [
+{}
+]
+}
+}
+'
+```
+200 Copy
+```
+{
+"file_id": 123,
+"task_id": " ",
+"base_resp": {
+"status_msg": " ",
+"status_code": 123
+},
+"task_token": " ",
+"usage_characters": 123
+}
+```
+POST / v3 / async / minimax-speech-2.8-hd MiniMax Speech 2.8 HD Async Text-to-Speech cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/minimax-speech-2.8-hd \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"text": " ",
+"text_file_id": 123,
+"voice_modify": {
+"pitch": 123,
+"timbre": 123,
+"intensity": 123,
+"sound_effects": " "
+},
+"audio_setting": {
+"format": " ",
+"bitrate": 123,
+"channel": 123,
+"audio_sample_rate": 123
+},
+"voice_setting": {
+"vol": 123,
+"pitch": 123,
+"speed": 123,
+"emotion": " ",
+"voice_id": " ",
+"english_normalization": true
+},
+"aigc_watermark": true,
+"language_boost": " ",
+"continuous_sound": true,
+"pronunciation_dict": {
+"tone": [
+{}
+]
+}
+}
+'
+```
+200 Copy
+```
+{
+"file_id": 123,
+"task_id": " ",
+"base_resp": {
+"status_msg": " ",
+"status_code": 123
+},
+"task_token": " ",
+"usage_characters": 123
+}
+```
+MiniMax asynchronous text-to-speech API, supports various voice, emotion, speed and other parameter settings, text length limit up to 50,000 characters, supports file input (up to 100,000 characters)
+This is an asynchronous API; only the task_id will be returned. You should use the task_id to request the Task Result API to retrieve the video generation results.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ text string Text to synthesize into audio, maximum length is 50,000 characters. Either text or text_file_id is required.
+- Interjection tags: Only supported when model is speech-2.8-hd or speech-2.8-turbo. Supported interjections: (laughs) (laughter), (chuckle) (light laugh), (coughs) (cough), (clear-throat) (clear throat), (groans) (groan), (breath) (normal breathing), (pant) (panting), (inhale) (inhale), (exhale) (exhale), (gasps) (gasp), (sniffs) (sniff), (sighs) (sigh), (snorts) (snort), (burps) (burp), (lip-smacking) (lip smacking), (humming) (humming), (hissing) (hissing), (emm) (um), (whistles) (whistle), (sneezes) (sneeze), (crying) (crying), (applause) (applause)
+​ text_file_id integer Text file ID for audio synthesis, single file length limit is less than 100,000 characters, supported file formats: txt, zip. Either text or text_file_id is required, format will be automatically validated.
+- txt file: Length limit <100000 characters. Supports custom pause using &lt;#x#&gt; tag. x is pause duration (in seconds), range [0.01, 99.99], up to 2 decimal places. Pause must be set between two pronounceable text segments, cannot use multiple pause tags consecutively
+- zip file:
+Compressed package must contain txt or json files of the same format.
+- json file format: Supports [title, content, extra] three fields, representing title, body, and additional information. If all three fields exist, 3 groups of results will be produced, 9 files in total, stored in one folder. If a field does not exist or is empty, no corresponding result will be generated
+​ voice_modify object Hide properties ​ pitch integer Pitch adjustment (deep/bright), range [-100, 100], values closer to -100 produce deeper voice; closer to 100 produce brighter voice Value range: [-100, 100] ​ timbre integer Timbre adjustment (rich/crisp), range [-100, 100], values closer to -100 produce richer voice; closer to 100 produce crisper voice Value range: [-100, 100] ​ intensity integer Intensity adjustment (powerful/soft), range [-100, 100], values closer to -100 produce more powerful voice; closer to 100 produce softer voice Value range: [-100, 100] ​ sound_effects string Sound effect setting, only one can be selected at a time. Options:
+- spacious_echo (spacious echo)
+- auditorium_echo (auditorium broadcast)
+- lofi_telephone (telephone distortion)
+- robotic (electronic)
+Optional values: spacious_echo , auditorium_echo , lofi_telephone , robotic
+​ audio_setting object Hide properties ​ format string default: "mp3" Audio output format. Options [mp3, pcm, flac] , default is mp3 Optional values: mp3 , pcm , flac ​ bitrate integer default: 128000 Audio bitrate. Options [32000, 64000, 128000, 256000] , default is 128000 . This parameter only applies to mp3 format ​ channel integer default: 2 Number of audio channels. Options: [1, 2] , where 1 is mono and 2 is stereo, default is 1 ​ audio_sample_rate integer default: 32000 Audio sample rate. Options [8000, 16000, 22050, 24000, 32000, 44100] , default is 32000
+​ voice_setting object required Hide properties ​ vol number default: 1 Audio volume, higher value means louder. Range (0, 10], default is 1.0 Value range: [0, 10] ​ pitch integer default: 0 Audio pitch, range [-12, 12] , default is 0, where 0 is original voice output Value range: [-12, 12] ​ speed number default: 1 Speech speed, higher value means faster. Range [0.5, 2] , default is 1.0 Value range: [0.5, 2] ​ emotion string Controls the emotion of synthesized speech. Options ["happy", "sad", "angry", "fearful", "disgusted", "surprised", "calm", "fluent", "whisper"] correspond to 8 emotions: happy, sad, angry, fearful, disgusted, surprised, calm, fluent, whisper
+- The model will automatically match appropriate emotion based on input text, usually no need to specify manually
+- This parameter only works for speech-2.6-hd, speech-2.6-turbo, speech-02-hd, speech-02-turbo, speech-01-hd, speech-01-turbo models
+- Options fluent, whisper only work for speech-2.6-turbo, speech-2.6-hd models
+Optional values: happy , sad , angry , fearful , disgusted , surprised , calm , fluent , whisper ​ voice_id string required Voice ID for audio synthesis. If mixed voice is needed, set timber_weights parameter and leave this empty. Supports system voice, cloned voice, and text-generated voice. Below are some of the latest system voices (ID) - Chinese: moss_audio_ce44fc67-7ce3-11f0-8de5-96e35d26fb85, moss_audio_aaa1346a-7ce7-11f0-8e61-2e6e3c7ee85d, Chinese (Mandarin)_Lyrical_Voice, Chinese (Mandarin)_HK_Flight_Attendant
+- English: English_Graceful_Lady, English_Insightful_Speaker, English_radiant_girl, English_Persuasive_Man, moss_audio_6dc281eb-713c-11f0-a447-9613c873494c, moss_audio_570551b1-735c-11f0-b236-0adeeecad052, moss_audio_ad5baf92-735f-11f0-8263-fe5a2fe98ec8, English_Lucky_Robot
+- Japanese: Japanese_Whisper_Belle, moss_audio_24875c4a-7be4-11f0-9359-4e72c55db738, moss_audio_7f4ee608-78ea-11f0-bb73-1e2a4cfcd245, moss_audio_c1a6a3ac-7be6-11f0-8e8e-36b92fbb4f95
+​ english_normalization boolean default: false Supports English text normalization, which can improve performance in number reading scenarios but slightly increases latency, default false
+​ aigc_watermark boolean default: false Controls whether to add audio rhythm identifier at the end of synthesized audio, default is False. This parameter is only valid for non-streaming synthesis
+​ language_boost string Whether to enhance recognition ability for specified minor languages and dialects. Default is null , can be set to auto to let the model decide automatically. Optional values: Chinese , Chinese,Yue , English , Arabic , Russian , Spanish , French , Portuguese , German , Turkish , Dutch , Ukrainian , Vietnamese , Indonesian , Japanese , Italian , Korean , Thai , Polish , Romanian , Greek , Czech , Finnish , Hindi , Bulgarian , Danish , Hebrew , Malay , Persian , Slovak , Swedish , Croatian , Filipino , Hungarian , Norwegian , Slovenian , Catalan , Nynorsk , Tamil , Afrikaans , auto
+​ continuous_sound boolean default: false Enable this parameter to make clause transitions more natural, only supported by speech-2.8-hd and speech-2.8-turbo models
+​ pronunciation_dict object Hide properties ​ tone array Defines pronunciation or replacement rules for special characters or symbols. For Chinese text, tones are represented by numbers:
+1st tone = 1, 2nd tone = 2, 3rd tone = 3, 4th tone = 4, neutral tone = 5
+Example:
+["omg/oh my god"]
+## ​Response
+​ file_id integer Corresponding audio file ID returned after task creation.
+- After task completion, use file_id to download
+- This field is not returned when request fails
+Note: The download URL is valid for 9 hours (32400 seconds) from generation. After expiration, the file will become invalid and generated information will be lost. Please pay attention to download timing
+​ task_id string Use the task_id to retrieve the generated outputs.
+​ base_resp object Hide properties ​ status_msg string required Status details ​ status_code integer required Status code - 0: Success
+- 1002: Rate limit
+- 1004: Authentication failed
+- 1039: TPM rate limit triggered
+- 1042: Invalid characters exceed 10%
+- 2013: Parameter error
+​ task_token string Token used to complete the current task
+​ usage_characters integer Billable character count Was this page helpful? Yes No MiniMax Speech 2.8 Turbo Async Text-to-Speech MiniMax Speech 2.8 Turbo Sync Text-to-Speech ⌘ I

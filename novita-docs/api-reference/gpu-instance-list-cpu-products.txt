@@ -1,0 +1,84 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-list-cpu-products
+============================================================
+
+- List CPU Products - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationProductList CPU ProductsGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- Instance
+- Image
+- Template
+- ProductGETList GPU Products
+- GETList CPU Products
+- Network
+- Image Registry
+- Storage
+- Jobs
+- Serverless GPUs
+List CPU Products cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/cpu/products \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"id": " ",
+"name": " ",
+"cpuNum": 123,
+"memorySize": 123,
+"rootfsSize": 123,
+"localVolumeSize": 123,
+"availableDeploy": true,
+"price": 123
+}
+```
+GET / gpu-instance / openapi / v1 / cpu / products Try it List CPU Products cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/cpu/products \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"id": " ",
+"name": " ",
+"cpuNum": 123,
+"memorySize": 123,
+"rootfsSize": 123,
+"localVolumeSize": 123,
+"availableDeploy": true,
+"price": 123
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Query Parameters
+​ clusterId string Filter by specified cluster ID. String, length limit: 0-255 characters.
+​ productName string Filter by product name (fuzzy match). String, length limit: 0-255 characters.
+## ​Response
+​ id string required CPU product ID.
+​ name string required CPU product name.
+​ cpuNum integer Number of CPU cores.
+​ memorySize integer Memory size (GB).
+​ rootfsSize integer Root filesystem size (GB).
+​ localVolumeSize integer Local disk size (GB).
+​ availableDeploy boolean Whether this product can be used to create an instance. Values:
+- true: This product can be used to create an instance.
+- false: Insufficient resources, cannot create an instance.
+​ price integer Unit price of the product. Was this page helpful? Yes No List GPU Products Create VPC Network ⌘ I

@@ -1,0 +1,279 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-get-instance
+============================================================
+
+- Get Instance - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationInstanceGet InstanceGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- InstancePOSTCreate GPU Instance
+- POSTCreate CPU Instance
+- GETList Instances
+- GETGet Instance
+- POSTEdit Instance
+- POSTStart Instance
+- POSTStop Instance
+- POSTRestart Instance
+- POSTUpgrade Instance
+- POSTMigrate Instance
+- GETMonitor Metrics
+- POSTRenew Subscription Instance
+- POSTConvert Pay-As-You-Go Instance to Subscription
+- POSTDelete Instance
+- POSTSet Auto Renew
+- POSTSet Auto Migrate Strategy
+- Image
+- Template
+- Product
+- Network
+- Image Registry
+- Storage
+- Jobs
+- Serverless GPUs
+Get Instance cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/gpu/instance \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"id": " ",
+"name": " ",
+"clusterId": " ",
+"clusterName": " ",
+"imageUrl": " ",
+"imageAuthId": " ",
+"command": " ",
+"entrypoint": " ",
+"cpuNum": " ",
+"memory": " ",
+"gpuNum": " ",
+"status": " ",
+"statusError": {
+"state": " ",
+"message": " "
+},
+"network": {
+"id": " ",
+"ip": " "
+},
+"portMappings": [
+{
+"port": 123,
+"endpoint": " ",
+"type": " "
+}
+],
+"volumeMounts": [
+{
+"type": " ",
+"size": 123,
+"id": " ",
+"mountPath": " "
+}
+],
+"node": [
+{
+"maxRootfsSize": 123
+}
+],
+"jobs": [
+{
+"id": " ",
+"type": " "
+}
+],
+"envs": [
+{
+"key": " ",
+"value": " "
+}
+],
+"connectComponentSSH": {
+"sshCommand": " ",
+"password": " ",
+"isRunning": true
+},
+"connectComponentWebTerminal": {
+"address": " ",
+"username": " ",
+"password": " ",
+"isRunning": true
+},
+"connectComponentJupyter": {
+"port": 123,
+"address": " ",
+"isRunning": true
+},
+"connectComponentLog": {
+"systemLogAddress": " ",
+"instanceLogAddress": " ",
+"isRunning": true
+},
+"kind": " ",
+"billingMode": " ",
+"endTime": " ",
+"freeStorageSize": 123,
+"keepDataDay": 123
+}
+```
+GET / gpu-instance / openapi / v1 / gpu / instance Try it Get Instance cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/gpu/instance \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"id": " ",
+"name": " ",
+"clusterId": " ",
+"clusterName": " ",
+"imageUrl": " ",
+"imageAuthId": " ",
+"command": " ",
+"entrypoint": " ",
+"cpuNum": " ",
+"memory": " ",
+"gpuNum": " ",
+"status": " ",
+"statusError": {
+"state": " ",
+"message": " "
+},
+"network": {
+"id": " ",
+"ip": " "
+},
+"portMappings": [
+{
+"port": 123,
+"endpoint": " ",
+"type": " "
+}
+],
+"volumeMounts": [
+{
+"type": " ",
+"size": 123,
+"id": " ",
+"mountPath": " "
+}
+],
+"node": [
+{
+"maxRootfsSize": 123
+}
+],
+"jobs": [
+{
+"id": " ",
+"type": " "
+}
+],
+"envs": [
+{
+"key": " ",
+"value": " "
+}
+],
+"connectComponentSSH": {
+"sshCommand": " ",
+"password": " ",
+"isRunning": true
+},
+"connectComponentWebTerminal": {
+"address": " ",
+"username": " ",
+"password": " ",
+"isRunning": true
+},
+"connectComponentJupyter": {
+"port": 123,
+"address": " ",
+"isRunning": true
+},
+"connectComponentLog": {
+"systemLogAddress": " ",
+"instanceLogAddress": " ",
+"isRunning": true
+},
+"kind": " ",
+"billingMode": " ",
+"endTime": " ",
+"freeStorageSize": 123,
+"keepDataDay": 123
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Query Parameters
+​ instanceId string required ID of the instance being queried.
+## ​Response
+​ id string required Instance ID.
+​ name string required Instance name.
+​ clusterId string required Cluster ID.
+​ clusterName string required Name of the cluster.
+​ imageUrl string required Container image URL.
+​ imageAuthId string required Image registry authentication information.
+​ command string required Container startup command.
+​ entrypoint string required Container startup entrypoint.
+​ cpuNum string required Number of CPU cores allocated to the instance.
+​ memory string required Memory size allocated to the instance, in GB.
+​ gpuNum string required Number of GPU cards allocated to the instance.
+​ status string required Instance status. Possible values:
+- toCreate: Pending creation
+- creating: Creating
+- pulling: Pulling image
+- running: Running
+- toStart: Pending start
+- starting: Starting
+- toStop: Pending stop
+- stopping: Stopping
+- exited: Stopped
+- toRestart: Pending restart
+- restarting: Restarting
+- toRemove: Pending deletion
+- removing: Deleting
+- removed: Deleted
+- toReset: Pending reset (upgrade)
+- resetting: Resetting
+- migrating: Migrating
+- freezing: Freezing
+​ statusError object Error information when instance creation fails or the instance is unavailable. Show properties ​ state string Abnormal instance status. ​ message string Error message.
+​ network object VPC network information for the instance. Show properties ​ id string VPC network ID. ​ ip string Instance IP address.
+​ portMappings object[] required Instance port mapping information. Show properties ​ port integer required Port number. ​ endpoint string required Endpoint. ​ type string required Protocol type.
+​ volumeMounts object[] Storage configuration for the instance. Show properties ​ type string Storage type. Possible values:
+- network: Cloud storage.
+- local: Local storage.
+​ size number Storage capacity. ​ id string Cloud storage ID. Only present when the storage type is “network”. ​ mountPath string Mount path for the storage.
+​ node object[] Node information. Show properties ​ maxRootfsSize number Maximum available system disk size.
+​ jobs object[] Tasks currently running on the instance. Show properties ​ id string Task ID. ​ type string Task type. Currently, only saveImage is supported, which indicates saving an image.
+​ envs object[] Instance environment variable information. Show properties ​ key string Environment variable name. ​ value string Environment variable value.
+​ connectComponentSSH object Instance SSH connection information. Show properties ​ sshCommand string Command for SSH remote login. ​ password string Password for SSH remote login. ​ isRunning boolean Whether SSH remote login is active.
+​ connectComponentWebTerminal object Instance WebSSH connection information. Show properties ​ address string Address for web-based remote login. ​ username string Username for web-based remote login. ​ password string Password for web-based remote login. ​ isRunning boolean Whether web-based remote login is active.
+​ connectComponentJupyter object Jupyter connection information for the instance (if available). Show properties ​ port integer Connection port. ​ address string Connection address. ​ isRunning boolean Whether Jupyter remote login is active.
+​ connectComponentLog object Instance log connection information (HTTP Stream). Show properties ​ systemLogAddress string System log address. ​ instanceLogAddress string Instance log address. ​ isRunning boolean Whether log connection is active.
+​ kind string Instance type.
+​ billingMode string required Billing mode for the instance. Values:
+- onDemand: Pay-as-you-go billing.
+- monthly: Subscription (monthly or yearly) billing.
+- spot: Spot instance billing.
+​ endTime string Expiration time for subscription instances. For pay-as-you-go instances, returns -1.
+​ freeStorageSize integer Free system disk size (GB).
+​ keepDataDay integer Number of days data is retained after the instance is shut down. Was this page helpful? Yes No List Instances Edit Instance ⌘ I

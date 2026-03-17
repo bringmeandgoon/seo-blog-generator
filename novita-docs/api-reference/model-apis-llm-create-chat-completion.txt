@@ -1,0 +1,259 @@
+Source: https://novita.ai/docs/api-reference/model-apis-llm-create-chat-completion
+============================================================
+
+- Create chat completion - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationLLM APICreate chat completionGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM APIPOSTCreate chat completion
+- POSTCreate completion
+- POSTCreate embeddings
+- POSTCreate rerank
+- GETList models
+- GETRetrieve model
+- Batch
+- Image, Audio and Video
+GPUs - GPU Instance
+- Serverless GPUs
+Create chat completion cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/openai/v1/chat/completions \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"model": " ",
+"messages": [
+{
+"content": {
+"type": " ",
+"text": " ",
+"image_url": " ",
+"video_url": " ",
+"modalities": [
+" "
+],
+"input_audio": {
+"data": " ",
+"format": " "
+}
+},
+"role": " ",
+"name": " "
+}
+],
+"max_tokens": 123,
+"stream": {},
+"stream_options": {
+"include_usage": true
+},
+"n": {},
+"seed": {},
+"frequency_penalty": {},
+"presence_penalty": {},
+"repetition_penalty": {},
+"stop": {},
+"temperature": {},
+"top_p": {},
+"top_k": {},
+"min_p": {},
+"logit_bias": {},
+"logprobs": {},
+"top_logprobs": {},
+"tools": {
+"type": " ",
+"function": {
+"name": " ",
+"description": {},
+"parameters": {},
+"strict": true
+}
+},
+"response_format": {
+"type": " ",
+"json_schema": {
+"name": " ",
+"description": {},
+"schema": {},
+"strict": true
+}
+},
+"separate_reasoning": {},
+"enable_thinking": {}
+}
+'
+```
+200 Copy
+```
+{
+"choices": [
+{
+"finish_reason": " ",
+"index": 123,
+"message": {
+"role": " ",
+"content": {},
+"reasoning_content": {}
+}
+}
+],
+"created": 123,
+"id": " ",
+"model": " ",
+"object": " ",
+"usage": {
+"completion_tokens": 123,
+"prompt_tokens": 123,
+"total_tokens": 123
+}
+}
+```
+POST / openai / v1 / chat / completions Try it Create chat completion cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/openai/v1/chat/completions \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"model": " ",
+"messages": [
+{
+"content": {
+"type": " ",
+"text": " ",
+"image_url": " ",
+"video_url": " ",
+"modalities": [
+" "
+],
+"input_audio": {
+"data": " ",
+"format": " "
+}
+},
+"role": " ",
+"name": " "
+}
+],
+"max_tokens": 123,
+"stream": {},
+"stream_options": {
+"include_usage": true
+},
+"n": {},
+"seed": {},
+"frequency_penalty": {},
+"presence_penalty": {},
+"repetition_penalty": {},
+"stop": {},
+"temperature": {},
+"top_p": {},
+"top_k": {},
+"min_p": {},
+"logit_bias": {},
+"logprobs": {},
+"top_logprobs": {},
+"tools": {
+"type": " ",
+"function": {
+"name": " ",
+"description": {},
+"parameters": {},
+"strict": true
+}
+},
+"response_format": {
+"type": " ",
+"json_schema": {
+"name": " ",
+"description": {},
+"schema": {},
+"strict": true
+}
+},
+"separate_reasoning": {},
+"enable_thinking": {}
+}
+'
+```
+200 Copy
+```
+{
+"choices": [
+{
+"finish_reason": " ",
+"index": 123,
+"message": {
+"role": " ",
+"content": {},
+"reasoning_content": {}
+}
+}
+],
+"created": 123,
+"id": " ",
+"model": " ",
+"object": " ",
+"usage": {
+"completion_tokens": 123,
+"prompt_tokens": 123,
+"total_tokens": 123
+}
+}
+```
+Creates a model response for the given chat conversation.
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ model string required The name of the model to use.
+​ messages object[] required A list of messages comprising the conversation so far. Show properties ​ content string | object[] | null required The contents of the message. content is required for all messages, and may be null for assistant messages with function calls. You may use the following parameters depending on the modality. - Text content
+- Image content
+- Video content
+- Audio content
+Option 1: You can use the string type to represent the text contents of the message. Option 2: Use an array of content parts, object[]. Detailed fields are as follows: ​ type string required The type of the content part, in this case text . ​ text string required The text content. Only vision language models can be used. An array of content parts, object[]. Detailed fields are as follows: ​ type string required The type of the content part, in this case image_url . ​ image_url string required Hide properties ​ url string required Either a URL of the image or the base64 encoded image data. Only models that support video can be used. An array of content parts, object[]. Detailed fields are as follows: ​ type string required The type of the content part, in this case video_url . ​ video_url string required Hide properties ​ url string required URL of the video. Only models that support audio can be used. Output modality parameters: ​ modalities string[] Set the modality of the model output. Currently support two types: ["text"] , ["text","audio"] .
+If ["text"] is passed in, the model only returns text content. If ["text","audio"] is passed in, the model will return both text content and audio content.
+Default is ["text"] . An array of content parts, object[]. Detailed fields are as follows: ​ type string required The type of the content part, in this case input_audio . ​ input_audio object required Hide properties ​ data string required The URL or Base64 encoded data of the audio. ​ format string required The format of the audio. ​ role string required The role of the messages author. One of system, user, or assistant. Enum: system , user , assistant ​ name string The name of the author of this message. May contain a-z, A-Z, 0-9, and underscores, with a maximum length of 64 characters.
+​ max_tokens integer required The maximum number of tokens to generate in the completion. If the token count of your prompt (previous messages) plus max_tokens exceed the model’s context length, the behavior is depends on context_length_exceeded_behavior. By default, max_tokens will be lowered to fit in the context window instead of returning an error.
+​ stream boolean | null default: false Whether to stream back partial progress. If set, tokens will be sent as data-only server-sent events (SSE) as they become available, with the stream terminated by a data: [DONE] message.
+​ stream_options object | null Options for streaming response. Only set this when you set stream: true. Show properties ​ include_usage boolean If set, an additional chunk will be streamed before the data: [DONE] message. The usage field on this chunk shows the token usage statistics for the entire request, and the choices field will always be an empty array. All other chunks will also include a usage field, but with a null value.
+​ n integer | null default: 1 How many completions to generate for each prompt. Note: Because this parameter generates many completions, it can quickly consume your token quota. Use carefully and ensure that you have reasonable settings for max_tokens and stop. Required range: 1 < x < 128
+​ seed integer | null If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result.
+​ frequency_penalty number | null default: 0 Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model’s likelihood to repeat the same line verbatim. Reasonable value is around 0.1 to 1 if the aim is to just reduce repetitive samples somewhat. If the aim is to strongly suppress repetition, then one can increase the coefficients up to 2, but this can noticeably degrade the quality of samples. Negative values can be used to increase the likelihood of repetition. See also presence_penalty for penalizing tokens that have at least one appearance at a fixed rate. Required range: -2 < x < 2
+​ presence_penalty number | null default: 0 Positive values penalize new tokens based on whether they appear in the text so far, increasing the model’s likelihood to talk about new topics. Reasonable value is around 0.1 to 1 if the aim is to just reduce repetitive samples somewhat. If the aim is to strongly suppress repetition, then one can increase the coefficients up to 2, but this can noticeably degrade the quality of samples. Negative values can be used to increase the likelihood of repetition. See also frequency_penalty for penalizing tokens at an increasing rate depending on how often they appear. Required range: -2 < x < 2
+​ repetition_penalty number | null Applies a penalty to repeated tokens to discourage or encourage repetition. A value of 1.0 means no penalty, allowing free repetition. Values above 1.0 penalize repetition, reducing the likelihood of repeating tokens. Values between 0.0 and 1.0 reward repetition, increasing the chance of repeated tokens. For a good balance, a value of 1.2 is often recommended. Note that the penalty is applied to both the generated output and the prompt in decoder-only models. Required range: 0 < x < 2
+​ stop string | null Up to 4 sequences where the API will stop generating further tokens. The returned text will contain the stop sequence.
+​ temperature number | null default: 1 What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. We generally recommend altering this or top_p but not both. Required range: 0 < x < 2
+​ top_p number | null An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered. We generally recommend altering this or temperature but not both. Required range: 0 < x <= 1
+​ top_k integer | null Top-k sampling is another sampling method where the k most probable next tokens are filtered and the probability mass is redistributed among only those k next tokens. The value of k controls the number of candidates for the next token at each step during text generation. Required range: 1 < x < 128
+​ min_p number | null float that represents the minimum probability for a token to be considered, relative to the probability of the most likely token. Required range: 0 <= x <= 1
+​ logit_bias map[string, integer] | null Modify the likelihood of specified tokens appearing in the completion. Accepts a JSON object that maps tokens to an associated bias value from -100 to 100.
+Mathematically, the bias is added to the logits generated by the model prior to
+sampling. The exact effect will vary per model. For example, by setting "logit_bias":{"1639": 6} will increase the likelihood of the token with token ID 1639.
+​ logprobs boolean | null default: false Whether to return log probabilities of the output tokens or not. If true, returns the log probabilities of each output token returned in the content of message.
+​ top_logprobs integer | null An integer between 0 and 20 specifying the number of most likely tokens to return at each token position, each with an associated log probability. logprobs must be set to true if this parameter is used. Required range: 0 <= x <= 20
+​ tools object[] | null A list of tools the model may call. Currently, only functions are supported as a tool. Use this to provide a list of functions the model may generate JSON inputs for. Learn more about function calling in the function calling guide . Show properties ​ type string required The type of the tool. Supported types: function ​ function object required Show properties ​ name string required The name of the function to be called. Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 64. ​ description string | null A description of what the function does, used by the model to choose when and how to call the function. ​ parameters object | null The parameters the functions accepts, described as a JSON Schema object. See the JSON Schema reference for documentation about the format. ​ strict boolean default: false Whether to enable strict schema adherence when generating the function call. If set to true, the model will follow the exact schema defined in the parameters field.
+​ response_format object | null Allows to force the model to produce specific output format. Setting to { "type": "json_schema", "json_schema": {...} } enables Structured Outputs which ensures the model will match your supplied JSON schema. Setting to { "type": "json_object" } enables the older JSON mode, which ensures the message the model generates is valid JSON. Using json_schema is preferred for models that support it. Show properties ​ type string default: "text" required Enum: text , json_object , json_schema ​ json_schema object | null JSON Schema response format. Used to generate structured JSON responses. Only supported when type is set to json_schema , and also required when type is set to json_schema . Please learn more in the Structured Outputs guide . Show properties ​ name string required The name of the response format. Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum length of 64. ​ description string | null A description of what the response format is for, used by the model to determine how to respond in the format. ​ schema object | null The schema for the response format, described as a JSON Schema object. Learn how to build JSON schemas here . Supported types: string , number , integer , boolean , array , object , enum , anyOf . ​ strict boolean default: false Whether to enable strict schema adherence when generating the output. If set to true, the model will always follow the exact schema defined in the schema field. Only a subset of JSON Schema is supported when strict is true. If you turn on Structured Outputs by supplying strict: true and call the API with an unsupported JSON Schema, you will receive an error.
+​ separate_reasoning boolean | null default: false Whether to separate the reasoning from the “content” into “reasoning_content” field. Supported models:
+- deepseek/deepseek-r1-turbo
+​ enable_thinking boolean | null default: true Controls the switches between thinking and non-thinking modes. Supported models:
+- zai-org/glm-4.5
+- deepseek/deepseek-v3.1
+- deepseek/deepseek-v3.1-terminus
+- deepseek/deepseek-v3.2-exp
+## ​Response
+​ choices object[] required The list of chat completion choices. Show properties ​ finish_reason string required The reason the model stopped generating tokens. This will be “stop” if the model hit a natural stop point or a provided stop sequence, or “length” if the maximum number of tokens specified in the request was reached. Available options: stop , length ​ index integer required The index of the chat completion choice. ​ message object required Show properties ​ role string required The role of the author of this message. Available options: system , user , assistant ​ content string | null The contents of the message. ​ reasoning_content string | null The contents of the reasoning steps. This field will only be available when separate_reasoning is set to true.
+​ created integer required The Unix time in seconds when the response was generated.
+​ id string required A unique identifier of the response.
+​ model string required The model used for the chat completion.
+​ object string required The object type, which is always chat.completion .
+​ usage object Usage statistics. For streaming responses, usage field is included in the very last response chunk returned. Show properties ​ completion_tokens integer required The number of tokens in the generated completion. ​ prompt_tokens integer required The number of tokens in the prompt. ​ total_tokens integer required The total number of tokens used in the request (prompt + completion). Was this page helpful? Yes No Introduction Create completion ⌘ I

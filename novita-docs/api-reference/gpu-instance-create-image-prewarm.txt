@@ -1,0 +1,90 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-create-image-prewarm
+============================================================
+
+- Create Image Prewarm Task - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImageCreate Image Prewarm TaskGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- Instance
+- ImagePOSTSave Instance Image
+- GETGet Image Prewarm Quota
+- POSTCreate Image Prewarm Task
+- GETList Image Prewarm Tasks
+- POSTUpdate Image Prewarm Task
+- POSTDelete Image Prewarm Tasks
+- Template
+- Product
+- Network
+- Image Registry
+- Storage
+- Jobs
+- Serverless GPUs
+Create Image Prewarm Task cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/image/prewarm \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"imageUrl": " ",
+"repositoryAuth": " ",
+"clusterId": " ",
+"productIds": [
+" "
+],
+"note": " "
+}
+'
+```
+200 Copy
+```
+{
+"id": " "
+}
+```
+POST / gpu-instance / openapi / v1 / image / prewarm Try it Create Image Prewarm Task cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/image/prewarm \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"imageUrl": " ",
+"repositoryAuth": " ",
+"clusterId": " ",
+"productIds": [
+" "
+],
+"note": " "
+}
+'
+```
+200 Copy
+```
+{
+"id": " "
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ imageUrl string required Image address to prewarm.
+​ repositoryAuth string Image registry authentication ID. Required only for private registries.
+​ clusterId string required Cluster ID where the image should be prewarmed.
+​ productIds string[] Product IDs to prewarm on. Leave empty to prewarm globally in the cluster.
+​ note string Task note or description.
+## ​Response
+​ id string required Created prewarm task ID. Was this page helpful? Yes No Get Image Prewarm Quota List Image Prewarm Tasks ⌘ I

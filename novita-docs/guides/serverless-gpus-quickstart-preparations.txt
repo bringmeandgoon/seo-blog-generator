@@ -1,0 +1,42 @@
+Source: https://novita.ai/docs/guides/serverless-gpus-quickstart-preparations
+============================================================
+
+- Preparations - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationQuickstartPreparationsGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUsOverview
+- QuickstartPreparations
+- Create Serverless Endpoint
+- Create Async Serverless Endpoint
+- Manage Serverless Endpoint
+- Guides
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+Before creating a serverless endpoint , you need to be aware of the following information:
+- Please ensure that you have completed the Novita AI account registration;
+- Please refer to the Introduction Document to know about the product features, terminology, and other information.
+Was this page helpful? Yes No Overview Create Serverless Endpoint ⌘ I

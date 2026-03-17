@@ -1,0 +1,72 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-migrate-instance
+============================================================
+
+- Migrate Instance - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationInstanceMigrate InstanceGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- InstancePOSTCreate GPU Instance
+- POSTCreate CPU Instance
+- GETList Instances
+- GETGet Instance
+- POSTEdit Instance
+- POSTStart Instance
+- POSTStop Instance
+- POSTRestart Instance
+- POSTUpgrade Instance
+- POSTMigrate Instance
+- GETMonitor Metrics
+- POSTRenew Subscription Instance
+- POSTConvert Pay-As-You-Go Instance to Subscription
+- POSTDelete Instance
+- POSTSet Auto Renew
+- POSTSet Auto Migrate Strategy
+- Image
+- Template
+- Product
+- Network
+- Image Registry
+- Storage
+- Jobs
+- Serverless GPUs
+Migrate Instance cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/gpu/instance/migrate \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"instanceId": " "
+}
+'
+```
+POST / gpu-instance / openapi / v1 / gpu / instance / migrate Try it Migrate Instance cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/gpu/instance/migrate \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"instanceId": " "
+}
+'
+```
+## ​API Description
+When migrating an instance, any new data on the system disk and local disk will not be preserved.
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ instanceId string required The ID of the instance to be migrated. Was this page helpful? Yes No Upgrade Instance Monitor Metrics ⌘ I

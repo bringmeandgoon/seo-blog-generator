@@ -1,0 +1,87 @@
+Source: https://novita.ai/docs/guides/lobechat
+============================================================
+
+- LobeChat - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationIntegrationsLobeChatGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- IntegrationsClaude Code Integration Guide
+- OpenAI Agents SDK
+- AnythingLLM
+- Dify
+- Helicone
+- Hugging Face
+- Langflow
+- Continue
+- Cursor
+- LangChain
+- Skyvern
+- LobeChat
+- AI Gradio
+- Langfuse
+- MLflow
+- Verba
+- Portkey
+- DocsGPT
+- LlamaIndex
+- LoLLMS WebUI
+- CodeCompanion
+- Page Assist
+- DeepSearcher
+- Browser Use
+- OWL
+- LiteLLM
+- ChatBox
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - What Is LobeChat?
+- Prerequisites
+- Integration Steps
+- Step 1: Connect Novita AI to LobeChat
+- Step 2: Select a Novita AI Model
+- Step 3: Launch Your First Chat
+With the Novita AI & LobeChat integration , you gain seamless access to Novita AI’s comprehensive suite of LLM models, including Llama, DeepSeek, and more. This integration enables you to create and deploy advanced AI applications tailored to your needs. Whether it’s customer service, content creation, or personal assistance, LobeChat, and Novita AI provide the tools to build intelligent, dynamic, and privacy-focused AI solutions.
+This guide will walk you through integrating Novita AI’s LLMs with the LobeChat platform, enabling you to deploy AI applications with advanced capabilities like multimodal interaction, context-aware reasoning, and extensible plugins.
+## ​What Is LobeChat?
+LobeChat is an open-source, modern UI/Framework designed for ChatGPT and other LLMs. It simplifies the development of AI chat applications by supporting speech synthesis, multi-modal inputs, and an extensible plugin ecosystem. With LobeChat, you can deploy your private chat application using models like OpenAI’s ChatGPT, Claude, Gemini, or Novita AI’s LLMs in just one click.
+## ​Prerequisites
+Before you begin, ensure you have the following:
+- Novita AI LLM API Key:
+Visit Novita AI’s website and create an account.
+- After logging in, go to the Key Management page to generate your API Key. This key is required to connect Novita AI’s models to LobeChat.
+- LobeChat Account
+Sign up for a LobeChat account at LobeChat.
+## ​Integration Steps
+### ​Step 1: Connect Novita AI to LobeChat
+To connect Novita AI’s models with LobeChat:
+- Log in to your LobeChat account and access the Settings.
+- Navigate to the AI Service Provider tab.
+- Scroll down to find the Novita AI section and expand it.
+- Paste your Novita AI API Key into the provided field and click Save.
+### ​Step 2: Select a Novita AI Model
+Once the API Key is configured, you can select a Novita AI LLM model to power your AI application:
+### ​Step 3: Launch Your First Chat
+Begin your conversation with Novita AI LLM on LobeChat. Was this page helpful? Yes No Skyvern AI Gradio ⌘ I

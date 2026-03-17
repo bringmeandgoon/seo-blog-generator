@@ -1,0 +1,73 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-list-clusters
+============================================================
+
+- List Clusters - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationClusterList ClustersGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceClusterGETList Clusters
+- Instance
+- Image
+- Template
+- Product
+- Network
+- Image Registry
+- Storage
+- Jobs
+- Serverless GPUs
+List Clusters cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/clusters \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"data": [
+{
+"id": " ",
+"name": " ",
+"availableGpuType": {},
+"supportNetworkStorage": true,
+"supportInstanceNetwork": true
+}
+]
+}
+```
+GET / gpu-instance / openapi / v1 / clusters Try it List Clusters cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/clusters \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"data": [
+{
+"id": " ",
+"name": " ",
+"availableGpuType": {},
+"supportNetworkStorage": true,
+"supportInstanceNetwork": true
+}
+]
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Response
+​ data object[] required Hide properties ​ id string required Cluster ID. ​ name string required Cluster name. ​ availableGpuType [string] required Supported GPU types in the cluster. ​ supportNetworkStorage boolean required Whether the cluster supports creating cloud storage. ​ supportInstanceNetwork boolean required Whether the cluster supports creating VPC networks. Was this page helpful? Yes No Upscale V2 Create GPU Instance ⌘ I

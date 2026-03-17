@@ -1,0 +1,53 @@
+Source: https://novita.ai/docs/guides/sandbox-commands-background
+============================================================
+
+- Running commands in background - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationCommandsRunning commands in backgroundGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- CommandsRunning commands in sandbox
+- Streaming command output
+- Running commands in background
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+To run commands in background, pass the background option to the commands.run() method. This will return immediately and the command will continue to run in the sandbox.
+You can then later kill the command using the commands.kill() method.
+JavaScript & TypeScript Python Copy
+```
+import { Sandbox } from 'novita-sandbox/code-interpreter'
+const sandbox = await Sandbox.create()
+// Start the command in the background
+const command = await sandbox.commands.run('echo hello; sleep 10; echo world', {
+background: true,
+onStdout: (data) => {
+console.log(data)
+},
+})
+// Kill the command
+await command.kill()
+await sandbox.kill()
+```
+Was this page helpful? Yes No Streaming command output Installing CLI ⌘ I

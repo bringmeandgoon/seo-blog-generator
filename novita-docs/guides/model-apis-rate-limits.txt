@@ -1,0 +1,104 @@
+Source: https://novita.ai/docs/guides/model-apis-rate-limits
+============================================================
+
+- Rate limits - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImage, Audio and VideoRate limitsGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and VideoSDKs for Model APIs
+- How to subscribe to Dedicated Endpoints?
+- Configure Custom AWS S3 Bucket
+- Upload Custom LoRA Models
+- A Brief Introduction to Sampler
+- A Brief Introduction to Clip Skip
+- What's the Variational Autoencoder VAE?
+- Training Image Caption Guidance
+- API V2 to V3 Migration Guide
+- Rate limits
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - 1. Understanding Rate Limits
+- 2. Rate Limiting Metrics
+- 3. Default Rate Limits
+- IPM
+- RPM
+- 4. Handling Rate Limits
+- How to Monitor Rate Limits?
+- Best Practices
+- When You Hit Rate Limits
+## ​1. Understanding Rate Limits
+Rate limiting refers to the rules that govern how frequently a user’s API may access our platform services within a given time window. Its goals are:
+- Prevent API abuse and misuse: By setting an upper bound on request frequency, we limit abnormal or unintended traffic.
+- Ensure fair resource allocation: We prevent a small number of users from monopolizing system resources, so everyone can access the service on equal terms.
+- Maintain API performance and reliability: By smoothing out traffic spikes, we stabilize response times and reduce failure rates due to overload, improving overall service quality.
+- Protect system stability: Rate limits help absorb sudden bursts of traffic, preventing high-concurrency spikes from overwhelming our infrastructure.
+## ​2. Rate Limiting Metrics
+For our image and video models, we use two primary rate-limiting metrics:
+- IPM (Images Per Minute): The number of images an image model is allowed to generate per minute.
+- RPM (Requests Per Minute): The number of API requests a video model is allowed to handle per minute.
+## ​3. Default Rate Limits
+For different models, our platform applies differentiated rate-limiting strategies based on each model’s computational resource consumption.
+### ​IPM
+The IPM (Images Per Minute) limit controls the number of images that can be generated per minute. The default IPM values for each model are listed in the table below.
+Resource/ServiceModel APIUser Default Settings
+Text to Imagetxt2img_v320
+Image to Imageimg2img_v310
+Remove Backgroundremove_background10
+Replace Backgroundreplace_background10
+Remove Textremove_text10
+Inpaintinginpainting10
+Cleanupcleanup10
+Merge Facemerge_face10
+FLUX.1 [schnell] Text to Imageflux-1-schnell10
+Upscaleupscale_v320
+### ​RPM
+The RPM (Requests Per Minute) limit controls the number of API requests allowed per minute. The default RPM values for each model are provided in the table below.
+Resource/ServiceModel APIUser Default Settings
+Video Merge Facevideo_merge_face10
+Text to Videotxt2video2
+Image to Videoimg2video2
+Wan 2.1 Text to Videowan_txt_to_video20
+Wan 2.1 Image to Videowan i2v20
+Hunyuan Video Fasthunyuan_video_fast20
+KLING V1.6 Image to VideoKling i2v20
+KLING V1.6 Text to VideoKling t2v20
+Minimax Video-01Minimax20
+## ​4. Handling Rate Limits
+### ​How to Monitor Rate Limits?
+If your API requests exceed the allowed rate, the API will return:
+- HTTP Status Code: 429 Too Many Requests
+- Response Body: A message indicating that the rate limit has been exceeded.
+### ​Best Practices
+To avoid triggering rate limits, you can:
+- Implement client-side request throttling: Respect the platform’s rate limits by controlling your application’s request rate, ensuring you don’t send too many calls in a short period.
+- Use exponential backoff on retries: When you receive a rate-limit response (e.g., HTTP 429), wait progressively longer between retry attempts instead of retrying immediately, reducing load on the service.
+- Monitor your API usage: Continuously track and log your request counts, frequencies, and any error responses so you can adjust your usage patterns proactively.
+### ​When You Hit Rate Limits
+If you receive an HTTP 429 (“Too Many Requests”) response, you can:
+- Retry later: Wait a short period before sending your request again.
+- Optimize your requests: Reduce the frequency of calls to stay within the platform’s rate limits.
+- Request a higher rate limit: If you require a higher rate limit, please fill out the contact form at the Quotas&Limits to get in touch with us.
+Was this page helpful? Yes No API V2 to V3 Migration Guide Claude Code Integration Guide ⌘ I

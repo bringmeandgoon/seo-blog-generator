@@ -1,0 +1,24 @@
+Source: https://novita.ai/docs/api-reference/model-apis-introduction
+============================================================
+
+- Introduction - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationModel APIsIntroductionGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU Instance
+- Serverless GPUs
+For LLM API, Novita AI provides compatibility with the OpenAI API standard, allowing you to use official OpenAI SDKs like openai-python, openai-node, and others to interact with our API. This means you can easily migrate your existing OpenAI-based applications to Novita AI with minimal code changes. Additionally, you can develop your own custom SDKs by following our API reference , which details all available endpoints, parameters, and response formats. Our API supports key features like chat chat completions, completions, model listings, and model information retrieval, making it a flexible solution for your LLM needs.
+## LLM API
+Create Chat Completion / Create Completion / List Models / Retrieve Model.
+For Images, Audio and Video APIs, Novita AI provides official SDKs for Python and JavaScript to help you quickly integrate with our services. You can find detailed SDK guides and examples here . Additionally, we provide API reference documentation that covers all endpoints, parameters, and response formats if you prefer to implement the integration yourself. Our APIs support a wide range of multimodal AI capabilities including text-to-image, image-to-image, text-to-video, image-to-video, and text-to-speech…
+## Image, Audio and Video API
+Text-to-Image / Image-to-Image / Text-to-Video / Image-to-Video / Text-to-Speech… Was this page helpful? Yes No Query Fixed-Term Billing Create chat completion ⌘ I

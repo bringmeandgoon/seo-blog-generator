@@ -1,0 +1,92 @@
+Source: https://novita.ai/docs/api-reference/model-apis-qwen-image-edit
+============================================================
+
+- Novita AI Qwen Image Edit APISkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImage EditorQwen-Image EditGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image EditorPOSTUpscale
+- POSTRemove Background
+- POSTReplace Background
+- POSTInpainting
+- POSTRemove Text
+- POSTCleanup
+- POSTImage to Prompt
+- POSTQwen-Image Edit
+- POSTImage Eraser
+- POSTImage Upscaling
+- POSTImage Remove Background
+- Video Generator
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Qwen-Image Edit cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/qwen-image-edit \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"prompt": " ",
+"image": " ",
+"seed": 123,
+"output_format": " "
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+POST / v3 / async / qwen-image-edit Try it Qwen-Image Edit cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/qwen-image-edit \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"prompt": " ",
+"image": " ",
+"seed": 123,
+"output_format": " "
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+Qwen-Image Edit — a 20B MMDiT model for next-gen image edit generation. Built on 20B Qwen-Image, it brings precise bilingual text editing (Chinese & English) while preserving style, and supports both semantic and appearance-level editing.
+This is an asynchronous API; only the task_id will be returned. You should use the task_id to request the Task Result API to retrieve the image generation results.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ prompt string required The prompt to generate an image from.
+​ image string required The image to generate an image from.
+​ seed integer The random seed to use for the generation. -1 means a random seed will be used. Range: -1 ~ 2147483647. Default is -1.
+​ output_format string The format of the output image. Default is jpeg.
+Enum: jpeg , png , webp
+## ​Response
+​ task_id string required Use the task_id to request the Task Result API to retrieve the generated outputs. Was this page helpful? Yes No Image to Prompt Image Eraser ⌘ I

@@ -1,0 +1,103 @@
+Source: https://novita.ai/docs/guides/sandbox-internet-access
+============================================================
+
+- Internet access - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationSandboxInternet accessGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- SandboxSandbox Lifecycle
+- Sandbox Persistence
+- Sandbox Metrics
+- Sandbox Metadata
+- Environment variables
+- List sandboxes
+- Connect to running sandbox
+- Internet access
+- Mount object storage bucket
+- Auto Pause and Resume
+- Sandbox Clone
+- Sandbox Snapshot Template
+- Idle Timeout
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Sandbox public URL
+- Connecting to a server running inside the sandbox
+Every sandbox has access to the internet and can be reached by a public URL.
+## ​Sandbox public URL
+Every sandbox has a public URL that can be used to access running services inside the sandbox.
+JavaScript & TypeScript Python Copy
+```
+import { Sandbox } from 'novita-sandbox/code-interpreter'
+const sandbox = await Sandbox.create()
+// You need to always pass a port number to get the host
+const host = sandbox.getHost(3000)
+console.log(`https://${host}`)
+// Example output:
+// https://3000-idpw1qdrbcciscn2r8lw7-82b888ba.sandbox.novita.ai
+await sandbox.kill()
+```
+The first leftmost part of the host is the port number we passed to the method.
+## ​Connecting to a server running inside the sandbox
+You can start a server inside the sandbox and connect to it using the approach above.
+In this example we will start a simple HTTP server that listens on port 3000 and responds with the content of the directory where the server is started.
+JavaScript & TypeScript Python Copy
+```
+import { Sandbox } from 'novita-sandbox/code-interpreter'
+const sandbox = await Sandbox.create()
+// Start a simple HTTP server inside the sandbox.
+const commandHandle = await sandbox.commands.run('python -m http.server 3000', { background: true })
+const host = sandbox.getHost(3000)
+const url = `https://${host}`
+console.log('Server started at:', url)
+// Fetch data from the server inside the sandbox.
+const response = await fetch(url);
+const data = await response.text();
+console.log('Response from server inside sandbox:', data);
+// Kill the server process inside the sandbox.
+await commandHandle.kill()
+// Example output:
+// Server started at: https://3000-ibbw4zmqp38s77v1vbykj-d0b9e1e2.sandbox.novita.ai
+// Response from server inside sandbox:
+//
+//
+//
+// Directory listing for /
+//
+//
+//
+# Directory listing for /
+//
+//
+// - .bash_logout
+// - .bashrc
+// - .profile
+//
+//
+//
+//
+await sandbox.kill()
+```
+Was this page helpful? Yes No Connect to running sandbox Mount object storage bucket ⌘ I

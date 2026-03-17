@@ -1,0 +1,119 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-upgrade-instance
+============================================================
+
+- Upgrade Instance - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationInstanceUpgrade InstanceGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- InstancePOSTCreate GPU Instance
+- POSTCreate CPU Instance
+- GETList Instances
+- GETGet Instance
+- POSTEdit Instance
+- POSTStart Instance
+- POSTStop Instance
+- POSTRestart Instance
+- POSTUpgrade Instance
+- POSTMigrate Instance
+- GETMonitor Metrics
+- POSTRenew Subscription Instance
+- POSTConvert Pay-As-You-Go Instance to Subscription
+- POSTDelete Instance
+- POSTSet Auto Renew
+- POSTSet Auto Migrate Strategy
+- Image
+- Template
+- Product
+- Network
+- Image Registry
+- Storage
+- Jobs
+- Serverless GPUs
+Upgrade Instance cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/gpu/instance/upgrade \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"instanceId": " ",
+"imageUrl": " ",
+"imageAuthId": " ",
+"envs": [
+{
+"key": " ",
+"value": " "
+}
+],
+"command": " ",
+"entrypoint": " ",
+"save": true,
+"networkVolume": {
+"volumeMounts": [
+{
+"type": " ",
+"id": " ",
+"mountPath": " "
+}
+]
+}
+}
+'
+```
+POST / gpu-instance / openapi / v1 / gpu / instance / upgrade Try it Upgrade Instance cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/gpu/instance/upgrade \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"instanceId": " ",
+"imageUrl": " ",
+"imageAuthId": " ",
+"envs": [
+{
+"key": " ",
+"value": " "
+}
+],
+"command": " ",
+"entrypoint": " ",
+"save": true,
+"networkVolume": {
+"volumeMounts": [
+{
+"type": " ",
+"id": " ",
+"mountPath": " "
+}
+]
+}
+}
+'
+```
+## ​API Description
+When upgrading an instance, all parameters must be provided in full.
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ instanceId string required The ID of the instance to be upgraded.
+​ imageUrl string required Container image URL. String, length limit: 1-500 characters.
+​ imageAuthId string Image registry authentication ID.
+​ envs object[] required Instance environment variables. Up to 100 environment variable pairs can be created. Show properties ​ key string Environment variable name. String, length limit: 0-511 characters. ​ value string Environment variable value. String, length limit: 0-4095 characters.
+​ command string required Container startup command. String, length limit: 0-2047 characters.
+​ entrypoint string required Container startup entrypoint. This setting will override the Docker image’s ENTRYPOINT. String, length limit: 0-2047 characters.
+​ save boolean required Whether to retain data from the previous instance. Boolean, values: true or false.
+​ networkVolume object required Configure cloud storage (type: network). Each instance supports mounting up to 30 cloud storage volumes. To remove all cloud storage mounts, set volumeMounts to an empty array: []. Show properties ​ volumeMounts object[] required Cloud storage mount information. Hide properties ​ type string required Storage type. Must be set to network. ​ id string required Cloud storage ID. ​ mountPath string required Mount path for the cloud storage. Default: “/network”. String, length limit: 1-4095 characters. Was this page helpful? Yes No Restart Instance Migrate Instance ⌘ I

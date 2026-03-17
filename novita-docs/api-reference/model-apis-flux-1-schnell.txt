@@ -1,0 +1,162 @@
+Source: https://novita.ai/docs/api-reference/model-apis-flux-1-schnell
+============================================================
+
+- FLUX.1 [schnell] Text to Image - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImage GeneratorFLUX.1 [schnell] Text to ImageGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image GeneratorPOSTText to Image
+- POSTImage to Image
+- POSTReimagine
+- POSTFLUX.1 [schnell] Text to Image
+- POSTFLUX.1 Kontext Dev
+- POSTFLUX.1 Kontext Pro
+- POSTFLUX.1 Kontext Max
+- POSTSeedream 3.0 Text to Image
+- POSTSeedream 4.0
+- POSTSeedream 4.5
+- POSTSeedream 5.0 lite
+- POSTQwen-Image Text to Image
+- POSTHunyuan Image 3
+- POSTFlux 2 Dev Image Gen
+- POSTFlux 2 Flex Image Gen
+- POSTFlux 2 Pro Image Gen
+- POSTZ Image Turbo LoRA
+- POSTZ Image Turbo
+- POSTGLM Image Generation
+- Image Editor
+- Video Generator
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+FLUX.1 [schnell] Text to Image cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3beta/flux-1-schnell \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"response_image_format": " ",
+"prompt": " ",
+"seed": 123,
+"steps": 123,
+"width": 123,
+"height": 123,
+"image_num": 123
+}
+'
+```
+200 Copy
+```
+{
+"task": {
+"task_id": " "
+},
+"images": [
+{
+"image_url": " ",
+"image_url_ttl": 123,
+"image_type": " "
+}
+]
+}
+```
+POST / v3beta / flux-1-schnell Try it FLUX.1 [schnell] Text to Image cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3beta/flux-1-schnell \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"response_image_format": " ",
+"prompt": " ",
+"seed": 123,
+"steps": 123,
+"width": 123,
+"height": 123,
+"image_num": 123
+}
+'
+```
+200 Copy
+```
+{
+"task": {
+"task_id": " "
+},
+"images": [
+{
+"image_url": " ",
+"image_url_ttl": 123,
+"image_type": " "
+}
+]
+}
+```
+Generate images from text prompts using FLUX.1 [schnell].
+Pricing: $0.003 * (Width * Height * Steps) / (1024*1024*4)
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ response_image_format string The returned image type. Default is png.
+Enum: png webp jpeg
+​ prompt string required Text input required to guide the image generation, divided by , . Range [1, 1024].
+​ seed integer required A seed is a number from which Stable Diffusion generates noise, which, makes generation deterministic. Using the same seed and set of parameters will produce identical image each time. Range [0, 4294967295].
+​ steps integer required The number of denoising steps. More steps usually can produce higher quality images, but take more time to generate, Range [1, 100].
+​ width integer required Width of image. Range [64, 2048].
+​ height integer required Height of image. Range [64, 2048].
+​ image_num integer required Images numbers generated in one single generation. Range [1, 8].
+## ​Response
+​ task object Task information. Show properties ​ task_id string Task ID.
+​ images object[] Contains information about images associated with image-type tasks. This parameter provides detailed data on each image processed or generated during the task, such as file paths, metadata, or any image-specific attributes. It is returned only for tasks that involve image operations, facilitating enhanced tracking and management of image data. Show properties ​ image_url string Image URL. ​ image_url_ttl integer Image expiration time in seconds. ​ image_type string Image type.
+Enum: jpeg , png , webp
+## ​Example
+request
+Copy
+```
+curl --location 'https://api.novita.ai/v3beta/flux-1-schnell' \
+--header 'Authorization: Bearer {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data '{
+"prompt": "Extreme close-up of a single tiger eye, direct frontal view. Detailed iris and pupil. Sharp focus on eye texture and color. Natural lighting to capture authentic eye shine and depth. The word \"Novita AI\" is painted over it in big, white brush strokes with visible texture",
+"width": 512,
+"height": 512,
+"seed": 2024,
+"steps": 4,
+"image_num": 1
+}'
+```
+response
+Copy
+```
+{
+"images": [
+{
+"image_url": "https://model-api-output.5e61b0cbce9f453eb9db49fdd85c7cac.r2.cloudflarestorage.com/xxx",
+"image_url_ttl": 604800,
+"image_type": "png"
+}
+],
+"task": {
+"task_id": "xxx"
+}
+}
+```
+Was this page helpful? Yes No Reimagine FLUX.1 Kontext Dev ⌘ I

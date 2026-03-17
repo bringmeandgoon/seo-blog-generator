@@ -1,0 +1,109 @@
+Source: https://novita.ai/docs/api-reference/model-apis-z-image-turbo-lora
+============================================================
+
+- Z Image Turbo LoRA - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImage GeneratorZ Image Turbo LoRAGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image GeneratorPOSTText to Image
+- POSTImage to Image
+- POSTReimagine
+- POSTFLUX.1 [schnell] Text to Image
+- POSTFLUX.1 Kontext Dev
+- POSTFLUX.1 Kontext Pro
+- POSTFLUX.1 Kontext Max
+- POSTSeedream 3.0 Text to Image
+- POSTSeedream 4.0
+- POSTSeedream 4.5
+- POSTSeedream 5.0 lite
+- POSTQwen-Image Text to Image
+- POSTHunyuan Image 3
+- POSTFlux 2 Dev Image Gen
+- POSTFlux 2 Flex Image Gen
+- POSTFlux 2 Pro Image Gen
+- POSTZ Image Turbo LoRA
+- POSTZ Image Turbo
+- POSTGLM Image Generation
+- Image Editor
+- Video Generator
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Z Image Turbo LoRA cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/z-image-turbo-lora \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"seed": 123,
+"size": " ",
+"loras": [
+{
+"path": " ",
+"scale": 123
+}
+],
+"prompt": " "
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+POST / v3 / async / z-image-turbo-lora Z Image Turbo LoRA cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/z-image-turbo-lora \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"seed": 123,
+"size": " ",
+"loras": [
+{
+"path": " ",
+"scale": 123
+}
+],
+"prompt": " "
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+Z-Image Turbo LoRA is a high-speed image generation model that supports rapid generation of high-quality images based on text prompts, with support for applying custom LoRA weights.
+This is an asynchronous API; only the task_id will be returned. You should use the task_id to request the Task Result API to retrieve the video generation results.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ seed integer Random seed for generation. -1 means using a random seed Value range: [-1, 2147483647]
+​ size string default: "1024*1024" Pixel dimensions of the generated image (width*height)
+​ loras array default: "[]" List of LoRAs to apply (maximum 3) Array length: 0 - 3 Hide properties ​ path string required URL or path to the LoRA weights ​ scale number default: 1 Scale factor for the LoRA weights. Used to scale the LoRA weights before merging with the base model Value range: [0, 4]
+​ prompt string required Positive prompt for generation
+## ​Response
+​ task_id string required Use the task_id to request the Task Result API to retrieve the generated outputs. Was this page helpful? Yes No Flux 2 Pro Image Gen Z Image Turbo ⌘ I

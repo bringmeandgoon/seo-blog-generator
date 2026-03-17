@@ -1,0 +1,86 @@
+Source: https://novita.ai/docs/api-reference/basic-query-monthly-bill
+============================================================
+
+- Query Monthly Bill - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationBasicQuery Monthly BillGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU Instance
+- Serverless GPUs
+Query Monthly Bill cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/openapi/v1/billing/monthly/bill \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"data": [
+{
+"billId": " ",
+"userId": " ",
+"billingMonth": " ",
+"totalAmount": " ",
+"originTotalAmount": " ",
+"voucherPayAmount": " ",
+"cashPayAmount": " ",
+"debtAmount": " ",
+"status": " ",
+"invoiceUrl": " ",
+"startTime": " ",
+"endTime": " ",
+"repaidAmount": " "
+}
+]
+}
+```
+GET / openapi / v1 / billing / monthly / bill Try it Query Monthly Bill cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/openapi/v1/billing/monthly/bill \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"data": [
+{
+"billId": " ",
+"userId": " ",
+"billingMonth": " ",
+"totalAmount": " ",
+"originTotalAmount": " ",
+"voucherPayAmount": " ",
+"cashPayAmount": " ",
+"debtAmount": " ",
+"status": " ",
+"invoiceUrl": " ",
+"startTime": " ",
+"endTime": " ",
+"repaidAmount": " "
+}
+]
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Response Parameters
+​ data object[] required Monthly billing information. Hide properties ​ billId string required Unique identifier for the bill. ​ userId string required User ID to which the bill belongs. ​ billingMonth string required The billing month in YYYY-MM format (e.g., “2025-11”). ​ totalAmount string required Total amount for the billing month, unit is 0.0001 USD. ​ originTotalAmount string required Original total amount before any discounts or adjustments, unit is 0.0001 USD. ​ voucherPayAmount string required Amount paid using vouchers, unit is 0.0001 USD. ​ cashPayAmount string required Amount paid in cash, unit is 0.0001 USD. ​ debtAmount string required Outstanding debt amount, unit is 0.0001 USD. ​ status string required Bill status. Possible values:
+- pending (Upcoming)
+- outed (Payment Due)
+- paid (Paid)
+- overdue (Overdue)
+​ invoiceUrl string required URL to download the invoice. Empty string if invoice is not yet available. ​ startTime string required Start time of the billing period, Unix timestamp in seconds. ​ endTime string required End time of the billing period, Unix timestamp in seconds. ​ repaidAmount string required Amount that has been paid, unit is 0.0001 USD. Was this page helpful? Yes No User Balance Info Query Usage-based Billing ⌘ I

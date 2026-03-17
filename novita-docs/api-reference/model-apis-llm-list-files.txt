@@ -1,0 +1,99 @@
+Source: https://novita.ai/docs/api-reference/model-apis-llm-list-files
+============================================================
+
+- List files - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationBatchList filesGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM APIPOSTCreate chat completion
+- POSTCreate completion
+- POSTCreate embeddings
+- POSTCreate rerank
+- GETList models
+- GETRetrieve model
+- BatchPOSTCreate batch
+- GETRetrieve batch
+- POSTCancel batch
+- GETList batch
+- POSTUpload file
+- GETList files
+- GETRetrieve file
+- DELDelete file
+- GETRetrieve file content
+- Image, Audio and Video
+GPUs - GPU Instance
+- Serverless GPUs
+List files cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/openai/v1/files \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"code": " ",
+"message": " ",
+"data": [
+{
+"id": " ",
+"object": " ",
+"bytes": 123,
+"filename": " ",
+"created_at": 123,
+"expires_at": 123,
+"purpose": " ",
+"metadata": {
+"total_requests": 123
+}
+}
+]
+}
+```
+GET / openai / v1 / files Try it List files cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/openai/v1/files \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"code": " ",
+"message": " ",
+"data": [
+{
+"id": " ",
+"object": " ",
+"bytes": 123,
+"filename": " ",
+"created_at": 123,
+"expires_at": 123,
+"purpose": " ",
+"metadata": {
+"total_requests": 123
+}
+}
+]
+}
+```
+Displays a list of all available files.
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Response
+​ code string required HTTP status code indicating the result of the request.
+​ message string required A descriptive message about the request result.
+​ data array required An array of file objects. Show File Object Properties ​ id string required The unique identifier of the file. ​ object string required The object type, which is always file . ​ bytes integer required The size of the file in bytes. ​ filename string required The name of the file. ​ created_at integer required The Unix timestamp (in seconds) when the file was created. ​ expires_at integer The Unix timestamp (in seconds) when the file will expire. Only present for output files. ​ purpose string required The purpose of the file. Available purposes:
+- batch - Input file for batch processing
+- batch_output - Output file from batch processing
+​ metadata object required Additional metadata about the file. Show properties ​ total_requests integer The total number of requests in the batch input file. Only present for batch input files. Was this page helpful? Yes No Upload file Retrieve file ⌘ I

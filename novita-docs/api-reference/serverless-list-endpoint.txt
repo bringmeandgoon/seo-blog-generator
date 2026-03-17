@@ -1,0 +1,223 @@
+Source: https://novita.ai/docs/api-reference/serverless-list-endpoint
+============================================================
+
+- List Endpoints - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationServerless GPUsList EndpointsGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU Instance
+- Serverless GPUsGETGet Endpoint Parameter Limit Ranges
+- POSTCreate Endpoint
+- GETList Endpoints
+- GETGet Endpoint
+- POSTUpdate Endpoint
+- POSTDelete Endpoint
+List Endpoints cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/endpoints \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"endpoints": [
+{
+"id": " ",
+"name": " ",
+"appName": " ",
+"state": {
+"state": " ",
+"error": " ",
+"message": " "
+},
+"url": " ",
+"workerConfig": {
+"minNum": 123,
+"maxNum": 123,
+"freeTimeout": " ",
+"maxConcurrent": " ",
+"gpuNum": 123,
+"cudaVersion": " "
+},
+"policy": {
+"type": " ",
+"value": " "
+},
+"image": {
+"image": " ",
+"authId": " ",
+"command": " "
+},
+"rootfsSize": 123,
+"volumeMounts": [
+{
+"type": " ",
+"id": " ",
+"size": 123,
+"mountPath": " "
+}
+],
+"envs": [
+{
+"key": " ",
+"value": " "
+}
+],
+"ports": [
+{
+"port": " "
+}
+],
+"workers": [
+{
+"id": " ",
+"state": {
+"state": " ",
+"error": " ",
+"message": " "
+},
+"log": " ",
+"metrics": " ",
+"healthy": true
+}
+],
+"products": [
+{
+"id": " "
+}
+],
+"healthy": {
+"path": " ",
+"initialDelay": 123,
+"period": 123,
+"timeout": 123,
+"successThreshold": 123,
+"failureThreshold": 123
+},
+"clusterID": " ",
+"log": " "
+}
+],
+"total": 123
+}
+```
+GET / gpu-instance / openapi / v1 / endpoints Try it List Endpoints cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/endpoints \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"endpoints": [
+{
+"id": " ",
+"name": " ",
+"appName": " ",
+"state": {
+"state": " ",
+"error": " ",
+"message": " "
+},
+"url": " ",
+"workerConfig": {
+"minNum": 123,
+"maxNum": 123,
+"freeTimeout": " ",
+"maxConcurrent": " ",
+"gpuNum": 123,
+"cudaVersion": " "
+},
+"policy": {
+"type": " ",
+"value": " "
+},
+"image": {
+"image": " ",
+"authId": " ",
+"command": " "
+},
+"rootfsSize": 123,
+"volumeMounts": [
+{
+"type": " ",
+"id": " ",
+"size": 123,
+"mountPath": " "
+}
+],
+"envs": [
+{
+"key": " ",
+"value": " "
+}
+],
+"ports": [
+{
+"port": " "
+}
+],
+"workers": [
+{
+"id": " ",
+"state": {
+"state": " ",
+"error": " ",
+"message": " "
+},
+"log": " ",
+"metrics": " ",
+"healthy": true
+}
+],
+"products": [
+{
+"id": " "
+}
+],
+"healthy": {
+"path": " ",
+"initialDelay": 123,
+"period": 123,
+"timeout": 123,
+"successThreshold": 123,
+"failureThreshold": 123
+},
+"clusterID": " ",
+"log": " "
+}
+],
+"total": 123
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Query Parameters
+​ pageSize integer required Maximum number of items returned per page.
+​ pageNum integer required Current page number.
+## ​Response
+​ endpoints object[] required Endpoint information. Hide properties ​ id string required Endpoint ID. ​ name string required Endpoint name. ​ appName string required Application name. ​ state object required Endpoint status. Hide properties ​ state string required Endpoint status. When the value is serving , the endpoint is available for service. ​ error string Error code when the endpoint is in an abnormal state. ​ message string Error message when the endpoint is in an abnormal state. ​ url string required Endpoint URL. You can access your HTTP service via this URL. ​ workerConfig object required Worker configuration for the endpoint. Hide properties ​ minNum integer required Minimum number of workers. ​ maxNum integer required Maximum number of workers. ​ freeTimeout string required Idle timeout, in seconds. ​ maxConcurrent string required Maximum concurrency. ​ gpuNum integer required Number of GPUs per worker. ​ cudaVersion string required CUDA version. ​ policy object required Auto-scaling policy for the endpoint. Hide properties ​ type string required Policy type. Options:
+- queue: Queue latency policy, adjusts the number of workers based on the waiting time of requests in the queue.
+- concurrency: Queue request policy, automatically adjusts the number of workers based on the number of requests in the queue.
+​ value string required The meaning of value depends on the type:
+- If type = queue, value is the queue waiting time in seconds.
+- If type = concurrency, value is the maximum number of requests in the queue.
+​ image object required Image configuration for the endpoint. Hide properties ​ image string required Image URL. ​ authId string required Image repository credential. ​ command string required Container startup command. ​ rootfsSize integer required System disk size. ​ volumeMounts object[] required Storage configuration for the endpoint. Hide properties ​ type string required Storage type. Options:
+- local: Local storage.
+- network: Cloud storage.
+​ id string required Cloud storage ID. Returned when type = network. ​ size integer Returned when type = local, indicates the size of the local disk. ​ mountPath string required Mount path for the storage. ​ envs object[] required Environment variables. Hide properties ​ key string required Environment variable name. ​ value string required Environment variable value. ​ ports object[] required HTTP ports. Hide properties ​ port string required HTTP port. ​ workers object[] required Worker information for the endpoint. Hide properties ​ id string required Worker ID. ​ state object required Worker status. Hide properties ​ state string required Worker status. When the value is running , the worker is available for service. ​ error string Error code when the worker is in an abnormal state. ​ message string Error message when the worker is in an abnormal state. ​ log string required Log path for the worker. ​ metrics string required Monitoring information for the worker. ​ healthy boolean required Whether the worker is healthy. ​ products object[] required Product information. Hide properties ​ id string required Product ID. ​ healthy object required Health check configuration for the endpoint. Hide properties ​ path string required Path to be checked via HTTP request for health monitoring. ​ initialDelay integer required Time to wait after startup before starting health checks, in seconds. ​ period integer required Interval between health checks, in seconds. ​ timeout integer required Timeout for health checks, in seconds. ​ successThreshold integer required Number of consecutive successes required to consider the check successful after a previous failure. ​ failureThreshold integer required Number of consecutive failures required to consider the check failed after a previous success. ​ clusterID string required Cluster ID where the cloud storage resides. Returned when using cloud storage. ​ log string required Log path for the endpoint.
+​ total integer required Total number of results. Was this page helpful? Yes No Create Endpoint Get Endpoint ⌘ I

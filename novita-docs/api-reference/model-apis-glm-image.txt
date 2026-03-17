@@ -1,0 +1,99 @@
+Source: https://novita.ai/docs/api-reference/model-apis-glm-image
+============================================================
+
+- GLM Image Generation - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImage GeneratorGLM Image GenerationGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image GeneratorPOSTText to Image
+- POSTImage to Image
+- POSTReimagine
+- POSTFLUX.1 [schnell] Text to Image
+- POSTFLUX.1 Kontext Dev
+- POSTFLUX.1 Kontext Pro
+- POSTFLUX.1 Kontext Max
+- POSTSeedream 3.0 Text to Image
+- POSTSeedream 4.0
+- POSTSeedream 4.5
+- POSTSeedream 5.0 lite
+- POSTQwen-Image Text to Image
+- POSTHunyuan Image 3
+- POSTFlux 2 Dev Image Gen
+- POSTFlux 2 Flex Image Gen
+- POSTFlux 2 Pro Image Gen
+- POSTZ Image Turbo LoRA
+- POSTZ Image Turbo
+- POSTGLM Image Generation
+- Image Editor
+- Video Generator
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+GLM Image Generation cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/glm-image \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"size": " ",
+"prompt": " ",
+"quality": " ",
+"watermark_enabled": true
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+POST / v3 / async / glm-image GLM Image Generation cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/glm-image \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"size": " ",
+"prompt": " ",
+"quality": " ",
+"watermark_enabled": true
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+GLM Image text-to-image generation tool creates high-quality images from text prompts, producing HD images with fine details and high consistency.
+This is an asynchronous API; only the task_id will be returned. You should use the task_id to request the Task Result API to retrieve the video generation results.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ size string default: "1280x1280" Image size. Recommended values: 1280x1280 (default), 1568x1056, 1056x1568, 1472x1088, 1088x1472, 1728x960, 960x1728. Custom sizes: dimensions should be 1024-2048px, max total pixels 4194304, both must be multiples of 32.
+​ prompt string required Text description of desired image. Describe the scene, subject, style, and details you want in the generated image.
+​ quality string default: "hd" Image quality. HD produces finer details with higher consistency. Optional values: hd
+​ watermark_enabled boolean default: true Control AI watermark on generated images. true: Enable watermark (default). false: Disable watermark
+## ​Response
+​ task_id string required Use the task_id to request the Task Result API to retrieve the generated outputs. Was this page helpful? Yes No Z Image Turbo Upscale ⌘ I

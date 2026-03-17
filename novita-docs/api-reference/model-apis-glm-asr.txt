@@ -1,0 +1,103 @@
+Source: https://novita.ai/docs/api-reference/model-apis-glm-asr
+============================================================
+
+- GLM Audio to Text - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationAudioGLM Audio to TextGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video Generator
+- AudioPOSTMiniMax Speech-02-hd Text to Speech
+- POSTMiniMax Speech-02-hd Async Long TTS
+- POSTMiniMax Speech-02-turbo Text to Speech
+- POSTMiniMax Speech-02-turbo Async Long TTS
+- POSTMiniMax Speech-2.5-hd-preview Text to Speech
+- POSTMiniMax Speech-2.5-hd-preview Async Long TTS
+- POSTMiniMax Speech-2.5-turbo-preview Text to Speech
+- POSTMiniMax Speech-2.5-turbo-preview Async Long TTS
+- POSTMiniMax Speech-2.6-hd Text to Speech
+- POSTMiniMax Speech-2.6-hd Async Long TTS
+- POSTMiniMax Speech-2.6-turbo Text to Speech
+- POSTMiniMax Speech-2.6-turbo Async Long TTS
+- POSTMiniMax Speech 2.8 Turbo Async Text-to-Speech
+- POSTMiniMax Speech 2.8 HD Async Text-to-Speech
+- POSTMiniMax Speech 2.8 Turbo Sync Text-to-Speech
+- POSTMiniMax Speech 2.8 HD Sync Text-to-Speech
+- POSTMiniMax Voice Cloning
+- POSTFish Audio Text to Speech
+- POSTFish Audio Voice Cloning
+- POSTText to Speech
+- POSTGLM Text to Speech
+- POSTGLM Audio to Text
+- POSTGLM Voice Clone
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+GLM Audio to Text cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/glm-asr \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"file": " ",
+"prompt": " ",
+"hotwords": [
+{}
+]
+}
+'
+```
+200 Copy
+```
+{
+"text": " "
+}
+```
+POST / v3 / glm-asr GLM Audio to Text cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/glm-asr \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"file": " ",
+"prompt": " ",
+"hotwords": [
+{}
+]
+}
+'
+```
+200 Copy
+```
+{
+"text": " "
+}
+```
+Use the GLM-ASR-2512 model to transcribe audio files into text, supporting multi-language transcription.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ file string required The audio file URL or Base64 encoded string to be transcribed. Supported audio formats: .wav / .mp3. Limitations: file size ≤ 25 MB, audio duration ≤ 30 seconds
+​ prompt string For long text scenarios, you can provide previous transcription results as context. Recommended to be less than 8000 characters.
+​ hotwords array Hotword list to improve recognition accuracy for domain-specific vocabulary. Format example: [“person name”, “place name”]. Recommended not to exceed 100 items. Array length: 0 - 100
+## ​Response
+​ text string The complete transcribed content of the audio Was this page helpful? Yes No GLM Text to Speech GLM Voice Clone ⌘ I

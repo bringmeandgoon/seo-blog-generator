@@ -1,0 +1,178 @@
+Source: https://novita.ai/docs/api-reference/model-apis-vidu-q3-pro-i2v
+============================================================
+
+- Vidu Q3 Pro Image-to-Video - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationVideo GeneratorVidu Q3 Pro Image-to-VideoGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video GeneratorPOSTUnified Video Generation API
+- POSTText to Video
+- POSTImage to Video
+- POSTHunyuan Video Fast
+- POSTWan 2.1 Text to Video
+- POSTWan 2.1 Image to Video
+- POSTWan 2.2 Text to Video
+- POSTWan 2.2 Image to Video
+- POSTWan 2.5 Preview Text to Video
+- POSTWan 2.5 Preview Image to Video
+- POSTWan 2.6 Text to Video
+- POSTWan 2.6 Image to Video
+- POSTWan 2.6 Reference Video
+- POSTKLING V1.6 Text to Video
+- POSTKLING V1.6 Image to Video
+- POSTKling V2.1 Master Text to Video
+- POSTKling V2.1 Image to Video
+- POSTKling V2.1 Master Image to Video
+- POSTKling V2.5 Turbo Text to Video
+- POSTKling V2.5 Turbo Image to Video
+- POSTKling V2.6 Pro Motion Control
+- POSTKling V2.6 Pro Text-to-Video
+- POSTKling V2.6 Pro Image-to-Video
+- POSTKling-o1 Image to Video
+- POSTKling-o1 Reference Video Generation
+- POSTKling-o1 Text to Video
+- POSTKling-o1 Video Editing
+- POSTKling v3.0 Standard Image-to-Video
+- POSTKling v3.0 Standard Text-to-Video
+- POSTKling v3.0 Pro Image-to-Video
+- POSTKling v3.0 Pro Text-to-Video
+- POSTMinimax Video-01
+- POSTMinimax Hailuo-02
+- POSTMinimax Hailuo 2.3 Text to Video
+- POSTMinimax Hailuo 2.3 Image to Video
+- POSTMinimax Hailuo 2.3 Fast Image to Video
+- POSTVidu Q1 Text to Video
+- POSTVidu Q1 Image to Video
+- POSTVidu Q1 Start End to Video
+- POSTVidu Q1 Reference to Video
+- POSTVidu 2.0 Image to Video
+- POSTVidu 2.0 Start End to Video
+- POSTVidu 2.0 Reference to Video
+- POSTPixVerse V4.5 Text to Video
+- POSTPixVerse V4.5 Image to Video
+- POSTSeedance V1 Lite Text to Video
+- POSTSeedance V1 Lite Image to Video
+- POSTSeedance V1 Pro Text to Video
+- POSTSeedance V1 Pro Image to Video
+- POSTSeedance 1.5 Pro Text To Video
+- POSTSeedance 1.5 Pro Image To Video
+- POSTVIDU Q2 Turbo Start-End Frame to Video
+- POSTVIDU Q2 Turbo Multi-frame to Video
+- POSTVIDU Q2 Turbo Image to Video
+- POSTVIDU Q2 Text to Video
+- POSTVIDU Q2 Reference Image to Video
+- POSTVIDU Q2 Pro Start-End Frame to Video
+- POSTVIDU Q2 Pro Multi-frame to Video
+- POSTVIDU Q2 Pro Image to Video
+- POSTVIDU Q2 Pro Fast Start-End Frame to Video
+- POSTVIDU Q2 Pro Fast Image to Video
+- POSTVIDU Q2 Template to Video
+- POSTVidu Q3 Pro Text-to-Video
+- POSTVidu Q3 Pro Image-to-Video
+- POSTHeygen Video-translate
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Vidu Q3 Pro Image-to-Video cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/vidu-q3-pro-i2v \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"seed": 123,
+"audio": " ",
+"style": " ",
+"images": [
+{}
+],
+"is_rec": true,
+"prompt": " ",
+"wm_url": " ",
+"duration": 123,
+"off_peak": true,
+"watermark": true,
+"resolution": " ",
+"wm_position": " ",
+"aspect_ratio": " "
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+POST / v3 / async / vidu-q3-pro-i2v Vidu Q3 Pro Image-to-Video cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/vidu-q3-pro-i2v \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"seed": 123,
+"audio": " ",
+"style": " ",
+"images": [
+{}
+],
+"is_rec": true,
+"prompt": " ",
+"wm_url": " ",
+"duration": 123,
+"off_peak": true,
+"watermark": true,
+"resolution": " ",
+"wm_position": " ",
+"aspect_ratio": " "
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+Vidu Q3 Pro Image-to-Video transforms static images into dynamic videos with natural motion and smoother scene dynamics while maintaining subject consistency.
+This is an asynchronous API; only the task_id will be returned. You should use the task_id to request the Task Result API to retrieve the video generation results.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ seed integer Random seed for reproducibility; 0 or omit for random generation Value range: [0, 2147483647]
+​ audio string Custom audio URL for video background music; supports mp3, wav, m4a, flac; max 20MB
+​ style string default: "general" Visual style of output; general for realistic, anime for animated style Optional values: general , anime
+​ images array required Reference image URLs for video generation; supports .jpg , .jpeg , .png , .webp .
+Max file size 50MB per image; aspect ratio must be between 1:4 and 4:1.
+only support one image input now.
+​ is_rec boolean default: false Enable audio scene matching; when true, matches audio rhythm to video motion
+​ prompt string Motion description for video generation; describes scene motion, actions, and dynamics. Length limit: 0 - 1500
+​ wm_url string Custom watermark image URL; supports png, jpeg, jpg, webp; max 10MB
+​ duration integer default: 5 Video length in seconds Value range: [1, 16]
+​ off_peak boolean default: false Use off-peak pricing; when true, task is queued for off-peak processing at reduced cost
+​ watermark boolean default: false Enable watermark on output video
+​ resolution string default: "720p" Output video resolution Optional values: 540p , 720p , 1080p
+​ wm_position string Watermark position on video Optional values: top-left , top-right , bottom-left , bottom-right
+​ aspect_ratio string default: "16:9" Output video aspect ratio Optional values: 16:9 , 9:16 , 4:3 , 3:4 , 1:1
+## ​Response
+​ task_id string required Use the task_id to request the Task Result API to retrieve the generated outputs. Was this page helpful? Yes No Vidu Q3 Pro Text-to-Video Heygen Video-translate ⌘ I

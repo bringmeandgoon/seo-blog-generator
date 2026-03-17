@@ -1,0 +1,73 @@
+Source: https://novita.ai/docs/guides/llamaindex
+============================================================
+
+- LlamaIndex - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationIntegrationsLlamaIndexGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- IntegrationsClaude Code Integration Guide
+- OpenAI Agents SDK
+- AnythingLLM
+- Dify
+- Helicone
+- Hugging Face
+- Langflow
+- Continue
+- Cursor
+- LangChain
+- Skyvern
+- LobeChat
+- AI Gradio
+- Langfuse
+- MLflow
+- Verba
+- Portkey
+- DocsGPT
+- LlamaIndex
+- LoLLMS WebUI
+- CodeCompanion
+- Page Assist
+- DeepSearcher
+- Browser Use
+- OWL
+- LiteLLM
+- ChatBox
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - How to Integrate Novita AI API with LlamaIndex
+Designed for optimal indexing and retrieval, LlamaIndex excels in delivering high efficiency for applications requiring precise and fast data access. By combining Novita AI with LlamaIndex, you will unlock key benefits such as superior data retrieval accuracy, unmatched scalability, and cost-effective performance.
+This guide will walk you through how to use LlamaIndex with Novita AI based on the OpenAl APl, offering smarter, scalable, and highly efficient AI solutions that drive innovation and deliver exceptional results for developers.
+## ​How to Integrate Novita AI API with LlamaIndex
+Step 1: Visit Model Library on Novita AI and select a model of interest.
+Step 2: Navigate to the demo page of the chosen model and click the Code button on the right.
+Step 3: Copy the model’s name and make a note of it.
+Step 4: Log in to the Novita platform.
+Step 5: After logging in, go to the platform’s settings page .
+Step 6: Create a new API key and copy it for service authentication.
+Step 7: Install llama_index and related Python libraries by running:
+Step 8: Write Python code and set the model name and API key as parameters in the NovitaAI class.
+Step 9: Run the code to get the output.
+For more examples, refer to the documentation: llama_index/llama-index-integrations/llms/llama-index-llms-novita at main · run-llama/llama_index . Was this page helpful? Yes No DocsGPT LoLLMS WebUI ⌘ I

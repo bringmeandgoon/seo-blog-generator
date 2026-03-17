@@ -1,0 +1,52 @@
+Source: https://novita.ai/docs/guides/observability-llm-api-metrics
+============================================================
+
+- LLM API Metrics - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationObservabilityLLM API MetricsGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Available Metrics
+Novita AI provides comprehensive monitoring metrics for your LLM API usage. These metrics give you insights into the availability and performance of your LLM API requests.
+You can access these metrics through the LLM Metrics Console .
+## ​Available Metrics
+All the following metrics are dimensioned by model , and sampled on a per-minute basis , but depending on the interval you select, the sampling points may not be displayed per minute. In such cases, the sampling points within that time interval will be averaged before being displayed.
+Request Per Minute (RPM)
+Shows the number of API requests made per minute, helping you understand usage patterns and API concurrency levels.
+Request Success Rate
+Shows the percentage of successful API responses (non-5xx status codes) made per minute, indicating API availability.
+Average Token Count Per Request
+Shows the average number of input and output tokens per request made per minute, useful for understanding token consumption patterns.
+End-to-end (E2E) Latency
+Shows the overall time it takes for the model to generate the full response for requests made per minute. Includes 99th percentile, 95th percentile, and average latency metrics.
+Time to First Token (TTFT)
+This metric is only tracked for streaming requests with the stream=true parameter is enabled.
+Shows the time required to process the prompt and generate the first output token for requests made per minute. Includes 99th percentile, 95th percentile, and average latency metrics.
+Time Per Output Token (TPOT)
+This metric is only tracked for streaming requests when the stream=true parameter is enabled.
+Shows the average time between consecutive output tokens for requests made per minute. Includes 99th percentile, 95th percentile, and average latency metrics. Was this page helpful? Yes No Run Axolotl on Novita AI Payment Methods ⌘ I

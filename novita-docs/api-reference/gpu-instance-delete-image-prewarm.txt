@@ -1,0 +1,64 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-delete-image-prewarm
+============================================================
+
+- Delete Image Prewarm Tasks - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImageDelete Image Prewarm TasksGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- Instance
+- ImagePOSTSave Instance Image
+- GETGet Image Prewarm Quota
+- POSTCreate Image Prewarm Task
+- GETList Image Prewarm Tasks
+- POSTUpdate Image Prewarm Task
+- POSTDelete Image Prewarm Tasks
+- Template
+- Product
+- Network
+- Image Registry
+- Storage
+- Jobs
+- Serverless GPUs
+Delete Image Prewarm Tasks cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/image/prewarm/delete \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"ids": [
+" "
+]
+}
+'
+```
+POST / gpu-instance / openapi / v1 / image / prewarm / delete Try it Delete Image Prewarm Tasks cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/image/prewarm/delete \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"ids": [
+" "
+]
+}
+'
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ ids string[] required IDs of prewarm tasks to delete. Was this page helpful? Yes No Update Image Prewarm Task Create Template ⌘ I

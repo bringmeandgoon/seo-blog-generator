@@ -1,0 +1,53 @@
+Source: https://novita.ai/docs/guides/sandbox-cli-shutdown-sandboxes
+============================================================
+
+- Shutdown running sandboxes - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationCLIShutdown running sandboxesGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLIInstalling CLI
+- Authentication in CLI
+- Create sandbox and connect to terminal
+- List sandboxes
+- Shutdown running sandboxes
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Shutdown single sandbox
+- Shutdown all sandboxes
+You can shutdown single or all running sandboxes with the CLI.
+## ​Shutdown single sandbox
+To shutdown a single sandbox, run the following command:
+Bash Copy
+```
+novita-sandbox-cli sandbox kill
+```
+## ​Shutdown all sandboxes
+To shutdown all running sandboxes, run the following command:
+Bash Copy
+```
+novita-sandbox-cli sandbox kill --all
+```
+Was this page helpful? Yes No List sandboxes Computer use with E2B Desktop ⌘ I

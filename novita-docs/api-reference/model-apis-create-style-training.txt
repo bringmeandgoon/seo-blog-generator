@@ -1,0 +1,410 @@
+Source: https://novita.ai/docs/api-reference/model-apis-create-style-training
+============================================================
+
+- LoRA for Style Training - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationTrainingLoRA for Style TrainingGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video Generator
+- Audio
+- Face Editor
+- TrainingPOSTGet Images URL
+- LoRA for Style Training
+- GETList LoRA Training Task
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+On this page - Create Style Training Task
+- Request Headers
+- Request Body
+- Response
+- Get style training result
+- Request Headers
+- Request Body
+- Response
+- Example
+- 1. Upload images for training
+- 1.1 Get image upload URL
+- 1.2 Upload images
+- 2. Start training task and configure parameters
+- 3. Get training status
+- 3.1 Get model training and deployment status
+- 3.2 Start using the trained model
+- 3.3 List training tasks
+- 4. Training playground
+- 4.1 Input Novita AI API Key, images and select training type
+- 4.2 Switch to the inferencing tab and add more detail
+- Review the training results
+You can train a LoRA model to generate images that emulate a specific artistic style.
+## ​Create Style Training Task
+POST https://api.novita.ai/v3/training/style
+Use this API to start a style training task.
+This is an asynchronous API ; only the task_id is returned initially. Utilize this task_id to query the Task Result API at Get Style Training Result API to retrieve the results of the image generation.
+### ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+### ​Request Body
+​ name string required Task name for this model training.
+​ base_model string required Base models used for training.
+Enum: stable-diffusion-xl-base-1.0 , dreamshaperXL09Alpha_alpha2Xl10_91562 , protovisionXLHighFidelity3D_release0630Bakedvae_154359 , v1-5-pruned-emaonly , epicrealism_naturalSin_121250 , chilloutmix_NiPrunedFp32Fix , abyssorangemix3AOM3_aom3a3_10864 , dreamshaper_8_93211 , WFChild_v1.0 , majichenmixrealistic_v10 , realisticVisionV51_v51VAE_94301 , sdxlUnstableDiffusers_v11_216694 , realisticVisionV40_v40VAE_81510 , epicrealismXL_v10_247189 , somboy_v10_172675 , yesmixXL_v10_283329 , animagineXLV31_v31_325600
+​ width integer required Width of training images, must be > 0
+​ height integer required Height of training images, must be > 0
+​ image_dataset_items object[] required Image asset IDs and their captions. Hide properties ​ assets_id integer required Image asset ID; see Upload Images For Training for reference. ​ caption string required Image caption; refer to Training Image Caption Guidance for more information.
+​ expert_setting object Show properties ​ train_batch_size integer batch size of training, Range [1, 4] ​ learning_rate number(float) This parameter controls the extent of model parameter updates during each iteration. A higher learning rate results in larger updates, potentially speeding up the learning process but risking overshooting the optimal solution. Conversely, a lower learning rate ensures smaller, more precise adjustments, which may lead to a more stable convergence at the cost of slower training.
+Enum: 1e-4, 1e-5, 1e-6, 2e-4, 5e-5 ​ max_train_steps integer This parameter specifies the maximum number of training steps to be executed before halting the training process. It sets a limit on the duration of training, ensuring that the model does not continue to train indefinitely. If the max_train_steps set to 2000 and images amount in parameter image_dataset_items is 10, the number of training steps per graph is 200. Minimum value is 1. ​ seed integer A seed is a number from which Stable Diffusion generates noise, which, makes training deterministic. Using the same seed and set of parameters will produce identical LoRA each time, Minimum 1. ​ lr_scheduler string This parameter specifies the type of learning rate scheduler to be used during the training process. The scheduler dynamically adjusts the learning rate according to one of the specified strategies. constant : Maintains a fixed learning rate throughout training. linear : Gradually decreases the learning rate linearly from a higher to a lower value. cosine : Adjusts the learning rate following a cosine curve, decreasing it initially and then increasing towards the end. cosine_with_restarts : Similar to cosine, but resets the rate periodically to avoid local minima. polynomial : Decreases the learning rate according to a polynomial decay. constant_with_warmup : Starts with a lower learning rate and warms up to a constant rate after a specified number of steps.
+Enum: constant, linear, cosine, cosine_with_restarts, polynomial, constant_with_warmup ​ lr_warmup_steps integer This parameter determines the number of initial training steps during which the learning rate increases gradually, effective only when the lr_scheduler is set to one of the following modes: linear, cosine, cosine_with_restarts, polynomial, or constant_with_warmup. The warmup phase helps in stabilizing the training process before the main learning rate schedule begins. The minimum value for this parameter is 0, indicating no warmup, Minimum 0.
+​ components object[] required Common parameters configured for training. Hide properties ​ name string required Type of components. When set to face_crop_region , args can be set to args: [name: ratio, value: 1.0], ratio > 1 means more non-facial area will be included. When set to resize , args can be set to args: [name: width, value: 512, name: height, value: 512], which mean all the images will be cropped to 512*512. When set to face_restore , args can be set to args: [name: method, value:gfpgan_1.4], which mean face restore will be open.
+Enum: face_crop_region , resize , face_restore ​ args object[] required Component detail settings. Hide properties ​ name string required Name of argument. ​ value string required Argument value.
+### ​Response
+​ task_id string Utilize this task_id to query the Task Result API at Get style training result .
+## ​Get style training result
+GET https://api.novita.ai/v3/training/style
+Use this API to get the style training result, including the model.
+### ​Request Headers
+​ Authorization string required In Bearer {{API Key}} format.
+### ​Request Body
+​ task_id string required
+### ​Response
+​ task_id string The task id of training.
+​ task_status string Represents the current status of a task, particularly useful for monitoring and managing the progress of training tasks. Each status indicates a specific phase in the task’s lifecycle.
+Enum: UNKNOWN , QUEUING , TRAINING , SUCCESS , CANCELED , FAILED
+​ model_type string Model trained type.
+Enum: lora
+​ models object[] models info Show properties ​ model_name string model file name. ​ model_status string model status.
+Enum: DEPLOYING , SERVING
+​ extra object extra info Show properties ​ eta_relative number Estimated time of arrival in seconds. ​ progress_percent number The progress percent with a range of 0 to 100.
+## ​Example
+Generally, model training involves following steps.
+- Upload the images for model training.
+- Set training parameters and start the training.
+- Get the training results and generate images with the trained model.
+### ​1. Upload images for training
+- Currently we only supports uploading images in png / jpeg / webp format.
+- Each task supports uploading up to 50 images. In order to make the final effect good, the images uploaded should meet some basic conditions, such as: “portrait in the center”, “no watermark”, “clear picture”, etc.
+#### ​1.1 Get image upload URL
+- This interface returns the URL for single image to upload and can be called multiple times to upload images for training.
+Copy
+```
+curl --location --request POST 'https://api.novita.ai/v3/assets/training_dataset' \
+--header 'Authorization: Bearer {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+"file_extension": "png"
+}'
+```
+Response:
+Copy
+```
+{
+"assets_id": "34558688e2f42a0137ca2d5274a8cf43",
+"upload_url": "https://faas-training-dataset.s3.ap-southeast-1.amazonaws.com/test/******",
+"method": "PUT",
+"headers": {
+"Host": {
+"values": [
+"faas-training-dataset.s3.ap-southeast-1.amazonaws.com"
+]
+}
+}
+}
+```
+- assets_id: The unique identifier of the image, which will be used in the training task.
+- upload_url: The URL for image upload.
+- method: The HTTP method for image upload.
+#### ​1.2 Upload images
+After obtaining the upload_url at step Get image upload URL , please refer to the following document to complete the image upload: https://docs.aws.amazon.com/zh_cn/AmazonS3/latest/userguide/PresignedUrlUploadObject.html.
+Put images:
+Copy
+```
+curl -X PUT -T "{{filepath}}" "{{upload_url}}"
+```
+or
+Copy
+```
+curl --location --request PUT '{{upload_url}}' \
+--header 'Content-Type: image/png' \
+--data '{{filepath}}'
+```
+### ​2. Start training task and configure parameters
+In this step, we will begin the model training process, which is expected to take approximately 10 minutes, depending on the actual server’s availability.
+There are four types of parameters for model traning: Model info parameters , dataset parameters , components parameters , expert parameters , you can set them according to our tables below.
+Here are some tips to train a good model:
+- At least 10 photos of faces that meet the requirements.
+- For parameters instance_prompt, we suggests using “a close photo of ohwx <man|\woman>”
+- For parameters base_model, value v1-5-pruned-emaonly has better generalization ability and can be used in combination with various Base models, such as dreamshaper 2.5D, value epic-realism has a strong sense of reality.
+TypeParametersDescription
+Model info parametersnameName of your training model
+Model info parametersbase_modelbase_model type
+Model info parameterswidthTarget image width
+Model info parametersheightTarget image height
+dataset parametersimage_dataset_itemsArray: consist of imageUrl and image caption
+dataset parameters- image_dataset_items.assets_idimages assets_id, which can be found in step Get image upload URL
+components parameterscomponentsArray: consist of name and args, this is a common parameters configured for training.
+components parameters- components.nameType of components, Enum: face_crop_region, resize, face_restore
+components parameters- components.argsDetail values of components.name
+expert parametersexpert_settingexpert parameters.
+expert parameters- instance_promptCaptions for all the training images, here is a guidance of how to make a effective prompt : Click Here
+expert parameters- batch_sizebatch size of training.
+expert parameters- max_train_stepsMax train steps, 500 is enought for lora model training.
+expert parameters- …More expert parameters can be access at api reference.
+Here is a example of how to start training:
+Copy
+```
+curl --location --request POST 'https://api.novita.ai/v3/training/style' \
+--header 'Accept: ' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {{API Key}}' \
+--data-raw '{
+"name": "test_style_01",
+"base_model": "v1-5-pruned-emaonly",
+"width": 512,
+"height": 512,
+"image_dataset_items": [
+{
+"assets_id": "34558688e2f42a0137ca2d5274a8cf43"
+},
+{
+"assets_id": "1231231243f42a0137ca2d5274a8cf43"
+}
+],
+"expert_setting": {
+"instance_prompt": "Xstyle, of a young woman, profile shot, from side,sitting, looking at viewer, smiling, head tilt, eyes open,long black hair, glowing skin,light smile,cinematic lighting,dark environment",
+"class_prompt": "person"
+},
+"components": [
+{
+"name": "face_crop_region",
+"args": [
+{
+"name": "ratio",
+"value": "1"
+}
+]
+},
+{
+"name": "resize",
+"args": [
+{"name": "width", "value": "512"},
+{"name": "height", "value": "512"}
+]
+},
+{
+"name": "face_restore",
+"args": [
+{"name": "method", "value": "gfpgan_1.4"},
+{"name": "upscale", "value": "1.0"}
+]
+}
+]
+}'
+```
+Response:
+Copy
+```
+{
+"task_id": "d660cdd0-ab9b-4a55-8b78-4bc851051fb0"
+}
+```
+The task_id is the unique identifier of the training task, which can be used to query the training status and results.
+### ​3. Get training status
+#### ​3.1 Get model training and deployment status
+In this step, we will obtain the progress of model training and the status of model deployment after training
+Copy
+```
+curl --location --request GET 'https://api.novita.ai/v3/training/style?task_id=d660cdd0-ab9b-4a55-8b78-4bc851051fb0' \
+--header 'Authorization: Bearer {{API Key}}'
+```
+Response:
+Copy
+```
+{
+"task_id": "d660cdd0-ab9b-4a55-8b78-4bc851051fb0",
+"task_status": "SUCCESS",
+"model_type": "",
+"models": [
+{
+"model_name": "model_1698904832_F2BB461625.safetensors",
+"model_status": "DEPLOYING"
+}
+]
+}
+```
+- task_status: The status of the training task, Enum: UNKNOWN, QUEUING, TRAINING, SUCCESS, CANCELED, FAILED.
+- model_status: The status of the model, Enum: DEPLOYING, SERVING.
+- model_name: The name of the model, which can be used to generate images in next step.
+When the task_status is SUCCESS , the model_status is SERVING we can starting to use the lora model.
+#### ​3.2 Start using the trained model
+After model deployed successfully, we can download the model files or generate images directly.
+3.2.1 Use the generated models to create images
+In order to use the trained lora models, We need to add model_name into the request of endpoint /v3/async/txt2img or /v3/async/img2img . Currently trained lora model can not be used in /v3 endpoint.
+Below is a example of how to generate images with trained model:
+Please set the Content-Type header to application/json in your HTTP request to indicate that you are sending JSON data. Currently, only JSON format is supported .
+Request:
+Copy
+```
+curl --location 'https://api.novita.ai/v3/async/txt2img' \
+--header 'Authorization: Bearer {{API Key}};' \
+--header 'Content-Type;' \
+--data '{
+"extra": {
+"response_image_type": "jpeg"
+},
+"request": {
+"model_name": "realisticVisionV51_v51VAE_94301.safetensors",
+"prompt": "a young woman",
+"negative_prompt": "bottle, bad face",
+"sd_vae": "",
+"loras": [
+{
+"model_name": "model_1698904832_F2BB461625.safetensors",
+"strength": 0.7
+}
+],
+"embeddings": [
+{
+"model_name": ""
+}
+],
+"hires_fix": {
+"target_width": 1024,
+"target_height": 768,
+"strength": 0.5
+},
+"refiner": {
+"switch_at": null
+},
+"width": 512,
+"height": 384,
+"image_num": 2,
+"steps": 20,
+"seed": 123,
+"clip_skip": 1,
+"guidance_scale": 7.5,
+"sampler_name": "Euler a"
+}
+}'
+```
+Response:
+Copy
+```
+{
+"code": 0,
+"msg": "",
+"data": {
+"task_id": "bec2bcfe-47c6-4536-af34-f26cfe6fd457"
+}
+}
+```
+Use task_id to get images
+HTTP status codes in the 2xx range indicate that the request has been successfully accepted, while status codes in the 5xx range indicate internal server errors.
+You can get images url in imgs of response.
+Request:
+Copy
+```
+curl --location 'https://api.novita.ai/v3/async/task-result?task_id=bec2bcfe-47c6-4536-af34-f26cfe6fd457' \
+--header 'Authorization: Bearer {{API Key}}'
+```
+Response:
+Copy
+```
+{
+"task": {
+"task_id": "bec2bcfe-47c6-4536-af34-f26cfe6fd457",
+"status": "TASK_STATUS_SUCCEED",
+"reason": ""
+},
+"images": [
+{
+"image_url": "https://faas-output-image.s3.ap-southeast-1.amazonaws.com/dev/replace_object_a910c8f7-76ce-40bd-b805-f00f3ddd7dc1_0.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIASVPYCN6LRCW3SOUV%2F20231019%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Date=20231019T084537Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=b9ad40a5cb3aecf89602c15fe72d28be5d8a33e0bfe3656ce968295fde1aab31",
+"image_url_ttl": 3600,
+"image_type": "png"
+}
+],
+"videos": [
+{
+"video_url": "https://faas-output-image.s3.ap-southeast-1.amazonaws.com/dev/replace_object_a910c8f7-76ce-40bd-b805-f00f3ddd7dc1_0.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIASVPYCN6LRCW3SOUV%2F20231019%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Date=20231019T084537Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=b9ad40a5cb3aecf89602c15fe72d28be5d8a33e0bfe3656ce968295fde1aab31",
+"video_url_ttl": "3600",
+"video_type": "png"
+}
+]
+}
+```
+#### ​3.3 List training tasks
+In this step, we can obtain all the info of trained models.
+Copy
+```
+curl --location --request GET 'https://api.novita.ai/v3/training?pagination.limit=10&pagination.cursor=c_0' \
+--header 'Authorization: Bearer {{API Key}}'
+```
+Response:
+Copy
+```
+{
+"tasks": [
+{
+"task_name": "test_01",
+"task_id": "a0c4cc90-0296-4972-a1d8-e6e227daf094",
+"task_type": "style",
+"task_status": "SUCCESS",
+"created_at": 1699325415,
+"models": [
+{
+"model_name": "model_1699325939_E83A88DAC5.safetensors",
+"model_status": "SERVING"
+}
+]
+},
+{
+"task_name": "test_02",
+"task_id": "51e9bf41-8f7a-464d-b5ad-2fa217a1ec93",
+"task_type": "style",
+"task_status": "SUCCESS",
+"created_at": 1699267268,
+"models": [
+{
+"model_name": "model_1699267603_27F0D9C81C.safetensors",
+"model_status": "SERVING"
+}
+]
+},
+{
+"task_name": "test_03",
+"task_id": "7bd205ab-63e9-452b-9a66-39c597000eaa",
+"task_type": "style",
+"task_status": "FAILED",
+"created_at": 1699264338,
+"models": []
+}
+],
+"pagination": {
+"next_cursor": "c_10"
+}
+}
+```
+- task_name : The name of the training task.
+- task_id : The unique identifier of the training task, which can be used to query the training status and results.
+- task_type : The type of the training task.
+- task_status: The status of the training task, Enum: UNKNOWN, QUEUING, TRAINING, SUCCESS, CANCELED, FAILED.
+- created_at: The time when the training task was created.
+- model: The trained model.
+- model_name: The sd name of the model.
+- model_status: The status of the model, Enum: DEPLOYING, SERVING.
+### ​4. Training playground
+You can also use our training playground to train models in a user-friendly way at: Click Here
+#### ​4.1 Input Novita AI API Key, images and select training type
+#### ​4.2 Switch to the inferencing tab and add more detail
+#### ​Review the training results
+Was this page helpful? Yes No Get Images URL List LoRA Training Task ⌘ I

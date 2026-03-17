@@ -1,0 +1,49 @@
+Source: https://novita.ai/docs/guides/gpu-instance-edit-instance
+============================================================
+
+- Edit Instance - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationGuidesEdit InstanceGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU InstanceOverview
+- Quickstart
+- GuidesGPU Instance Pricing
+- Edit Instance
+- Upgrade Instance
+- Save Image
+- How to Choose a GPU?
+- Jupyter Lab
+- Image Prewarm
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+When you need to modify the “Volume Disk Size”, “Expose HTTP Ports” or “Expose TCP Ports” of a GPU instance, you can use Novita AI Edit Instance feature. Here’s how to use this feature.
+- Go to the Instances page and locate the instance you want to modify. Click “More Operations - Edit”.
+- In the pop-up edit window, modify the instance configuration and click the “Save” button.
+- You can modify the instance configuration while the instance is running, and the instance will not restart after modification;
+- Changes are expected to take effect within 1 minute.
+- The “Volume Disk Size” configuration can only be increased, not decreased;
+- New “Expose HTTP Ports” and “Expose TCP Ports” cannot conflict with ports that are already in use.
+Was this page helpful? Yes No GPU Instance Pricing Upgrade Instance ⌘ I

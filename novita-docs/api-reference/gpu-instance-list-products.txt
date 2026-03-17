@@ -1,0 +1,133 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-list-products
+============================================================
+
+- List GPU Products - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationProductList GPU ProductsGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- Instance
+- Image
+- Template
+- ProductGETList GPU Products
+- GETList CPU Products
+- Network
+- Image Registry
+- Storage
+- Jobs
+- Serverless GPUs
+List GPU Products cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/products \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"data": [
+{
+"id": " ",
+"name": " ",
+"cpuPerGpu": 123,
+"memoryPerGpu": 123,
+"diskPerGpu": 123,
+"availableDeploy": true,
+"minRootFS": 123,
+"maxRootFS": 123,
+"minLocalStorage": 123,
+"maxLocalStorage": 123,
+"regions": {},
+"price": 123,
+"monthlyPrice": [
+{
+"price": 123,
+"month": 123
+}
+],
+"billingMethods": [
+" "
+],
+"spotPrice": " ",
+"inventoryState": " "
+}
+]
+}
+```
+GET / gpu-instance / openapi / v1 / products Try it List GPU Products cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/products \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"data": [
+{
+"id": " ",
+"name": " ",
+"cpuPerGpu": 123,
+"memoryPerGpu": 123,
+"diskPerGpu": 123,
+"availableDeploy": true,
+"minRootFS": 123,
+"maxRootFS": 123,
+"minLocalStorage": 123,
+"maxLocalStorage": 123,
+"regions": {},
+"price": 123,
+"monthlyPrice": [
+{
+"price": 123,
+"month": 123
+}
+],
+"billingMethods": [
+" "
+],
+"spotPrice": " ",
+"inventoryState": " "
+}
+]
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Query Parameters
+​ clusterId string Filter by specified cluster ID. String, length limit: 0-255 characters.
+​ gpuNum integer Filter by number of GPUs. Integer, valid range: [0, 8].
+​ productName string Filter by product name (fuzzy match). String, length limit: 0-255 characters.
+​ minCpuPerGpu integer Filter by minimum CPU cores per GPU. Integer, value must be greater than or equal to 0.
+​ minMemoryPerGpu integer Filter by minimum memory per GPU (GB). Integer, value must be greater than or equal to 0.
+​ minRootFSSize integer Filter by minimum root filesystem size per GPU (GB). Integer, value must be greater than or equal to 0.
+​ billingMethod string Filter by billing method. Options:
+- onDemand: Pay-as-you-go instance (default)
+- monthly: Subscription instance (monthly or yearly)
+- spot: Spot instance billing
+## ​Response
+​ data object[] required GPU product information. Hide properties ​ id string required Product ID. ​ name string required Product name. ​ cpuPerGpu integer required Number of CPU cores per GPU. ​ memoryPerGpu integer required Memory size per GPU (GB). ​ diskPerGpu integer required Disk size per GPU (GB). ​ availableDeploy boolean required Whether this product can be used to create an instance. Values:
+- true: The product can be used to create an instance.
+- false: Insufficient resources, cannot create an instance.
+​ minRootFS integer required Minimum available root filesystem size (GB). ​ maxRootFS integer required Maximum available root filesystem size (GB). ​ minLocalStorage integer required Minimum available local storage size (GB). ​ maxLocalStorage integer required Maximum available local storage size (GB). ​ regions [string] required Available clusters. Indicates that this product is only available in the specified clusters. If the list is empty, the product is available in all clusters. ​ price integer required Price for creating a pay-as-you-go instance with this product. ​ monthlyPrice object[] required Price for creating a subscription (monthly or yearly) instance with this product. Hide properties ​ price integer required Unit price for the subscription instance. ​ month integer required Subscription duration, in months. ​ billingMethods string[] required The billing methods supported by this product. Valid values:
+- onDemand: Pay-as-you-go billing
+- monthly: Monthly subscription billing
+- spot: Spot instance billing
+​ spotPrice string Spot billing instance price. ​ inventoryState string Product inventory status:
+- none: Out of stock
+- low: Low stock
+- normal: Normal stock
+- high: Sufficient stock
+Was this page helpful? Yes No List Templates List CPU Products ⌘ I

@@ -1,0 +1,177 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-create-template
+============================================================
+
+- Create Template - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationTemplateCreate TemplateGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- Instance
+- Image
+- TemplatePOSTCreate Template
+- POSTDelete Template
+- GETGet Template
+- GETList Templates
+- Product
+- Network
+- Image Registry
+- Storage
+- Jobs
+- Serverless GPUs
+Create Template cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/template/create \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"template": {
+"name": " ",
+"readme": " ",
+"type": " ",
+"channel": " ",
+"image": " ",
+"imageAuth": " ",
+"startCommand": " ",
+"entrypoint": " ",
+"rootfsSize": 123,
+"ports": [
+{
+"type": " ",
+"ports": [
+123
+]
+}
+],
+"envs": [
+{
+"key": " ",
+"value": " "
+}
+],
+"minCudaVersion": " "
+}
+}
+'
+```
+200 Copy
+```
+{
+"templateId": " "
+}
+```
+POST / gpu-instance / openapi / v1 / template / create Try it Create Template cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/template/create \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"template": {
+"name": " ",
+"readme": " ",
+"type": " ",
+"channel": " ",
+"image": " ",
+"imageAuth": " ",
+"startCommand": " ",
+"entrypoint": " ",
+"rootfsSize": 123,
+"ports": [
+{
+"type": " ",
+"ports": [
+123
+]
+}
+],
+"envs": [
+{
+"key": " ",
+"value": " "
+}
+],
+"minCudaVersion": " "
+}
+}
+'
+```
+200 Copy
+```
+{
+"templateId": " "
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ template object required Template settings. Hide properties ​ name string required Template name. String, length limit: 1-255 characters. ​ readme string Template README content (in Markdown format). String, length limit: 0-102400 characters. ​ type string required Template type.
+Enum: instance ​ channel string required Template channel.
+Enum: private ​ image string required Docker image address for instance startup. String, length limit: 1-500 characters. ​ imageAuth string Image repository authentication ID for private images. String, length limit: 0-255 characters. ​ startCommand string Startup command for the instance. String, length limit: 0-2047 characters. ​ entrypoint string Instance startup entrypoint. This setting will override the Docker image’s ENTRYPOINT. String, length limit: 0-2047 characters. ​ rootfsSize integer required Root filesystem storage (GB). Integer, value must be greater than 0. ​ ports object[] Exposed port settings. Hide properties ​ type string required Exposed port types.
+Enum: http , tcp ​ ports integer[] required Exposed ports (maximum of 10). Supported port range: 1-65535, except for 2222, 2223, 2224 which are reserved for internal use. ​ envs object[] Environment variables injected into the instance. Up to 100 environment variable pairs can be created. Hide properties ​ key string Environment variable key. String, length limit: 0-511 characters. ​ value string Environment variable value. String, length limit: 0-4095 characters. ​ minCudaVersion string Minimum supported CUDA version. String, length limit: 0-255 characters. Format example: 11.8, 12.4.
+## ​Response
+​ templateId string ID of the created template.
+## ​Example
+Request
+Copy
+```
+curl --request POST \
+--url 'https://api.novita.ai/gpu-instance/openapi/v1/template/create' \
+--header 'Authorization: Bearer {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data '{
+"template": {
+"name": "test",
+"readme": "readme",
+"type": "instance",
+"channel": "private",
+"readme": "test create template",
+"image": "nginx",
+"imageAuth": "",
+"startCommand": "echo test",
+"entrypoint": "",
+"rootfsSize": 60,
+"ports": [
+{
+"type": "http",
+"ports": [80, 443]
+},
+{
+"type": "tcp",
+"ports": [90, 95]
+}
+],
+"envs": [
+{
+"key": "test1",
+"value": "template1"
+},
+{
+"key": "test2",
+"value": "test2"
+}
+],
+"minCudaVersion": "11.8"
+}
+}'
+```
+Response
+Copy
+```
+{
+"templateId": "1"
+}
+```
+Was this page helpful? Yes No Delete Image Prewarm Tasks Delete Template ⌘ I

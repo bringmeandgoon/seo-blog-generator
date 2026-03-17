@@ -1,0 +1,137 @@
+Source: https://novita.ai/docs/guides/llm-reasoning
+============================================================
+
+- Reasoning Models - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationLLMReasoning ModelsGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLMLarge Language Models
+- Vision Language Models
+- Recommended Models
+- Reasoning Models
+- DeepSeek-OCR Usage
+- Function Calling
+- Structured Outputs
+- Prompt Cache
+- Dedicated Endpoint User Manual
+- Batch Inference
+- Rate limits
+- LLM Monitoring
+- Interactive Playground
+- Anthropic SDK Compatibility
+- Interleaved Thinking Supporty
+- Common Error Codes
+- LLM FAQs
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Overview
+- Typical Use Cases
+- Installation & Setup
+- API Usage
+- Request Parameters
+- Example Code
+- Streaming Response
+- Non-Streaming Response
+- Context Management
+- Supported Models
+- Billing
+- Notes & Best Practices
+## ​Overview
+Reasoning models are advanced language models optimized for complex problem-solving tasks. By generating detailed reasoning steps (chain-of-thought), they improve the accuracy of answers in analytical scenarios.
+### ​Typical Use Cases
+- Complex Problem Solving: Suitable for tasks requiring step-by-step logic, such as math or scientific reasoning.
+- Decision Support Systems: Helps explain the logic behind conclusions by providing detailed reasoning processes.
+- Education and Training: Assists learners in understanding complex concepts by presenting derivation processes clearly.
+## ​Installation & Setup
+Before using reasoning models, make sure the latest OpenAI SDK is installed:
+Copy
+```
+pip install -U openai
+```
+## ​API Usage
+Use the /chat/completions endpoint to invoke reasoning models.
+### ​Request Parameters
+- max_tokens: Sets the maximum number of tokens the model can return.
+- temperature: Recommended between 0.5 and 0.7 (suggested: 0.6) to balance creativity and logic.
+- top_p: Recommended value is 0.95.
+### ​Example Code
+#### ​Streaming Response
+Copy
+```
+from openai import OpenAI
+client = OpenAI(api_key="YOUR_API_KEY", base_url="https://api.novita.ai/openai")
+messages = [
+{"role": "user", "content": "Explain Newton's Second Law."}
+]
+response = client.chat.completions.create(
+model="deepseek/deepseek-r1",
+messages=messages,
+stream=True,
+max_tokens=4096
+)
+content = ""
+reasoning_content = ""
+for chunk in response:
+if chunk.choices[0].delta.content:
+content += chunk.choices[0].delta.content
+if chunk.choices[0].delta.reasoning_content:
+reasoning_content += chunk.choices[0].delta.reasoning_content
+print("Final Answer:", content)
+print("Reasoning Steps:", reasoning_content)
+```
+#### ​Non-Streaming Response
+Copy
+```
+response = client.chat.completions.create(
+model="deepseek/deepseek-r1",
+messages=[
+{"role": "user", "content": "What is the greenhouse effect? How can it be mitigated?"}
+],
+stream=False,
+max_tokens=4096
+)
+content = response.choices[0].message.content
+reasoning_content = response.choices[0].message.reasoning_content
+print("Final Answer:", content)
+print("Reasoning Steps:", reasoning_content)
+```
+## ​Context Management
+Reasoning outputs are not automatically carried over to the next round of dialogue. You must manually maintain the message history:
+Copy
+```
+messages.append({"role": "assistant", "content": content})
+messages.append({"role": "user", "content": "Please continue explaining the solution."})
+```
+## ​Supported Models
+The following reasoning models are currently supported on the Novita platform:
+## ​Billing
+- Billing is based on the number of tokens for both input and output.
+- Please refer to each model’s pricing page for specific billing rules and token conversion details.
+## ​Notes & Best Practices
+- Avoid placing reasoning instructions in the system message. Instead, make the intent explicit in the user message.
+- For mathematical tasks, clearly instruct the model, e.g., “Please reason step by step and provide a final answer.”
+- To prevent the model from skipping reasoning steps, consider asking for a newline before the final answer.
+Was this page helpful? Yes No Recommended Models DeepSeek-OCR Usage ⌘ I

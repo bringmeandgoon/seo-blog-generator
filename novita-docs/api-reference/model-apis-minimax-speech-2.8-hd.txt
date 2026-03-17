@@ -1,0 +1,232 @@
+Source: https://novita.ai/docs/api-reference/model-apis-minimax-speech-2.8-hd
+============================================================
+
+- MiniMax Speech 2.8 HD Sync Text-to-Speech - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationAudioMiniMax Speech 2.8 HD Sync Text-to-SpeechGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video Generator
+- AudioPOSTMiniMax Speech-02-hd Text to Speech
+- POSTMiniMax Speech-02-hd Async Long TTS
+- POSTMiniMax Speech-02-turbo Text to Speech
+- POSTMiniMax Speech-02-turbo Async Long TTS
+- POSTMiniMax Speech-2.5-hd-preview Text to Speech
+- POSTMiniMax Speech-2.5-hd-preview Async Long TTS
+- POSTMiniMax Speech-2.5-turbo-preview Text to Speech
+- POSTMiniMax Speech-2.5-turbo-preview Async Long TTS
+- POSTMiniMax Speech-2.6-hd Text to Speech
+- POSTMiniMax Speech-2.6-hd Async Long TTS
+- POSTMiniMax Speech-2.6-turbo Text to Speech
+- POSTMiniMax Speech-2.6-turbo Async Long TTS
+- POSTMiniMax Speech 2.8 Turbo Async Text-to-Speech
+- POSTMiniMax Speech 2.8 HD Async Text-to-Speech
+- POSTMiniMax Speech 2.8 Turbo Sync Text-to-Speech
+- POSTMiniMax Speech 2.8 HD Sync Text-to-Speech
+- POSTMiniMax Voice Cloning
+- POSTFish Audio Text to Speech
+- POSTFish Audio Voice Cloning
+- POSTText to Speech
+- POSTGLM Text to Speech
+- POSTGLM Audio to Text
+- POSTGLM Voice Clone
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+MiniMax Speech 2.8 HD Sync Text-to-Speech cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/minimax-speech-2.8-hd \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"text": " ",
+"stream": true,
+"voice_modify": {
+"pitch": 123,
+"timbre": 123,
+"intensity": 123,
+"sound_effects": " "
+},
+"audio_setting": {
+"format": " ",
+"bitrate": 123,
+"channel": 123,
+"force_cbr": true,
+"sample_rate": 123
+},
+"output_format": " ",
+"voice_setting": {
+"vol": 123,
+"pitch": 123,
+"speed": 123,
+"emotion": " ",
+"voice_id": " ",
+"latex_read": true,
+"text_normalization": true
+},
+"aigc_watermark": true,
+"language_boost": " ",
+"stream_options": {
+"exclude_aggregated_audio": true
+},
+"timber_weights": [
+{
+"weight": 123,
+"voice_id": " "
+}
+],
+"subtitle_enable": true,
+"continuous_sound": true,
+"pronunciation_dict": {
+"tone": [
+{}
+]
+}
+}
+'
+```
+200 Copy
+```
+{
+"data": {
+"audio": " ",
+"status": 123,
+"subtitle_file": " "
+},
+"trace_id": " ",
+"base_resp": {
+"status_msg": " ",
+"status_code": 123
+},
+"extra_info": {
+"bitrate": 123,
+"audio_size": 123,
+"word_count": 123,
+"audio_format": " ",
+"audio_length": 123,
+"audio_channel": 123,
+"usage_characters": 123,
+"audio_sample_rate": 123,
+"invisible_character_ratio": 123
+}
+}
+```
+POST / v3 / minimax-speech-2.8-hd MiniMax Speech 2.8 HD Sync Text-to-Speech cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/minimax-speech-2.8-hd \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"text": " ",
+"stream": true,
+"voice_modify": {
+"pitch": 123,
+"timbre": 123,
+"intensity": 123,
+"sound_effects": " "
+},
+"audio_setting": {
+"format": " ",
+"bitrate": 123,
+"channel": 123,
+"force_cbr": true,
+"sample_rate": 123
+},
+"output_format": " ",
+"voice_setting": {
+"vol": 123,
+"pitch": 123,
+"speed": 123,
+"emotion": " ",
+"voice_id": " ",
+"latex_read": true,
+"text_normalization": true
+},
+"aigc_watermark": true,
+"language_boost": " ",
+"stream_options": {
+"exclude_aggregated_audio": true
+},
+"timber_weights": [
+{
+"weight": 123,
+"voice_id": " "
+}
+],
+"subtitle_enable": true,
+"continuous_sound": true,
+"pronunciation_dict": {
+"tone": [
+{}
+]
+}
+}
+'
+```
+200 Copy
+```
+{
+"data": {
+"audio": " ",
+"status": 123,
+"subtitle_file": " "
+},
+"trace_id": " ",
+"base_resp": {
+"status_msg": " ",
+"status_code": 123
+},
+"extra_info": {
+"bitrate": 123,
+"audio_size": 123,
+"word_count": 123,
+"audio_format": " ",
+"audio_length": 123,
+"audio_channel": 123,
+"usage_characters": 123,
+"audio_sample_rate": 123,
+"invisible_character_ratio": 123
+}
+}
+```
+MiniMax synchronous text-to-speech API using HTTP protocol. Supports various voice, emotion, speed and other parameter settings.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ text string required Text to synthesize into speech, length limit is less than 10000 characters. If text length is greater than 3000 characters, streaming output is recommended. Supports paragraph breaks (newline), pause control ( &lt;#x#&gt; tag), and interjection tags (such as (laughs), (coughs), etc., only supported by speech-2.8-hd/turbo)
+​ stream boolean default: false Controls whether to enable streaming output. Default is false
+​ voice_modify object Hide properties ​ pitch integer Pitch adjustment (deep/bright), range [-100, 100]. Values closer to -100 produce deeper voice; closer to 100 produce brighter voice Value range: [-100, 100] ​ timbre integer Timbre adjustment (rich/crisp), range [-100, 100]. Values closer to -100 produce richer voice; closer to 100 produce crisper voice Value range: [-100, 100] ​ intensity integer Intensity adjustment (powerful/soft), range [-100, 100]. Values closer to -100 produce more powerful voice; closer to 100 produce softer voice Value range: [-100, 100] ​ sound_effects string Sound effect setting, only one can be selected at a time. Options: spacious_echo (spacious echo), auditorium_echo (auditorium broadcast), lofi_telephone (telephone distortion), robotic (electronic) Optional values: spacious_echo , auditorium_echo , lofi_telephone , robotic
+​ audio_setting object Hide properties ​ format string default: "mp3" Audio output format. wav is only supported in non-streaming output Optional values: mp3 , pcm , flac , wav ​ bitrate integer default: 128000 Audio bitrate. Options: [32000, 64000, 128000, 256000], default is 128000. This parameter only applies to mp3 format Optional values: 32000 , 64000 , 128000 , 256000 ​ channel integer default: 1 Number of audio channels. Options: [1, 2], where 1 is mono and 2 is stereo. Default is 1 Optional values: 1 , 2 ​ force_cbr boolean default: false Controls constant bitrate (CBR) encoding. When set to true, audio will be encoded with constant bitrate. Note: This parameter only works when streaming output is enabled and audio format is mp3 ​ sample_rate integer default: 32000 Audio sample rate. Options: [8000, 16000, 22050, 24000, 32000, 44100], default is 32000 Optional values: 8000 , 16000 , 22050 , 24000 , 32000 , 44100
+​ output_format string default: "hex" Controls output format, options are url or hex, default is hex. This parameter is only valid in non-streaming scenarios. URL is valid for 24 hours Optional values: url , hex
+​ voice_setting object Hide properties ​ vol number default: 1 Audio volume, higher value means louder. Range (0, 10], default is 1.0 Value range: [0, 10] ​ pitch integer default: 0 Audio pitch, range [-12, 12], default is 0, where 0 is original voice output Value range: [-12, 12] ​ speed number default: 1 Speech speed, higher value means faster. Range [0.5, 2], default is 1.0 Value range: [0.5, 2] ​ emotion string Controls the emotion of synthesized speech. Options correspond to 8 emotions: happy, sad, angry, fearful, disgusted, surprised, calm, fluent, whisper. The model will automatically match appropriate emotion based on input text Optional values: happy , sad , angry , fearful , disgusted , surprised , calm , fluent , whisper ​ voice_id string required Voice ID for audio synthesis. If mixed voice is needed, set timber_weights parameter and leave this empty. Supports system voice, cloned voice, and text-generated voice ​ latex_read boolean default: false Controls whether to read LaTeX formulas, default is false. Only supports Chinese. When enabled, language_boost will be set to Chinese ​ text_normalization boolean default: false Whether to enable Chinese/English text normalization, which can improve performance in number reading scenarios but slightly increases latency. Default is false
+​ aigc_watermark boolean default: false Controls whether to add audio rhythm identifier at the end of synthesized audio, default is false. This parameter is only valid for non-streaming synthesis
+​ language_boost string Whether to enhance recognition ability for specified minor languages and dialects. Default is null, can be set to auto to let the model decide automatically Optional values: Chinese , Chinese,Yue , English , Arabic , Russian , Spanish , French , Portuguese , German , Turkish , Dutch , Ukrainian , Vietnamese , Indonesian , Japanese , Italian , Korean , Thai , Polish , Romanian , Greek , Czech , Finnish , Hindi , Bulgarian , Danish , Hebrew , Malay , Persian , Slovak , Swedish , Croatian , Filipino , Hungarian , Norwegian , Slovenian , Catalan , Nynorsk , Tamil , Afrikaans , auto
+​ stream_options object Hide properties ​ exclude_aggregated_audio boolean default: false Sets whether the last chunk contains the concatenated audio hex data. Default is false, meaning the last chunk contains the complete concatenated audio hex data
+​ timber_weights array Mixed voice settings, supports up to 4 voice mixtures Hide properties ​ weight integer required Weight of each voice in the mix, must be set together with voice_id. Range [1, 100], supports up to 4 voice mixtures. Higher weight means more similarity to that voice Value range: [1, 100] ​ voice_id string required Voice ID for audio synthesis, must be set together with weight parameter. Supports system voice, cloned voice, and text-generated voice
+​ subtitle_enable boolean default: false Controls whether to enable subtitle service, default is false. This parameter is only valid in non-streaming output scenarios, and only valid for speech-2.6-hd, speech-2.6-turbo, speech-02-turbo, speech-02-hd, speech-01-turbo, speech-01-hd models
+​ continuous_sound boolean default: false Enable this parameter to make clause transitions more natural, only supported by speech-2.8-hd and speech-2.8-turbo models
+​ pronunciation_dict object Hide properties ​ tone array Defines pronunciation or replacement rules for special characters or symbols. For Chinese text, tones are represented by numbers: 1st tone = 1, 2nd tone = 2, 3rd tone = 3, 4th tone = 4, neutral tone = 5. Example: [“omg/oh my god”]
+## ​Response
+​ data object Returned synthesis data object, may be null and needs null check Hide properties ​ audio string Synthesized audio data in hex encoding, format matches the output format specified in request ​ status integer Current audio stream status: 1 means synthesizing, 2 means synthesis completed ​ subtitle_file string Subtitle download link. Subtitles for the audio file, accurate to sentence (no more than 50 characters), in milliseconds, JSON format
+​ trace_id string Session ID for this request, used for troubleshooting
+​ base_resp object Status code and details for this request Hide properties ​ status_msg string Status details ​ status_code integer Status code. 0: success, 1000: unknown error, 1001: timeout, 1002: rate limit triggered, 1004: authentication failed, 1039: TPM rate limit triggered, 1042: invalid characters exceed 10%, 2013: invalid input parameters
+​ extra_info object Additional audio information Hide properties ​ bitrate integer Audio bitrate ​ audio_size integer Audio file size in bytes ​ word_count integer Word count of pronounced text, includes Chinese characters, numbers, letters, excludes punctuation ​ audio_format string Generated audio file format. Options: [mp3, pcm, flac] Optional values: mp3 , pcm , flac ​ audio_length integer Audio duration in milliseconds ​ audio_channel integer Generated audio channel count, 1: mono, 2: stereo ​ usage_characters integer Billable character count ​ audio_sample_rate integer Audio sample rate ​ invisible_character_ratio number Invalid character ratio. If invalid characters do not exceed 10% (inclusive), audio will be generated normally with this ratio data returned; if exceeds 10%, an error will be returned Was this page helpful? Yes No MiniMax Speech 2.8 Turbo Sync Text-to-Speech MiniMax Voice Cloning ⌘ I

@@ -1,0 +1,183 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-create-instance
+============================================================
+
+- Create GPU Instance - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationInstanceCreate GPU InstanceGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- InstancePOSTCreate GPU Instance
+- POSTCreate CPU Instance
+- GETList Instances
+- GETGet Instance
+- POSTEdit Instance
+- POSTStart Instance
+- POSTStop Instance
+- POSTRestart Instance
+- POSTUpgrade Instance
+- POSTMigrate Instance
+- GETMonitor Metrics
+- POSTRenew Subscription Instance
+- POSTConvert Pay-As-You-Go Instance to Subscription
+- POSTDelete Instance
+- POSTSet Auto Renew
+- POSTSet Auto Migrate Strategy
+- Image
+- Template
+- Product
+- Network
+- Image Registry
+- Storage
+- Jobs
+- Serverless GPUs
+Create GPU Instance cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/gpu/instance/create \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"name": " ",
+"productId": " ",
+"gpuNum": 123,
+"rootfsSize": 123,
+"imageUrl": " ",
+"imageAuth": " ",
+"imageAuthId": " ",
+"ports": " ",
+"envs": [
+{
+"key": " ",
+"value": " "
+}
+],
+"tools": [
+{
+"name": " ",
+"port": " ",
+"type": " "
+}
+],
+"command": " ",
+"entrypoint": " ",
+"clusterId": " ",
+"networkStorages": [
+{
+"Id": " ",
+"mountPoint": " "
+}
+],
+"networkId": " ",
+"kind": " ",
+"month": 123,
+"billingMode": " ",
+"autoRenew": true,
+"autoRenewMonth": 123,
+"minCudaVersion": " "
+}
+'
+```
+200 Copy
+```
+{
+"id": " "
+}
+```
+POST / gpu-instance / openapi / v1 / gpu / instance / create Try it Create GPU Instance cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/gpu/instance/create \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"name": " ",
+"productId": " ",
+"gpuNum": 123,
+"rootfsSize": 123,
+"imageUrl": " ",
+"imageAuth": " ",
+"imageAuthId": " ",
+"ports": " ",
+"envs": [
+{
+"key": " ",
+"value": " "
+}
+],
+"tools": [
+{
+"name": " ",
+"port": " ",
+"type": " "
+}
+],
+"command": " ",
+"entrypoint": " ",
+"clusterId": " ",
+"networkStorages": [
+{
+"Id": " ",
+"mountPoint": " "
+}
+],
+"networkId": " ",
+"kind": " ",
+"month": 123,
+"billingMode": " ",
+"autoRenew": true,
+"autoRenewMonth": 123,
+"minCudaVersion": " "
+}
+'
+```
+200 Copy
+```
+{
+"id": " "
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ name string Instance name. String, length limit: 0-255 characters.
+​ productId string required GPU product ID. String, length limit: 1-255 characters. You can query this via the List GPU Products API .
+​ gpuNum integer required Number of GPUs. Integer, valid range: [1, 8].
+​ rootfsSize integer required Root filesystem size. Integer, valid range: [10, 6144]. If the minimum value is less than 10 GB, the system will default to 10 GB. The maximum value is dynamically limited by available storage resources and can be queried via the product list API.
+​ imageUrl string required Image URL. String, length limit: 1-500 characters.
+​ imageAuth string Image authentication (username:password). String, length limit: 0-10239 characters.
+​ imageAuthId string Image repository authentication ID.
+​ ports string Instance open ports, e.g.: 80/http, 3306/tcp. Supported port range: [1-65535], except for 2222, 2223, 2224 which are reserved for internal use. Supported port types: [tcp, http]. The total number of ports used by ports + tools must not exceed 15.
+​ envs object[] Instance environment variables. Up to 100 environment variables can be created. Show properties ​ key string Environment variable name. String, length limit: 0-511 characters. ​ value string Environment variable value. String, length limit: 0-4095 characters.
+​ tools object[] Enable official image support tools. Currently, some official images only include Jupyter. The total number of ports used by ports + tools must not exceed 15. Show properties ​ name string Tool name. Valid values: [Jupyter]. ​ port string Port used by the tool. Supported port range: [1-65535], except for 2222, 2223, 2224 which are reserved for internal use. ​ type string Port type used by the tool. Supported types: [tcp, http].
+​ command string Instance startup command. String, length limit: 0-2047 characters.
+​ entrypoint string Instance startup entrypoint. This setting will override the Docker image’s ENTRYPOINT. String, length limit: 0-2047 characters.
+​ clusterId string Specify the cluster ID to create the instance in. If left empty, the instance will be created in a random cluster.
+​ networkStorages object[] Cloud storage mount configuration. Up to 30 cloud storages can be mounted. Show properties ​ Id string Network storage ID. ​ mountPoint string Network storage mount path. Default: “/network”. String, length limit: 1-4095 characters.
+​ networkId string VPC network ID. Leave empty if not using a VPC network.
+​ kind string required Instance type. Valid values: [gpu, cpu].
+​ month integer Number of months for subscription instance. Set to 0 to create a pay-as-you-go instance. Integer, value must be greater than or equal to 0.
+​ billingMode string Instance billing mode. Valid values: onDemand , monthly , spot .
+Default: onDemand .
+Note: If month > 0 is set, monthly billing mode will be enforced.
+- onDemand: Pay-as-you-go billing
+- monthly: Monthly subscription billing
+- spot: Spot instance billing
+​ autoRenew boolean Whether to automatically renew. Boolean, default value: false.
+Note: This parameter is only effective when monthly billing is enabled.
+​ autoRenewMonth integer Number of months to automatically renew. Integer, valid range: [1, 12].
+Note: This parameter is only effective when monthly billing is enabled and auto renew is enabled.
+​ minCudaVersion string Minimum CUDA version supported for instance creation. Must be specified in the format: 11.8, 12.4, etc. String, length limit: 0-255 characters.
+## ​Response
+​ id string Created instance ID. Was this page helpful? Yes No List Clusters Create CPU Instance ⌘ I

@@ -1,0 +1,93 @@
+Source: https://novita.ai/docs/guides/sandbox-metrics
+============================================================
+
+- Sandbox Metrics - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationSandboxSandbox MetricsGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- SandboxSandbox Lifecycle
+- Sandbox Persistence
+- Sandbox Metrics
+- Sandbox Metadata
+- Environment variables
+- List sandboxes
+- Connect to running sandbox
+- Internet access
+- Mount object storage bucket
+- Auto Pause and Resume
+- Sandbox Clone
+- Sandbox Snapshot Template
+- Idle Timeout
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Getting sandbox metrics
+- Getting sandbox metrics using the SDKs
+- Getting sandbox metrics using the CLI
+- Limitations
+The sandbox metrics allows you to get information about the sandbox’s CPU and memory usage.
+## ​Getting sandbox metrics
+Getting the metrics of a sandbox returns an array of timestamped metrics containing CPU and memory usage information.
+The metrics are collected at the start of the sandbox, then every 2 seconds, and finally right before the sandbox is deleted.
+### ​Getting sandbox metrics using the SDKs
+JavaScript & TypeScript Python Copy
+```
+import { Sandbox } from 'novita-sandbox/code-interpreter'
+const sandbox = await Sandbox.create()
+console.log('Sandbox created', sandbox.sandboxId)
+let metrics = await sandbox.getMetrics()
+// You can also get the metrics by sandbox ID:
+// const metrics = await Sandbox.getMetrics(sbx.sandboxId)
+while (metrics && metrics.length setTimeout(resolve, 1000))
+metrics = await sandbox.getMetrics()
+}
+console.log('Sandbox metrics:', metrics)
+// Example output:
+// Sandbox metrics: [
+// {
+// cpuCount: 2,
+// cpuUsedPct: 17.85,
+// memTotalMiB: 987,
+// memUsedMiB: 245,
+// timestamp: '2025-06-30T06:49:15.243Z'
+// },
+// {
+// cpuCount: 2,
+// cpuUsedPct: 0.4,
+// memTotalMiB: 987,
+// memUsedMiB: 246,
+// timestamp: '2025-06-30T06:49:20.237Z'
+// }
+// ]
+await sandbox.kill()
+```
+### ​Getting sandbox metrics using the CLI
+Bash Copy
+```
+novita-sandbox-cli sandbox metrics
+```
+## ​Limitations
+- It may take a second or more to get the metrics after the sandbox is created. Until the logs are collected from the sandbox, you will get an empty array.
+Was this page helpful? Yes No Sandbox Persistence Sandbox Metadata ⌘ I

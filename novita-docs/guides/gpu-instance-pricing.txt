@@ -1,0 +1,67 @@
+Source: https://novita.ai/docs/guides/gpu-instance-pricing
+============================================================
+
+- GPU Instance Pricing - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationGuidesGPU Instance PricingGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU InstanceOverview
+- Quickstart
+- GuidesGPU Instance Pricing
+- Edit Instance
+- Upgrade Instance
+- Save Image
+- How to Choose a GPU?
+- Jupyter Lab
+- Image Prewarm
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - On-Demand Pricing
+- Introduction
+- Billing Structure of On-Demand Pricing
+- 1. Computing Resources
+- 2. Storage Resources
+- Advantages of On-Demand Pricing for Different Scenarios
+## ​On-Demand Pricing
+### ​Introduction
+On-Demand Pricing is designed to offer users the flexibility to access computational resources without any long-term commitments or upfront costs. This pricing model is ideal for users who require compute power on an as-needed basis, whether for short-term projects, variable workloads, or unpredictable processing demands.
+### ​Billing Structure of On-Demand Pricing
+Includes “computing resources” and “storage resources”, you can view the billing details on the Billing Explore .
+#### ​1. Computing Resources
+Cost = Instance Unit Price × Billing Duration × Number of Cards
+- Billing duration is accurate to the second and settled hourly;
+- You can view the unit prices of various instance specifications on the GPU Instance Explore;
+- The billing start time is when the instance is successfully created and enters the pulling state, and the billing stop time is when the instance is stopped.
+#### ​2. Storage Resources
+Billing ItemBilling MethodExplanationBilling Logic
+Container DiskPay-as-you-goSupports 60GB free quota, charges for the excess based on capacity and usage duration.Unit price for the excess capacity: $0.005/GB/day
+Volume DiskPay-as-you-goCharges based on capacity and usage duration.Unit price: $0.005/GB/day
+Network VolumePay-as-you-goCharges based on capacity and usage duration.Unit price: $0.002/GB/day
+### ​Advantages of On-Demand Pricing for Different Scenarios
+- Short-Term Projects: For projects with a limited duration, On-Demand Pricing allows you to align your compute costs with the project timeline.
+- Variable Workloads: If your workloads fluctuate, On-Demand Pricing provides the flexibility to scale up or down as needed without incurring fixed costs.
+- Testing and Development: For testing new applications or developing code, On-Demand Pricing offers a cost-effective way to access necessary compute resources without long-term financial commitments.
+Was this page helpful? Yes No Connect to Instance Edit Instance ⌘ I

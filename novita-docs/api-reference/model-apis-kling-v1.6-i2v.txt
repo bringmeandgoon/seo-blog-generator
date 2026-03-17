@@ -1,0 +1,215 @@
+Source: https://novita.ai/docs/api-reference/model-apis-kling-v1.6-i2v
+============================================================
+
+- Novita AI KLING V1.6 Image to Video API | Generate videos from imagesSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationVideo GeneratorKLING V1.6 Image to VideoGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video GeneratorPOSTUnified Video Generation API
+- POSTText to Video
+- POSTImage to Video
+- POSTHunyuan Video Fast
+- POSTWan 2.1 Text to Video
+- POSTWan 2.1 Image to Video
+- POSTWan 2.2 Text to Video
+- POSTWan 2.2 Image to Video
+- POSTWan 2.5 Preview Text to Video
+- POSTWan 2.5 Preview Image to Video
+- POSTWan 2.6 Text to Video
+- POSTWan 2.6 Image to Video
+- POSTWan 2.6 Reference Video
+- POSTKLING V1.6 Text to Video
+- POSTKLING V1.6 Image to Video
+- POSTKling V2.1 Master Text to Video
+- POSTKling V2.1 Image to Video
+- POSTKling V2.1 Master Image to Video
+- POSTKling V2.5 Turbo Text to Video
+- POSTKling V2.5 Turbo Image to Video
+- POSTKling V2.6 Pro Motion Control
+- POSTKling V2.6 Pro Text-to-Video
+- POSTKling V2.6 Pro Image-to-Video
+- POSTKling-o1 Image to Video
+- POSTKling-o1 Reference Video Generation
+- POSTKling-o1 Text to Video
+- POSTKling-o1 Video Editing
+- POSTKling v3.0 Standard Image-to-Video
+- POSTKling v3.0 Standard Text-to-Video
+- POSTKling v3.0 Pro Image-to-Video
+- POSTKling v3.0 Pro Text-to-Video
+- POSTMinimax Video-01
+- POSTMinimax Hailuo-02
+- POSTMinimax Hailuo 2.3 Text to Video
+- POSTMinimax Hailuo 2.3 Image to Video
+- POSTMinimax Hailuo 2.3 Fast Image to Video
+- POSTVidu Q1 Text to Video
+- POSTVidu Q1 Image to Video
+- POSTVidu Q1 Start End to Video
+- POSTVidu Q1 Reference to Video
+- POSTVidu 2.0 Image to Video
+- POSTVidu 2.0 Start End to Video
+- POSTVidu 2.0 Reference to Video
+- POSTPixVerse V4.5 Text to Video
+- POSTPixVerse V4.5 Image to Video
+- POSTSeedance V1 Lite Text to Video
+- POSTSeedance V1 Lite Image to Video
+- POSTSeedance V1 Pro Text to Video
+- POSTSeedance V1 Pro Image to Video
+- POSTSeedance 1.5 Pro Text To Video
+- POSTSeedance 1.5 Pro Image To Video
+- POSTVIDU Q2 Turbo Start-End Frame to Video
+- POSTVIDU Q2 Turbo Multi-frame to Video
+- POSTVIDU Q2 Turbo Image to Video
+- POSTVIDU Q2 Text to Video
+- POSTVIDU Q2 Reference Image to Video
+- POSTVIDU Q2 Pro Start-End Frame to Video
+- POSTVIDU Q2 Pro Multi-frame to Video
+- POSTVIDU Q2 Pro Image to Video
+- POSTVIDU Q2 Pro Fast Start-End Frame to Video
+- POSTVIDU Q2 Pro Fast Image to Video
+- POSTVIDU Q2 Template to Video
+- POSTVidu Q3 Pro Text-to-Video
+- POSTVidu Q3 Pro Image-to-Video
+- POSTHeygen Video-translate
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+KLING V1.6 Image to Video cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/kling-v1.6-i2v \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"mode": " ",
+"image_url": " ",
+"end_image_url": " ",
+"prompt": " ",
+"negative_prompt": " ",
+"duration": 123,
+"guidance_scale": 123
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+POST / v3 / async / kling-v1.6-i2v Try it KLING V1.6 Image to Video cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/kling-v1.6-i2v \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"mode": " ",
+"image_url": " ",
+"end_image_url": " ",
+"prompt": " ",
+"negative_prompt": " ",
+"duration": 123,
+"guidance_scale": 123
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+KLING V1.6 Image to Video is an AI image-to-video generation model developed by the Kuaishou AI Team. It transforms images into dynamic 5-second videos at 720p / 1080p resolution, offering high-quality visual outputs with enhanced motion and semantic understanding.
+This is an asynchronous API; only the task_id will be returned. You should use the task_id to request the Task Result API to retrieve the video generation results.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ mode string The mode of the video generation. Supports:
+- Standard: fast creation, lower cost, and generate 720p video.
+- Professional: high quality, higher cost, generate 1080p video, and allow set an end frame.
+Default: Standard .
+​ image_url string required The URL of the start frame image to be used for video generation.
+​ end_image_url string The URL of the end frame image to be used for video generation. Only available when mode is Professional .
+​ prompt string required Prompt text required to guide the generation. Range: 1 <= x <= 2000 .
+​ negative_prompt string Negative prompts instruct the model on what elements to avoid generating. Range: 0 <= x <= 2000 .
+​ duration integer The length of the generated video in seconds. Default: 5 .
+Optional values: 5 , 10
+​ guidance_scale float Guidance scale parameter controls how closely the generated content follows the prompt. Range: 0 <= x <= 1 . Default: 0.5 .
+## ​Response
+​ task_id string required Use the task_id to request the Task Result API to retrieve the generated outputs.
+## ​Example
+Here is an example of how to use the KLING V1.6 Image to Video API.
+- Generate a task_id by sending a POST request to the KLING V1.6 Image to Video API.
+Request:
+Copy
+```
+curl --location 'https://api.novita.ai/v3/async/kling-v1.6-i2v' \
+--header 'Authorization: Bearer {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data '{
+"mode": "Standard",
+"image_url": "https://pub-f964a1c641c04024bce400ad128c8cd6.r2.dev/kling-v1.6-i2v-image",
+"prompt": "A cute dog standing up from a sitting position while wearing sunglasses",
+"negative_prompt": "low quality",
+"guidance_scale": 0.65
+}'
+```
+Response:
+Copy
+```
+{
+"task_id": "{Returned Task ID}"
+}
+```
+- Use task_id to get output videos.
+HTTP status codes in the 2xx range indicate that the request has been successfully accepted, while status codes in the 5xx range indicate internal server errors.
+You can get videos url in videos of response.
+Request:
+Copy
+```
+curl --location --request GET 'https://api.novita.ai/v3/async/task-result?task_id={Returned Task ID}' \
+--header 'Authorization: Bearer {{API Key}}'
+```
+Response:
+Copy
+```
+{
+"task": {
+"task_id": "{Returned Task ID}",
+"task_type": "KLING_V16_I2V_STANDARD",
+"status": "TASK_STATUS_SUCCEED",
+"reason": "",
+"eta": 0,
+"progress_percent": 100
+},
+"images": [],
+"videos": [
+{
+"video_url": "{The URL of the generated video}",
+"video_url_ttl": "3600",
+"video_type": "mp4"
+}
+]
+}
+```
+Video files:
+Was this page helpful? Yes No KLING V1.6 Text to Video Kling V2.1 Master Text to Video ⌘ I

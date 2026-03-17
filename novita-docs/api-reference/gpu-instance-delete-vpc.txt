@@ -1,0 +1,59 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-delete-vpc
+============================================================
+
+- Delete VPC Network - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationNetworkDelete VPC NetworkGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- Instance
+- Image
+- Template
+- Product
+- NetworkPOSTCreate VPC Network
+- GETList VPC Networks
+- GETGet VPC Network
+- POSTUpdate VPC Network
+- POSTDelete VPC Network
+- Image Registry
+- Storage
+- Jobs
+- Serverless GPUs
+Delete VPC Network cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/network/delete \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"networkId": " "
+}
+'
+```
+POST / gpu-instance / openapi / v1 / network / delete Try it Delete VPC Network cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/network/delete \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"networkId": " "
+}
+'
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ networkId string required Cluster ID. String, length limit: 1-255 characters. Please ensure there are no instances under this VPC network before deletion. Was this page helpful? Yes No Update VPC Network Create Container Registry Authentication ⌘ I

@@ -1,0 +1,84 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-edit-network-storage
+============================================================
+
+- Edit Network Storage - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationStorageEdit Network StorageGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- Instance
+- Image
+- Template
+- Product
+- Network
+- Image Registry
+- StoragePOSTCreate Network Storage
+- POSTDelete Network Storage
+- POSTEdit Network Storage
+- GETList Network Storage
+- Jobs
+- Serverless GPUs
+Edit Network Storage cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/networkstorage/update \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"storageId": " ",
+"storageName": " ",
+"storageSize": " "
+}
+'
+```
+POST / gpu-instance / openapi / v1 / networkstorage / update Try it Edit Network Storage cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/networkstorage/update \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"storageId": " ",
+"storageName": " ",
+"storageSize": " "
+}
+'
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ storageId string required The unique identifier for the storage.
+​ storageName string required The name of the storage.
+​ storageSize string required The size of the storage in appropriate units.
+## ​Example
+Request
+Copy
+```
+curl --request POST \
+--url 'https://api.novita.ai/gpu-instance/openapi/v1/networkstorage/update' \
+--header 'Authorization: Bearer {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data '{
+"storageId": "string",
+"storageName": "string",
+"storageSize": "string"
+}'
+```
+Response
+Copy
+```
+{}
+```
+Was this page helpful? Yes No Delete Network Storage List Network Storage ⌘ I

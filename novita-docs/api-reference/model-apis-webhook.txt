@@ -1,0 +1,114 @@
+Source: https://novita.ai/docs/api-reference/model-apis-webhook
+============================================================
+
+- Webhook - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImage, Audio and VideoWebhookGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video Generator
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+On this page - Get Started
+- Enable Webhook in Request
+- Use Test Mode to Test Your Integration
+- Retry Policy
+- Best Practices
+For the asynchronous V3 APIs, in addition to polling the Task Result API , you can now also listen for the ASYNC_TASK_RESULT event on your webhook endpoint.
+## ​Get Started
+### ​Enable Webhook in Request
+For the asynchronous V3 APIs that support webhooks, the webhook parameters are provided in the extra.webhook field. (For more details, please refer to the individual documentation pages for each API.) For example:
+Copy
+```
+{
+"extra": {
+"webhook": {
+"url": "https://your-webhook-endpoint-url"
+}
+//...
+},
+// ...
+}
+```
+When the task is finished, Novita AI will send the ASYNC_TASK_RESULT event to your webhook endpoint. For example:
+Copy
+```
+// The webhook event content with API /v3/async/txt2image.
+{
+"event_type": "ASYNC_TASK_RESULT",
+"payload": {
+"task": {
+"eta": 0,
+"progress_percent": 0,
+"reason": "",
+"status": "TASK_STATUS_SUCCEED",
+"task_id": "f6aec953-2e81-4e8b-938e-2ceab54d6df9",
+"task_type": "TXT_TO_IMG"
+},
+"extra": {
+"enable_nsfw_detection": false,
+"webhook": {
+"url": "https://your-webhook-endpoint-url"
+}
+},
+"images": [
+{
+"image_type": "jpeg",
+"image_url": "https://faas-output-image.s3.ap-southeast-1.amazonaws.com/test_data/image_01.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIASVPYCN6LRCW3SOUV%2F20240602%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Date=20240602T150041Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=f22b3a2f93587e8f7e80ba88842ddf7d80d6481bbec6f94eedd241bb15718629",
+"image_url_ttl": "3600",
+"nsfw_detection_result": null
+}
+],
+"videos": [],
+"audios": []
+}
+}
+```
+The schema of the payload fields is exactly the same as the response from the Task Result API .
+### ​Use Test Mode to Test Your Integration
+You can test your integration without making actual API calls by enabling Test Mode . For example:
+Copy
+```
+{
+"extra": {
+"webhook": {
+"url": "https://your-webhook-endpoint-url",
+"test_mode": {
+"enabled": true,
+// Set return_task_status to TASK_STATUS_SUCCEED to test the success response.
+// Set return_task_status to TASK_STATUS_FAILED to test the error response.
+"return_task_status": 'TASK_STATUS_SUCCEED'
+}
+},
+//...
+},
+// ...
+}
+```
+Your webhook endpoint will receive a simulated mock event , which you can use to ensure that your integration works correctly.
+### ​Retry Policy
+Novita AI will retry up to five times if it fails to send the event to your webhook endpoint. This includes the following situations:
+- The request to your endpoint times out (currently set to 5 seconds).
+- Your endpoint returns a non-2xx status code.
+## ​Best Practices
+- Your webhook endpoint must quickly return a successful status code 2xx before executing any complex logic that could cause a timeout.
+- After receiving a webhook event, filter out any events other than ASYNC_TASK_RESULT to continue with your logic.
+- Before releasing features that rely on the webhook event, use Test Mode to thoroughly test your logic.
+- Use HTTPS for your webhook endpoint.
+Was this page helpful? Yes No Retrieve file content Get Model ⌘ I

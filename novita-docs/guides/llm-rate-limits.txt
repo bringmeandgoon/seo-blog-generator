@@ -1,0 +1,92 @@
+Source: https://novita.ai/docs/guides/llm-rate-limits
+============================================================
+
+- Rate limits - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationLLMRate limitsGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLMLarge Language Models
+- Vision Language Models
+- Recommended Models
+- Reasoning Models
+- DeepSeek-OCR Usage
+- Function Calling
+- Structured Outputs
+- Prompt Cache
+- Dedicated Endpoint User Manual
+- Batch Inference
+- Rate limits
+- LLM Monitoring
+- Interactive Playground
+- Anthropic SDK Compatibility
+- Interleaved Thinking Supporty
+- Common Error Codes
+- LLM FAQs
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - 1. Understanding Rate Limits
+- What are Rate Limits?
+- Default Rate Limits
+- 2. Handling Rate Limits
+- How to Monitor Rate Limits?
+- Best Practices
+- When You Hit Rate Limits
+Rate limits control how frequently users can make requests to our LLM API within specific time periods. Understanding and working within these limits is essential for optimal API usage.
+## ​1. Understanding Rate Limits
+### ​What are Rate Limits?
+Rate limits restrict the number of API requests that can be made within defined time periods. They help:
+- Prevent API abuse and misuse;
+- Ensure fair resource distribution among users;
+- Maintain consistent API performance and reliability;
+- Protect the stability of our services.
+### ​Default Rate Limits
+Each account has a default rate limit for model calls, measured in RPM (requests per model per minute) and TPM (tokens per model per minute). Rate limits vary by account tier, as outlined in the tables below.
+TierHow to reach
+T1Monthly top-ups did not exceed $50 in any of the last 3 calendar months.
+T2Monthly top-ups were at least $50 but did not exceed $500 in any of the last 3 calendar months.
+T3Monthly top-ups were at least $500 but did not exceed $3,000 in any of the last 3 calendar months.
+T4Monthly top-ups were at least $3,000 but did not exceed $10,000 in any of the last 3 calendar months.
+T5Monthly top-ups were at least $10,000 in at least one of the last 3 calendar months.
+The last 3 calendar months refers to the current month and the two months before it.
+Default Rate Limit by Tier (RPM / TPM):
+## ​2. Handling Rate Limits
+### ​How to Monitor Rate Limits?
+When you exceed the rate limit, the API will return:
+- HTTP Status Code: 429 (Too Many Requests);
+- A rate limit exceeded message in the response body.
+### ​Best Practices
+To avoid hitting rate limits:
+- Implement request throttling in your application;
+- Add exponential backoff for retries;
+- Monitor your API usage patterns.
+### ​When You Hit Rate Limits
+If you receive a 429 error, you can:
+- Retry Later: Wait a short period before retrying your request;
+- Optimize Requests: Reduce request frequency;
+- Rate Limits Increase: For higher rate limits, you can:
+Contact us through Discord
+- or Book a call with our sales team
+If you have any questions, please reach out to us on Discord . Was this page helpful? Yes No Batch Inference LLM Monitoring ⌘ I

@@ -1,0 +1,67 @@
+Source: https://novita.ai/docs/guides/sandbox-cli-list-sandboxes
+============================================================
+
+- List sandboxes - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationCLIList sandboxesGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLIInstalling CLI
+- Authentication in CLI
+- Create sandbox and connect to terminal
+- List sandboxes
+- Shutdown running sandboxes
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - List all running sandboxes
+- Filter by state
+- Filter by metadata
+- List limit
+### ​List all running sandboxes
+To list all running sandboxes, use the following command:
+Bash Copy
+```
+novita-sandbox-cli sandbox list
+```
+### ​Filter by state
+To filter the sandboxes by their state you can specify the --state flag, which can either be “ running ”, “ paused ” or both.
+Bash Copy
+```
+novita-sandbox-cli sandbox list --state running,paused
+```
+This will return all sandboxes, both running and paused.
+### ​Filter by metadata
+To filter the sandboxes by their metadata, use the --metadata flag.
+Bash Copy
+```
+novita-sandbox-cli sandbox list --metadata key1=value1,key2=value2
+```
+### ​List limit
+To limit the amount of sandboxes returned by the command, use the --limit flag.
+Bash Copy
+```
+novita-sandbox-cli sandbox list --limit 10
+```
+By default, the command will return all sandboxes. Was this page helpful? Yes No Create sandbox and connect to terminal Shutdown running sandboxes ⌘ I

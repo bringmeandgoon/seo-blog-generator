@@ -1,0 +1,75 @@
+Source: https://novita.ai/docs/guides/sandbox-metadata
+============================================================
+
+- Sandbox Metadata - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationSandboxSandbox MetadataGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- SandboxSandbox Lifecycle
+- Sandbox Persistence
+- Sandbox Metrics
+- Sandbox Metadata
+- Environment variables
+- List sandboxes
+- Connect to running sandbox
+- Internet access
+- Mount object storage bucket
+- Auto Pause and Resume
+- Sandbox Clone
+- Sandbox Snapshot Template
+- Idle Timeout
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Filtering sandboxes by metadata
+Metadata is a way to attach arbitrary key-value pairs for a sandbox.
+This is useful in various scenarios, for example:
+- Associate a sandbox with a user session.
+- Store custom user data for a sandbox like API keys.
+- Associate a sandbox with a user ID and connect to it later.
+You specify metadata when creating a sandbox and can access it later through listing running sandboxes with Sandbox.list() method.
+JavaScript & TypeScript Python Copy
+```
+import { Sandbox } from 'novita-sandbox/code-interpreter'
+// Create sandbox with metadata.
+const sandbox = await Sandbox.create({
+metadata: {
+userId: '123',
+},
+})
+// List running sandboxes and access metadata.
+const runningSandboxesPaginator = await Sandbox.list({
+query: {
+state: ["running"],
+},
+})
+const runningSandboxes = await runningSandboxesPaginator.nextItems()
+console.log("runningSandboxes[0].metadata: ", runningSandboxes[0].metadata)
+// Example output:
+// { userId: '123' }
+await sandbox.kill()
+```
+## ​Filtering sandboxes by metadata
+You can also filter sandboxes by metadata, you can find more about it here . Was this page helpful? Yes No Sandbox Metrics Environment variables ⌘ I

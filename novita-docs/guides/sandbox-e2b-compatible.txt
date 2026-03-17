@@ -1,0 +1,100 @@
+Source: https://novita.ai/docs/guides/sandbox-e2b-compatible
+============================================================
+
+- E2B SDK Compatibility - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationQuickstartE2B SDK CompatibilityGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- QuickstartCreate Your First Agent Sandbox
+- E2B SDK Compatibility
+- Pricing
+- Quota Limit
+- Console
+- Learn more
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Installation
+- Code Interpreter SDK
+- Core SDK
+- Desktop SDK
+- CLI
+- Setup Configuration
+- Examples
+Novita Agent Sandbox provides a compatibility API that allows you to use the E2B SDK and CLI. This is useful if you are already using the E2B SDK and CLI and want to switch to Novita Agent Sandbox. However, we recommend using the Novita Agent Sandbox SDK to access all features.
+## ​Installation
+### ​Code Interpreter SDK
+JavaScript & TypeScript Python Copy
+```
+npm i @e2b/code-interpreter@beta
+```
+### ​Core SDK
+JavaScript & TypeScript Python Copy
+```
+npm i e2b@beta
+```
+### ​Desktop SDK
+JavaScript & TypeScript Python Copy
+```
+npm i @e2b/desktop@beta
+```
+### ​CLI
+Bash Copy
+```
+npm i -g @e2b/cli@v1.9.2
+```
+## ​Setup Configuration
+You need to set the following environment variables in your project to use the E2B SDK and CLI with Novita Agent Sandbox.
+Bash Copy
+```
+export E2B_DOMAIN=sandbox.novita.ai
+export E2B_API_KEY=" "
+```
+## ​Examples
+Below is an example showing how to create a sandbox through the SDK and run specified commands using E2B SDK.
+JavaScript & TypeScript Python Copy
+```
+import { Sandbox } from '@e2b/code-interpreter'
+// or import { Sandbox } from 'e2b'
+// or import { Sandbox } from '@e2b/desktop'
+const sbx = await Sandbox.create()
+const execution = await sbx.commands.run('ls -l')
+console.log(execution)
+await sbx.kill()
+```
+Below is an example showing how to use the E2B CLI with Novita Agent Sandbox.
+Bash Copy
+```
+export E2B_DOMAIN=sandbox.novita.ai
+# Authentication in CLI
+e2b auth login
+# Start sandbox and connect to terminal
+e2b sandbox spawn
+# List sandboxes
+e2b sandbox list
+# Shutdown running sandboxes
+e2b sandbox kill
+```
+Was this page helpful? Yes No Create Your First Agent Sandbox Pricing ⌘ I

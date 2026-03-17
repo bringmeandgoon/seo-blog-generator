@@ -1,0 +1,45 @@
+Source: https://novita.ai/docs/guides/sandbox-commands
+============================================================
+
+- Running commands in sandbox - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationCommandsRunning commands in sandboxGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- CommandsRunning commands in sandbox
+- Streaming command output
+- Running commands in background
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+You can run terminal commands inside the sandbox using the commands.run() method.
+JavaScript & TypeScript Python Copy
+```
+import { Sandbox } from 'novita-sandbox/code-interpreter'
+const sandbox = await Sandbox.create()
+const result = await sandbox.commands.run('ls -l')
+console.log(result)
+await sandbox.kill()
+```
+Was this page helpful? Yes No Download data from sandbox Streaming command output ⌘ I

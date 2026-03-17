@@ -1,0 +1,103 @@
+Source: https://novita.ai/docs/api-reference/model-apis-llm-upload-batch-input-file
+============================================================
+
+- Upload file - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationBatchUpload fileGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM APIPOSTCreate chat completion
+- POSTCreate completion
+- POSTCreate embeddings
+- POSTCreate rerank
+- GETList models
+- GETRetrieve model
+- BatchPOSTCreate batch
+- GETRetrieve batch
+- POSTCancel batch
+- GETList batch
+- POSTUpload file
+- GETList files
+- GETRetrieve file
+- DELDelete file
+- GETRetrieve file content
+- Image, Audio and Video
+GPUs - GPU Instance
+- Serverless GPUs
+Upload file cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/openai/v1/files \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"purpose": " "
+}
+'
+```
+200 Copy
+```
+{
+"id": " ",
+"object": " ",
+"bytes": 123,
+"created_at": 123,
+"filename": " ",
+"purpose": " ",
+"metadata": {
+"total_requests": 123
+}
+}
+```
+POST / openai / v1 / files Try it Upload file cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/openai/v1/files \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"purpose": " "
+}
+'
+```
+200 Copy
+```
+{
+"id": " ",
+"object": " ",
+"bytes": 123,
+"created_at": 123,
+"filename": " ",
+"purpose": " ",
+"metadata": {
+"total_requests": 123
+}
+}
+```
+Upload the batch input file so that it can be correctly referenced when creating a batch.
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ file file required The batch input file to be uploaded should be in .jsonl format, with each line detailing an API inference request. Each request must have a unique custom_id to identify inference results in the output file after batch processing. The parameters within the body field of each line are used as the actual inference request parameters for the endpoint. All requests within a single batch JSONL file must target the same model. Do not mix requests for different models in one batch. Here is an example of an input file containing two requests: Copy
+```
+{"custom_id": "request-1", "body": {"model": "deepseek/deepseek-v3-0324", "messages": [{"role": "user", "content": "Hello, world!"}], "max_tokens": 400}}
+{"custom_id": "request-2", "body": {"model": "deepseek/deepseek-v3-0324", "messages": [{"role": "system", "content": "You are a helpful assistant."},{"role": "user", "content": "Hello world!"}],"max_tokens": 1000}}
+```
+​ purpose string required The purpose of the uploaded file. For batch processing, this should be set to batch . Enum: batch
+## ​Response
+​ id string required The unique identifier of the uploaded file.
+​ object string required The object type, which is always file .
+​ bytes integer required The size of the uploaded file in bytes.
+​ created_at integer required The Unix timestamp (in seconds) when the file was created.
+​ filename string required The name of the uploaded file.
+​ purpose string required The purpose of the uploaded file.
+​ metadata object Additional metadata about the uploaded file. Show properties ​ total_requests integer required The total number of requests contained in the batch input file. Was this page helpful? Yes No List batch List files ⌘ I

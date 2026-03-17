@@ -1,0 +1,105 @@
+Source: https://novita.ai/docs/api-reference/model-apis-glm-tts-voice-clone
+============================================================
+
+- GLM Voice Clone - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationAudioGLM Voice CloneGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video Generator
+- AudioPOSTMiniMax Speech-02-hd Text to Speech
+- POSTMiniMax Speech-02-hd Async Long TTS
+- POSTMiniMax Speech-02-turbo Text to Speech
+- POSTMiniMax Speech-02-turbo Async Long TTS
+- POSTMiniMax Speech-2.5-hd-preview Text to Speech
+- POSTMiniMax Speech-2.5-hd-preview Async Long TTS
+- POSTMiniMax Speech-2.5-turbo-preview Text to Speech
+- POSTMiniMax Speech-2.5-turbo-preview Async Long TTS
+- POSTMiniMax Speech-2.6-hd Text to Speech
+- POSTMiniMax Speech-2.6-hd Async Long TTS
+- POSTMiniMax Speech-2.6-turbo Text to Speech
+- POSTMiniMax Speech-2.6-turbo Async Long TTS
+- POSTMiniMax Speech 2.8 Turbo Async Text-to-Speech
+- POSTMiniMax Speech 2.8 HD Async Text-to-Speech
+- POSTMiniMax Speech 2.8 Turbo Sync Text-to-Speech
+- POSTMiniMax Speech 2.8 HD Sync Text-to-Speech
+- POSTMiniMax Voice Cloning
+- POSTFish Audio Text to Speech
+- POSTFish Audio Voice Cloning
+- POSTText to Speech
+- POSTGLM Text to Speech
+- POSTGLM Audio to Text
+- POSTGLM Voice Clone
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+GLM Voice Clone cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/glm-tts-voice-clone \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"text": " ",
+"input": " ",
+"audio_url": " ",
+"voice_name": " "
+}
+'
+```
+200 Copy
+```
+{
+"voice": " ",
+"audio_url": " "
+}
+```
+POST / v3 / glm-tts-voice-clone GLM Voice Clone cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/glm-tts-voice-clone \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"text": " ",
+"input": " ",
+"audio_url": " ",
+"voice_name": " "
+}
+'
+```
+200 Copy
+```
+{
+"voice": " ",
+"audio_url": " "
+}
+```
+Using voice cloning technology to generate speech synthesis with specified voice timbre and text content based on sample audio.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ text string Text content of the sample audio, optional
+​ input string required Target text content for generating preview audio
+​ audio_url string required URL of the sample audio. Size limit is 10MB, recommended audio duration is between 3 to 30 seconds.
+​ voice_name string required Specify a unique voice name
+## ​Response
+​ voice string Voice timbre
+​ audio_url string URL of the generated preview audio file Was this page helpful? Yes No GLM Audio to Text Merge Face ⌘ I

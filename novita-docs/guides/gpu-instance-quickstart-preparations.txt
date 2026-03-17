@@ -1,0 +1,46 @@
+Source: https://novita.ai/docs/guides/gpu-instance-quickstart-preparations
+============================================================
+
+- Preparations - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationQuickstartPreparationsGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU InstanceOverview
+- QuickstartPreparations
+- Create Instances
+- Manage Instances
+- Manage Network Volume
+- Connect to Instance
+- Guides
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Preliminary Preparations
+## ​Preliminary Preparations
+Before deploying a new GPU instance, please be aware of the following points:
+- First, create your Novita AI account and ensure you have enough credits in your account. Refer to our Quickstart for more information.
+- Confirm that you have read and understood the product introductions, pricing, features, usage restrictions, and terms of service for Novita AI.
+- Understand the billing methods for GPU instances. Here’s some guidance: GPU Instance Pricing.
+Was this page helpful? Yes No Overview Create Instances ⌘ I

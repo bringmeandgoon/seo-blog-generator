@@ -1,0 +1,157 @@
+Source: https://novita.ai/docs/api-reference/model-apis-kling-v2.6-pro-motion-control
+============================================================
+
+- Kling V2.6 Pro Motion Control - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationVideo GeneratorKling V2.6 Pro Motion ControlGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video GeneratorPOSTUnified Video Generation API
+- POSTText to Video
+- POSTImage to Video
+- POSTHunyuan Video Fast
+- POSTWan 2.1 Text to Video
+- POSTWan 2.1 Image to Video
+- POSTWan 2.2 Text to Video
+- POSTWan 2.2 Image to Video
+- POSTWan 2.5 Preview Text to Video
+- POSTWan 2.5 Preview Image to Video
+- POSTWan 2.6 Text to Video
+- POSTWan 2.6 Image to Video
+- POSTWan 2.6 Reference Video
+- POSTKLING V1.6 Text to Video
+- POSTKLING V1.6 Image to Video
+- POSTKling V2.1 Master Text to Video
+- POSTKling V2.1 Image to Video
+- POSTKling V2.1 Master Image to Video
+- POSTKling V2.5 Turbo Text to Video
+- POSTKling V2.5 Turbo Image to Video
+- POSTKling V2.6 Pro Motion Control
+- POSTKling V2.6 Pro Text-to-Video
+- POSTKling V2.6 Pro Image-to-Video
+- POSTKling-o1 Image to Video
+- POSTKling-o1 Reference Video Generation
+- POSTKling-o1 Text to Video
+- POSTKling-o1 Video Editing
+- POSTKling v3.0 Standard Image-to-Video
+- POSTKling v3.0 Standard Text-to-Video
+- POSTKling v3.0 Pro Image-to-Video
+- POSTKling v3.0 Pro Text-to-Video
+- POSTMinimax Video-01
+- POSTMinimax Hailuo-02
+- POSTMinimax Hailuo 2.3 Text to Video
+- POSTMinimax Hailuo 2.3 Image to Video
+- POSTMinimax Hailuo 2.3 Fast Image to Video
+- POSTVidu Q1 Text to Video
+- POSTVidu Q1 Image to Video
+- POSTVidu Q1 Start End to Video
+- POSTVidu Q1 Reference to Video
+- POSTVidu 2.0 Image to Video
+- POSTVidu 2.0 Start End to Video
+- POSTVidu 2.0 Reference to Video
+- POSTPixVerse V4.5 Text to Video
+- POSTPixVerse V4.5 Image to Video
+- POSTSeedance V1 Lite Text to Video
+- POSTSeedance V1 Lite Image to Video
+- POSTSeedance V1 Pro Text to Video
+- POSTSeedance V1 Pro Image to Video
+- POSTSeedance 1.5 Pro Text To Video
+- POSTSeedance 1.5 Pro Image To Video
+- POSTVIDU Q2 Turbo Start-End Frame to Video
+- POSTVIDU Q2 Turbo Multi-frame to Video
+- POSTVIDU Q2 Turbo Image to Video
+- POSTVIDU Q2 Text to Video
+- POSTVIDU Q2 Reference Image to Video
+- POSTVIDU Q2 Pro Start-End Frame to Video
+- POSTVIDU Q2 Pro Multi-frame to Video
+- POSTVIDU Q2 Pro Image to Video
+- POSTVIDU Q2 Pro Fast Start-End Frame to Video
+- POSTVIDU Q2 Pro Fast Image to Video
+- POSTVIDU Q2 Template to Video
+- POSTVidu Q3 Pro Text-to-Video
+- POSTVidu Q3 Pro Image-to-Video
+- POSTHeygen Video-translate
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Kling V2.6 Pro Motion Control cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/kling-v2.6-pro-motion-control \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"image": " ",
+"video": " ",
+"prompt": " ",
+"negative_prompt": " ",
+"keep_original_sound": true,
+"character_orientation": " "
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+POST / v3 / async / kling-v2.6-pro-motion-control Kling V2.6 Pro Motion Control cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/kling-v2.6-pro-motion-control \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"image": " ",
+"video": " ",
+"prompt": " ",
+"negative_prompt": " ",
+"keep_original_sound": true,
+"character_orientation": " "
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+The Kling v2.6 Pro Motion Control model generates animations by applying motion from a reference video to a reference image. It extracts motion paths from 3-30 second video clips to produce smooth, realistic video animations while maintaining subject identity consistency.
+This is an asynchronous API; only the task_id will be returned. You should use the task_id to request the Task Result API to retrieve the video generation results.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ image string required Reference image to animate (URL or base64 encoded); supported formats: .jpg , .jpeg , .png .
+Max file size: 10MB; width and height must be >= 300px; aspect ratio must be between 1:2.5 and 2.5:1.
+​ video string required Reference motion video URL; contains the motion sequence to transfer; supported formats: .mp4 , .mov .
+Max file size: 10MB; width and height must be >= 300px; aspect ratio must be between 1:2.5 and 2.5:1.
+Duration must be between 3 and 30 seconds.
+​ prompt string Positive prompt for scene description, style, lighting, etc.
+​ negative_prompt string Negative prompt; max 2500 characters.
+​ keep_original_sound boolean default: true Whether to keep the original audio from the reference video.
+​ character_orientation string required Character orientation in the generated video, can match either the image or video orientation.
+- image: Matches the character orientation in the image; reference video duration limited to 10 seconds.
+- video: Matches the character orientation in the video; reference video duration limited to 30 seconds.
+Optional values: image , video
+## ​Response
+​ task_id string required Use the task_id to request the Task Result API to retrieve the generated outputs. Was this page helpful? Yes No Kling V2.5 Turbo Image to Video Kling V2.6 Pro Text-to-Video ⌘ I

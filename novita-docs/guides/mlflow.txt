@@ -1,0 +1,167 @@
+Source: https://novita.ai/docs/guides/mlflow
+============================================================
+
+- MLflow - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationIntegrationsMLflowGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- IntegrationsClaude Code Integration Guide
+- OpenAI Agents SDK
+- AnythingLLM
+- Dify
+- Helicone
+- Hugging Face
+- Langflow
+- Continue
+- Cursor
+- LangChain
+- Skyvern
+- LobeChat
+- AI Gradio
+- Langfuse
+- MLflow
+- Verba
+- Portkey
+- DocsGPT
+- LlamaIndex
+- LoLLMS WebUI
+- CodeCompanion
+- Page Assist
+- DeepSearcher
+- Browser Use
+- OWL
+- LiteLLM
+- ChatBox
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Prerequisites
+- Integration Steps
+- Step 1: Install Dependencies
+- Step 2: Start MLflow Server
+- Step 3: Enable Tracing and Call Novita AI
+- Step 4: View Traces in MLflow UI
+- Step 5: Advanced Tracing References
+- Streaming and Async
+- Combine with frameworks or manual tracing
+This guide shows how to integrate Novita AI with MLflow Tracing. By using Novita AI’s OpenAI-compatible endpoint ( https://api.novita.ai/openai ), you can capture prompts, responses, latency, token usage, and model metadata in MLflow.
+# ​Prerequisites
+Before you start, make sure you have:
+- Novita AI API key: create one in Key Management.
+- A running MLflow tracking server. You can use local default http://localhost:5000.
+- Python or JavaScript runtime.
+# ​Integration Steps
+## ​Step 1: Install Dependencies
+Python JavaScript / TypeScript Copy
+```
+pip install 'mlflow[genai]' openai
+```
+## ​Step 2: Start MLflow Server
+If you have a local Python environment >= 3.10, you can start MLflow with:
+Copy
+```
+mlflow server
+```
+MLflow also provides a Docker Compose setup:
+Copy
+```
+git clone --depth 1 --filter=blob:none --sparse https://github.com/mlflow/mlflow.git
+cd mlflow
+git sparse-checkout set docker-compose
+cd docker-compose
+cp .env.dev.example .env
+docker compose up -d
+```
+Then open http://localhost:5000 to confirm the MLflow UI is accessible.
+## ​Step 3: Enable Tracing and Call Novita AI
+Python JavaScript / TypeScript Copy
+```
+import openai
+import mlflow
+# Enable auto-tracing for OpenAI-compatible calls
+mlflow.openai.autolog()
+# Optional: set tracking target and experiment
+mlflow.set_tracking_uri("http://localhost:5000")
+mlflow.set_experiment("Novita AI")
+client = openai.OpenAI(
+base_url="https://api.novita.ai/openai",
+api_key=" ",
+)
+response = client.chat.completions.create(
+model="deepseek/deepseek-r1",
+messages=[
+{"role": "system", "content": "You are a helpful assistant."},
+{"role": "user", "content": "What is the capital of France?"},
+],
+)
+print(response.choices[0].message.content)
+```
+## ​Step 4: View Traces in MLflow UI
+Open your MLflow UI (for example http://localhost:5000 ) and go to your configured experiment to inspect traces.
+You should see:
+- Prompt and completion content
+- Latency and token usage
+- Model and request metadata
+- Errors/exceptions (if any)
+## ​Step 5: Advanced Tracing References
+### ​Streaming and Async
+MLflow supports tracing for streaming and async Novita AI APIs. See:
+- OpenAI Tracing
+### ​Combine with frameworks or manual tracing
+Python JavaScript / TypeScript Copy
+```
+import json
+from openai import OpenAI
+import mlflow
+from mlflow.entities import SpanType
+# Initialize the OpenAI client with Novita AI API endpoint
+client = OpenAI(
+base_url="https://api.novita.ai/openai",
+api_key=" ",
+)
+# Create a parent span for the Novita AI call
+@mlflow.trace(span_type=SpanType.CHAIN)
+def answer_question(question: str):
+messages = [{"role": "user", "content": question}]
+response = client.chat.completions.create(
+model="deepseek/deepseek-r1",
+messages=messages,
+)
+# Attach session/user metadata to the trace
+mlflow.update_current_trace(
+metadata={
+"mlflow.trace.session": "session-12345",
+"mlflow.trace.user": "user-a",
+}
+)
+return response.choices[0].message.content
+answer = answer_question("What is the capital of France?")
+```
+For full upstream reference:
+- MLflow Novita AI integration page: Tracing Novita AI
+- MLflow OpenAI tracing docs: OpenAI Tracing
+For Novita model details and endpoint usage, see:
+- Novita LLM API guide: LLM API
+Was this page helpful? Yes No Langfuse Verba ⌘ I

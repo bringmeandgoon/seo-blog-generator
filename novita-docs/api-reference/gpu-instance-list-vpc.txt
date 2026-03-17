@@ -1,0 +1,100 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-list-vpc
+============================================================
+
+​
+Request Headers
+​
+Content-Type
+stringrequired
+Enum: application/json
+​
+Authorization
+stringrequired
+Bearer authentication format, for example: Bearer {{API Key}}.
+​
+Query Parameters
+​
+pageSize
+integer
+Number of items per page. Integer, value must be greater than or equal to 0.
+​
+pageNum
+integer
+Page number to retrieve. Integer, value must be greater than or equal to 0.
+​
+name
+string
+Custom network name (supports fuzzy search). String, length limit: 0-255 characters.
+​
+creators
+string
+Creator user ID. String, length limit: 0-255 characters.
+​
+Response
+​
+network
+object[]required
+VPC network information.
+
+Hide properties
+
+​
+Id
+stringrequired
+VPC network ID.
+​
+user
+stringrequired
+User account ID.
+​
+name
+stringrequired
+VPC network name.
+​
+state
+object[]required
+VPC network status.
+
+Hide properties
+
+​
+state
+stringrequired
+VPC network status. Possible values:
+creating: Being created.
+ready: Successfully created.
+​
+error
+string
+Error message if VPC network creation fails or the network is unavailable.
+​
+segment
+stringrequired
+VPC network segment.
+​
+clusterId
+stringrequired
+Cluster ID.
+​
+Addresses
+object[]required
+Instance information under the VPC network.
+
+Hide properties
+
+​
+Id
+stringrequired
+Instance ID.
+​
+Ip
+stringrequired
+Instance IP address.
+​
+createTime
+stringrequired
+VPC network creation time. Format: Unix timestamp.
+​
+total
+stringrequired
+Total number of results.

@@ -1,0 +1,97 @@
+Source: https://novita.ai/docs/api-reference/model-apis-glm-tts
+============================================================
+
+- GLM Text to Speech - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationAudioGLM Text to SpeechGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video Generator
+- AudioPOSTMiniMax Speech-02-hd Text to Speech
+- POSTMiniMax Speech-02-hd Async Long TTS
+- POSTMiniMax Speech-02-turbo Text to Speech
+- POSTMiniMax Speech-02-turbo Async Long TTS
+- POSTMiniMax Speech-2.5-hd-preview Text to Speech
+- POSTMiniMax Speech-2.5-hd-preview Async Long TTS
+- POSTMiniMax Speech-2.5-turbo-preview Text to Speech
+- POSTMiniMax Speech-2.5-turbo-preview Async Long TTS
+- POSTMiniMax Speech-2.6-hd Text to Speech
+- POSTMiniMax Speech-2.6-hd Async Long TTS
+- POSTMiniMax Speech-2.6-turbo Text to Speech
+- POSTMiniMax Speech-2.6-turbo Async Long TTS
+- POSTMiniMax Speech 2.8 Turbo Async Text-to-Speech
+- POSTMiniMax Speech 2.8 HD Async Text-to-Speech
+- POSTMiniMax Speech 2.8 Turbo Sync Text-to-Speech
+- POSTMiniMax Speech 2.8 HD Sync Text-to-Speech
+- POSTMiniMax Voice Cloning
+- POSTFish Audio Text to Speech
+- POSTFish Audio Voice Cloning
+- POSTText to Speech
+- POSTGLM Text to Speech
+- POSTGLM Audio to Text
+- POSTGLM Voice Clone
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+GLM Text to Speech cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/glm-tts \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"input": " ",
+"speed": 123,
+"voice": " ",
+"volume": 123,
+"response_format": " ",
+"watermark_enabled": true
+}
+'
+```
+POST / v3 / glm-tts GLM Text to Speech cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/glm-tts \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"input": " ",
+"speed": 123,
+"voice": " ",
+"volume": 123,
+"response_format": " ",
+"watermark_enabled": true
+}
+'
+```
+Convert text to natural speech using GLM-TTS, supporting multiple voices, emotion control, and tone adjustment.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ input string required The text to convert to speech Length limit: 0 - 1024
+​ speed number default: 1 Speech speed, default is 1.0, range [0.5, 2] Value range: [0.5, 2]
+​ voice string default: "tongtong" required The voice to use for audio generation, supporting both system voices and cloned voices. System voices include: tongtong (Tongtong, default voice), chuichui (Chuichui), xiaochen (Xiaochen), jam (Dongdong Zoo jam voice), kazi (Dongdong Zoo kazi voice), douji (Dongdong Zoo douji voice), luodo (Dongdong Zoo luodo voice)
+​ volume number default: 1 Volume, default is 1.0, range (0, 10] Value range: [0, 10]
+​ response_format string default: "pcm" Audio output format, defaults to pcm format Optional values: wav , pcm
+​ watermark_enabled boolean Controls whether to add watermark when generating AI audio. true: Enables explicit watermark and implicit digital watermark for AI-generated content by default, complying with policy requirements. false: Disables all watermarks, only effective for users who have completed watermark removal action.
+## ​Response
+Request processed successfully, recommended sample rate is 24000
+Format: binary Was this page helpful? Yes No Text to Speech GLM Audio to Text ⌘ I

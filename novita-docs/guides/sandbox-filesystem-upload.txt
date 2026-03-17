@@ -1,0 +1,89 @@
+Source: https://novita.ai/docs/guides/sandbox-filesystem-upload
+============================================================
+
+- Upload data to sandbox - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationFilesystemUpload data to sandboxGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- FilesystemOverview
+- Read & write files
+- Watch sandbox directory for changes
+- Upload data to sandbox
+- Download data from sandbox
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Upload single file
+- Upload directory / multiple files
+You can upload data to the sandbox using the files.write() method.
+## ​Upload single file
+JavaScript & TypeScript Python Copy
+```
+import fs from 'fs'
+import { Sandbox } from 'novita-sandbox/code-interpreter'
+const sandbox = await Sandbox.create()
+// Read file from local filesystem
+const localFilePath = '../local-test-file'
+const content = fs.readFileSync(localFilePath, 'utf8')
+// Upload file to sandbox
+const filePathInSandbox = '/tmp/test-file'
+const result = await sandbox.files.write(filePathInSandbox, content)
+console.log(result)
+await sandbox.kill()
+```
+## ​Upload directory / multiple files
+JavaScript & TypeScript Python Copy
+```
+import fs from 'fs'
+import path from 'path'
+import { Sandbox } from 'novita-sandbox/code-interpreter'
+const sandbox = await Sandbox.create()
+const readDirectoryFiles = (directoryPath) => {
+const files = fs.readdirSync(directoryPath);
+const filesArray = files
+.filter(file => {
+const fullPath = path.join(directoryPath, file);
+return fs.statSync(fullPath).isFile();
+})
+.map(file => {
+const filePath = path.join(directoryPath, file);
+return {
+path: filePath,
+data: fs.readFileSync(filePath, 'utf8')
+};
+});
+return filesArray;
+};
+const localDirectoryPath = '../local-test-dir'
+const files = readDirectoryFiles(localDirectoryPath);
+console.log(files);
+files.forEach(file => {
+file.path = file.path.replace('../local-test-dir', '/tmp')
+})
+const result = await sandbox.files.write(files)
+console.log(result)
+await sandbox.kill()
+```
+Was this page helpful? Yes No Watch sandbox directory for changes Download data from sandbox ⌘ I

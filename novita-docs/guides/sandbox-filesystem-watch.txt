@@ -1,0 +1,83 @@
+Source: https://novita.ai/docs/guides/sandbox-filesystem-watch
+============================================================
+
+- Watch sandbox directory for changes - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationFilesystemWatch sandbox directory for changesGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- FilesystemOverview
+- Read & write files
+- Watch sandbox directory for changes
+- Upload data to sandbox
+- Download data from sandbox
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Recursive Watching
+You can watch a directory for changes using the files.watchDir() method in JavaScript and files.watch_dir() method in Python.
+Since events are tracked asynchronously, their delivery may be delayed.
+It’s recommended not to collect or close watcher immediately after making a change.
+JavaScript & TypeScript Python Copy
+```
+import { Sandbox, FilesystemEventType } from 'novita-sandbox/code-interpreter'
+const sandbox = await Sandbox.create()
+const dirname = '/tmp'
+// Start watching directory for changes
+const handle = await sandbox.files.watchDir(dirname, async (event) => {
+console.log(`got event: ${event.type} - ${event.name}`)
+if (event.type === FilesystemEventType.WRITE) {
+console.log(`wrote to file ${event.name}`)
+}
+})
+// Trigger file write event
+await sandbox.files.write(`${dirname}/test-file`, 'test-file-content')
+// Stop watching directory for changes
+handle.stop()
+await sandbox.kill()
+```
+## ​Recursive Watching
+You can enable recursive watching using the parameter recursive .
+When rapidly creating new folders (e.g., deeply nested path of folders), events other than CREATE might not be emitted. To avoid this behavior, create the required folder structure in advance.
+JavaScript & TypeScript Python Copy
+```
+import { Sandbox, FilesystemEventType } from 'novita-sandbox/code-interpreter'
+const sandbox = await Sandbox.create()
+const dirname = '/tmp'
+// Start watching directory for changes
+const handle = await sandbox.files.watchDir(dirname, async (event) => {
+console.log(`got event: ${event.type} - ${event.name}`)
+if (event.type === FilesystemEventType.WRITE) {
+console.log(`wrote to file ${event.name}`)
+}
+}, {
+recursive: true
+})
+// Trigger file write event
+await sandbox.files.write(`${dirname}/test-folder/test-file`, 'test-file-content')
+// Stop watching directory for changes
+handle.stop()
+await sandbox.kill()
+```
+Was this page helpful? Yes No Read & write files Upload data to sandbox ⌘ I

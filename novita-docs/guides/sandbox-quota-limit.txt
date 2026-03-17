@@ -1,0 +1,71 @@
+Source: https://novita.ai/docs/guides/sandbox-quota-limit
+============================================================
+
+- Quota Limit - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationQuickstartQuota LimitGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- QuickstartCreate Your First Agent Sandbox
+- E2B SDK Compatibility
+- Pricing
+- Quota Limit
+- Console
+- Learn more
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Agent Sandbox CPU and Memory Ratio Restrictions
+- CPU Restrictions
+- Memory Restrictions
+- Ratio Rules
+- Example Overview
+- Notes
+Currently, each user allows to create a maximum of 100 concurrent sandboxes by default. The quota can be adjusted based on your requirements after our evaluation.
+If you need a higher quota, please contact our support team .
+## ​Agent Sandbox CPU and Memory Ratio Restrictions
+When creating an Agent sandbox template, the system enforces constraints on the ratio between CPU and memory . These restrictions are designed to ensure the stability and resource efficiency of Agent sandboxes, and to avoid operational issues caused by unreasonable resource allocation.
+### ​CPU Restrictions
+- Supported CPU specification range: 1‒8 vCPU
+- Only integer values for CPU count are supported, such as: 1, 2, 4, 8 vCPU
+### ​Memory Restrictions
+- Maximum memory limit: 8192 MiB (8 GiB)
+- Memory must be an integer multiple of 512 MiB, e.g.: 512 MiB, 1024 MiB, 2048 MiB, etc.
+### ​Ratio Rules
+ItemRestriction RequirementDescription
+Minimum Ratio1:0.5 (CPU:Memory)Each 1 vCPU requires at least: 0.5 × 1024 = 512 MiB memory
+Maximum Ratio1:4 (CPU:Memory)Each 1 vCPU can allocate up to: 4 × 1024 = 4096 MiB memory
+Memory Step512 MiB incrementsMemory must be a multiple of 512 MiB, e.g.: 512 MiB, 1024 MiB, 1536 MiB, etc.
+### ​Example Overview
+CPU SpecMinimum MemoryMaximum Value by RatioActual Maximum Selectable
+1 vCPU512 MiB4096 MiB (4 GiB)4096 MiB (4 GiB)
+2 vCPU1024 MiB (1 GiB)8192 MiB (8 GiB)8192 MiB (8 GiB)
+4 vCPU2048 MiB (2 GiB)16384 MiB (16 GiB)8192 MiB (8 GiB)
+8 vCPU4096 MiB (4 GiB)32768 MiB (32 GiB)8192 MiB (8 GiB)
+### ​Notes
+- The above rules are only effective when creating the sandbox template. Sandboxes launched from this template will inherit its specifications.
+- The memory upper limit is 8192 MiB (8 GiB) by default; even if the calculated ratio exceeds this value, the actual selectable memory cannot surpass this limit.
+- If the configuration is out of range, the system will prompt an error and the user needs to select again.
+- It is recommended to reasonably choose the CPU to memory ratio according to your workload, to avoid OOM (out-of-memory) errors due to insufficient resources or wasting resources due to overallocation.
+Was this page helpful? Yes No Pricing Console ⌘ I

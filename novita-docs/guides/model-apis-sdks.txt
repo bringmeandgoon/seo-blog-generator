@@ -1,0 +1,67 @@
+Source: https://novita.ai/docs/guides/model-apis-sdks
+============================================================
+
+- SDKs for Model APIs - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImage, Audio and VideoSDKs for Model APIsGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and VideoSDKs for Model APIs
+- How to subscribe to Dedicated Endpoints?
+- Configure Custom AWS S3 Bucket
+- Upload Custom LoRA Models
+- A Brief Introduction to Sampler
+- A Brief Introduction to Clip Skip
+- What's the Variational Autoencoder VAE?
+- Training Image Caption Guidance
+- API V2 to V3 Migration Guide
+- Rate limits
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - JavaScript SDK
+- Installation
+- Quick Start
+- Python SDK
+- Installation
+- Quick Start
+Novita AI provides official SDKs to help you easily integrate our services into your applications.
+## ​JavaScript SDK
+### ​Installation
+Install our JavaScript SDK using npm :
+Copy
+```
+npm i novita-sdk
+```
+### ​Quick Start
+Visit https://github.com/novitalabs/javascript-sdk for a quick start.
+## ​Python SDK
+### ​Installation
+Install our Python SDK using pip :
+Copy
+```
+pip install novita-client
+```
+### ​Quick Start
+Visit https://github.com/novitalabs/python-sdk for a quick start. Was this page helpful? Yes No LLM FAQs How to subscribe to Dedicated Endpoints? ⌘ I

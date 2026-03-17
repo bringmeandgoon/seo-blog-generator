@@ -1,0 +1,67 @@
+Source: https://novita.ai/docs/guides/sandbox-template-start-cmd
+============================================================
+
+- Start Command - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationTemplateStart CommandGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- TemplateSandbox Templates
+- Start Command
+- Customize sandbox CPU & RAM
+- Version Management
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - How to add start command
+- Sandbox template config
+- Logs
+The start command allows you to specify a command that will be already running when you spawn your custom sandbox.
+This way, you can for example have running servers or seeded databases inside the sandbox that are already fully ready when you spawn the sandbox using the SDK and with zero waiting time for your users during the runtime.
+The idea behind the start command feature is to lower the wait times for your users and have everything ready for your users when you spawn your sandbox.
+You can see how it works here .
+## ​How to add start command
+When you are building a sandbox template you can specify the start command by using the -c option:
+Bash Copy
+```
+novita-sandbox-cli template build -c " "
+```
+When you spawn the custom sandbox you built, the start command will be already running if there was no error when we tried to execute it.
+### ​Sandbox template config
+You can specify the start command also inside the novita.toml in the same directory where you run novita-sandbox-cli template build .
+Toml Copy
+```
+template_id = "0r0efkbfwzfp9p7qpc1c"
+dockerfile = "novita.Dockerfile"
+template_name = "my-agent-sandbox"
+start_cmd = " "
+```
+## ​Logs
+You can retrieve the start command’s logs using the CLI during runtime.
+These logs are the logs from the start command during the build phase.
+Bash Copy
+```
+novita-sandbox-cli sandbox logs
+```
+Was this page helpful? Yes No Sandbox Templates Customize sandbox CPU & RAM ⌘ I

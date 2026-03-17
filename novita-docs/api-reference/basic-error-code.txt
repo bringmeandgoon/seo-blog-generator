@@ -1,0 +1,127 @@
+Source: https://novita.ai/docs/api-reference/basic-error-code
+============================================================
+
+- API Error Codes - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationBasicAPI Error CodesGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU Instance
+- Serverless GPUs
+On this page - Image / Video / Audio
+- LLM
+- GPU
+- Billing
+## ​Image / Video / Audio
+Error NameStatus CodeDescription
+INVALID_REQUEST_BODY400Request parameter validation failed
+IMAGE_FILE_EXCEEDS_MAX_SIZE400Image size exceeds limit
+INVALID_IMAGE_FORMAT400Image format does not meet requirements
+IMAGE_EXCEEDS_MAX_RESOLUTION400Image resolution exceeds limit
+INVALID_IMAGE_SIZE400Image width or height exceeds limit
+API_NOT_FOUND404API not found
+IMAGE_NO_FACE_DETECTED400No face detected
+INVALID_CUSTOM_OUTPUT_PATH400Invalid OSS path
+ILLEGAL_PROMPT400Prompt contains inappropriate content
+ILLEGAL_IMAGE_CONTENT400Image contains inappropriate content
+INVALID_AUDIO_FILE400Invalid audio input
+BILLING_FAILED500Billing service error
+BILLING_AUTH_FAILED403Billing service authentication failed
+BILLING_BALANCE_NOT_ENOUGH400Insufficient balance
+MISSING_API_KEY400API Key not provided
+INVALID_API_KEY403API Key validation failed
+FEATURE_NOT_ALLOWED403No permission to upload model
+API_NOT_ALLOWED403No permission to use this API
+RATE_LIMIT_EXCEEDED429Rate limit exceeded
+NEED_REAL_NAME_VERIFY403Enterprise verification not completed
+CREATE_TASK_FAILED500Failed to create task
+TASK_NOT_FOUND404Task not found
+GET_RESULT_FAILED500Failed to get task result
+TASK_FAILED500Task execution failed
+## ​LLM
+Error NameStatus CodeDescription
+INVALID_API_KEY403API Key not provided
+MODEL_NOT_FOUND404Model not found
+FAILED_TO_AUTH401Authentication failed
+NOT_ENOUGH_BALANCE403Insufficient balance
+INVALID_REQUEST_BODY400Request body format error, see message for details
+RATE_LIMIT_EXCEEDED429Too many requests, please try again later
+TOKEN_LIMIT_EXCEEDED429Token limit exceeded, please try again later
+SERVICE_NOT_AVAILABLE503Service unavailable
+ACCESS_DENY403Access denied
+## ​GPU
+Error NameStatus CodeDescription
+UNKNOWN500Unknown error
+GET_TOKEN_FAILED400Failed to obtain token
+FORBIDDEN403Access forbidden / No permission
+UNAUTHORIZED401Unauthorized
+USER_ALREADY_EXISTS400User already exists
+INVALID_USER_OR_PASSWORD400Invalid username or password
+INVALID_CODE400Invalid verification code
+USER_NOT_FOUND400User not found
+USER_PHONE_NOT_CONSIST400User phone number mismatch
+SEND_CODE_TOO_FAST429Verification code sent too frequently
+INVALID_PUBLIC_KEY400Invalid public key
+USER_NOT_ACTIVATED400User not activated
+USER_ALREADY_ACTIVATED400User already activated
+INVALID_USER_TOKEN400Invalid user token
+BANNED_USER400Account has been banned
+RATE_LIMIT_EXCEEDED429Request rate limit exceeded
+RESOURCE_NOT_FOUND400Resource not found (e.g., container not found)
+CONFLICT400Conflict (e.g., container conflict)
+VALIDATOR_PARAM400Parameter validation failed / Invalid parameter
+REQUEST400Request error
+OPERATION_LIMIT400Operation limit reached
+INSUFFICIENT_RESOURCE400Insufficient resources
+CLUSTER_STATUS400Cluster status abnormal
+NODE_STATUS400Node status abnormal
+DEPENDENT_RESOURCE_STATE400Dependent resource state abnormal
+PREPAID_INSTANCE_NOT_SUPPORT_RELEASE400Prepaid instance does not support release
+CREATING_INSTANCE_NOT_SUPPORT_RENEWAL400Instance in creation does not support renewal
+INSTANCE_LOCAL_STORAGE_NOT_FOUND400Instance local storage not found
+INVALID_COMMAND_PARAM400Invalid instance startup command parameter
+GPU_SPEC_USED400GPU specification already in use
+INCORRECT_USER_SYNCER_REQUIRE_PARAMS400Incorrect user syncer request parameters
+MIGRATE_INSUFFICIENT_RESOURCE400Insufficient resources for migration
+WALLET_NOT_FOUND500Wallet not found
+WALLET_UNSUPPORT_RECHARGE_METHOD400Unsupported wallet recharge method
+BALANCE_NOT_ENOUGH400Insufficient balance
+UNSUPPORTED_BILLING_MODE400Unsupported billing mode
+EXPIRED_OR_BALANCE_NOT_ENOUGH400Expired or insufficient balance
+ORDER_NOT_FOUND400Order not found
+SAVING_PLAN_ALREADY_EXISTS400Saving plan already exists
+CREATE_INSTANCE_LIMIT400Instance creation limit reached, please recharge or delete other instances
+NETWORK_STORAGE_TOO_LARGE400Network storage size exceeds limit
+CUR_CLUSTER_NETWORK_STORAGE_NOT_SUPPORT400Network storage not supported in current region
+NETWORK_STORAGE_IN_USE400Network storage is in use
+NETWORK_STORAGE_UNAVAILABLE400Network storage unavailable
+NETWORK_STORAGE_NOT_FOUND400Network storage not found
+IMAGE_NOT_FOUND400Image not found
+IMAGE_AUTH_IN_USE400Image authentication in use
+NETWORK_NOT_FOUND400Instance network not found
+NETWORK_IN_USE400Instance network in use
+NETWORK_MAX_LIMIT400Instance network creation limit exceeded
+SEND_MSG_ERROR400Message sending error
+JOB_NOT_FOUND400Instance job not found
+SERVERLESS_ENDPOINT_NOT_FOUND400Serverless endpoint not found
+SERVERLESS_WORKER_NOT_FOUND400Serverless worker not found
+SERVERLESS_PRODUCT_NOT_FOUND400Serverless product not found
+SERVERLESS_APP_NAME_IS_EXIST400Serverless application name already exists
+TEMPLATE_IS_PRIVATE400Template is private
+TEMPLATE_NOT_FOUND400Template not found
+## ​Billing
+Error NameStatus CodeDescription
+UNKNOWN500Unknown error, please contact us
+LIST_BILL_TOO_FAST429Requests are too frequent, please try again later
+INVALID_PRODUCT_CATEGORY400Invalid productCategory parameter
+INVALID_BILL_CYCLE400Invalid cycle parameter
+LIST_BILL_ERROR500Query error, please contact us
+Was this page helpful? Yes No Authentication User Balance Info ⌘ I

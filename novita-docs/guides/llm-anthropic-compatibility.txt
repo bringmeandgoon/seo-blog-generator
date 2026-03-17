@@ -1,0 +1,127 @@
+Source: https://novita.ai/docs/guides/llm-anthropic-compatibility
+============================================================
+
+- Novita AI Anthropic SDK CompatibilitySkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationLLMAnthropic SDK CompatibilityGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLMLarge Language Models
+- Vision Language Models
+- Recommended Models
+- Reasoning Models
+- DeepSeek-OCR Usage
+- Function Calling
+- Structured Outputs
+- Prompt Cache
+- Dedicated Endpoint User Manual
+- Batch Inference
+- Rate limits
+- LLM Monitoring
+- Interactive Playground
+- Anthropic SDK Compatibility
+- Interleaved Thinking Supporty
+- Common Error Codes
+- LLM FAQs
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Supported Models
+- Quick Start Guide
+- 1. Install the Anthropic SDK
+- 2. Initialize the Client
+- 3. Call the API
+Novita AI provides a compatibility API that allows you to use the Anthropic SDK with Novita AI models. This is useful if you are already using the Anthropic SDK and want to switch to Novita AI models.
+## ​Supported Models
+Currently, only the following models are compatible with the Anthropic SDK:
+## ​Quick Start Guide
+This guide demonstrates how to use the Anthropic SDK with the Novita AI models step by step.
+### ​1. Install the Anthropic SDK
+Python TypeScript Copy
+```
+pip install anthropic
+```
+### ​2. Initialize the Client
+The Anthropic SDKs are designed to pull the API key and base URL from the environmental variables: ANTHROPIC_API_KEY and ANTHROPIC_BASE_URL . Also, you can supply the parameters to the Anthropic client when initializing it.
+You can view and manage your API keys on the settings page .
+- Using Environment Variables
+Bash Copy
+```
+export ANTHROPIC_BASE_URL="https://api.novita.ai/anthropic"
+export ANTHROPIC_API_KEY=" "
+```
+- Set the parameters while initializing the Anthropic client
+Python TypeScript Copy
+```
+import anthropic
+client = anthropic.Anthropic(
+base_url="https://api.novita.ai/anthropic",
+api_key=" ",
+# Rewrite header
+default_headers={
+"Content-Type": "application/json",
+"Authorization": "Bearer ",
+}
+)
+```
+### ​3. Call the API
+Python TypeScript Copy
+```
+import anthropic
+# Initialize the client, if you already set `ANTHROPIC_BASE_URL` and `ANTHROPIC_API_KEY`
+# in the environment variables, you can omit the `api_key` and `base_url` parameters.
+client = anthropic.Anthropic(
+base_url="https://api.novita.ai/anthropic",
+api_key=" ",
+# Rewrite header
+default_headers={
+"Content-Type": "application/json",
+"Authorization": "Bearer ",
+}
+)
+message = client.messages.create(
+model="moonshotai/kimi-k2-instruct",
+max_tokens=1000,
+temperature=1,
+system=[
+{
+"type": "text",
+"text": "You are a world-class poet. Respond only with short poems."
+}
+],
+messages=[
+{
+"role": "user",
+"content": [
+{
+"type": "text",
+"text": "Why is the ocean salty?"
+}
+]
+}
+]
+)
+print(message.content)
+```
+Was this page helpful? Yes No Interactive Playground Interleaved Thinking Supporty ⌘ I

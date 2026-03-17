@@ -1,0 +1,197 @@
+Source: https://novita.ai/docs/api-reference/model-apis-task-result
+============================================================
+
+- Novita AI Task Result API | Retrieve Asynchronous Task ResultsSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationTaskTask ResultGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- TaskGETTask Result
+- Image Generator
+- Image Editor
+- Video Generator
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Task Result cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/v3/async/task-result \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"extra": {
+"seed": " ",
+"enable_nsfw_detection": true,
+"debug_info": {
+"request_info": " ",
+"submit_time_ms": " ",
+"execute_time_ms": " ",
+"complete_time_ms": " "
+}
+},
+"task": {
+"task_id": " ",
+"status": " ",
+"reason": " ",
+"task_type": " ",
+"eta": 123,
+"progress_percent": 123
+},
+"images": [
+{
+"image_url": " ",
+"image_url_ttl": 123,
+"image_type": " "
+}
+],
+"videos": [
+{
+"video_url": " ",
+"video_url_ttl": " ",
+"video_type": " "
+}
+],
+"audios": [
+{
+"audio_url": " ",
+"audio_url_ttl": " ",
+"audio_type": " ",
+"audio_metadata": {
+"text": " ",
+"start_time": {},
+"end_time": {}
+}
+}
+]
+}
+```
+GET / v3 / async / task-result Try it Task Result cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/v3/async/task-result \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"extra": {
+"seed": " ",
+"enable_nsfw_detection": true,
+"debug_info": {
+"request_info": " ",
+"submit_time_ms": " ",
+"execute_time_ms": " ",
+"complete_time_ms": " "
+}
+},
+"task": {
+"task_id": " ",
+"status": " ",
+"reason": " ",
+"task_type": " ",
+"eta": 123,
+"progress_percent": 123
+},
+"images": [
+{
+"image_url": " ",
+"image_url_ttl": 123,
+"image_type": " "
+}
+],
+"videos": [
+{
+"video_url": " ",
+"video_url_ttl": " ",
+"video_type": " "
+}
+],
+"audios": [
+{
+"audio_url": " ",
+"audio_url_ttl": " ",
+"audio_type": " ",
+"audio_metadata": {
+"text": " ",
+"start_time": {},
+"end_time": {}
+}
+}
+]
+}
+```
+This API is used to retrieve images, audio, or video results from v3 asynchronous tasks using the task_id .
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Query Parameters
+​ task_id string required Returned in the 200 response of v3 asynchronous APIs.
+## ​Response
+​ extra object Show properties ​ seed string A seed is a number from which Stable Diffusion generates noise, making generation deterministic. Using the same seed and set of parameters will produce identical images each time, minimum -1. ​ enable_nsfw_detection boolean When set to true, NSFW detection will be enabled, incurring an additional cost of $0.0015 for each generated image. ​ debug_info object Show properties ​ request_info string Records request parameters for debugging purposes. ​ submit_time_ms string The timestamp (in milliseconds) of when the task was submitted. ​ execute_time_ms string The timestamp (in milliseconds) of when the task started execution. ​ complete_time_ms string The timestamp (in milliseconds) of when the task was completed.
+​ task object Task information. Show properties ​ task_id string Task ID. ​ status string Indicates the current status of a task. This parameter allows you to filter results based on the following status categories: TASK_STATUS_QUEUED : The task is queued and awaiting processing. TASK_STATUS_SUCCEED : The task has been processed successfully. TASK_STATUS_FAILED : The task failed during processing. TASK_STATUS_PROCESSING : The task is currently being processed.
+Enum: TASK_STATUS_QUEUED , TASK_STATUS_SUCCEED , TASK_STATUS_FAILED , TASK_STATUS_PROCESSING ​ reason string Provides the reason for a task’s failure. This parameter specifies the explanation or error message associated with tasks that did not succeed. Utilizing this filter can aid in diagnosing issues and implementing corrective actions for failed processes. ​ task_type string Specifies the type of task. ​ eta number Specifies the estimated time of completion for tasks, measured in seconds. This parameter is particularly relevant for video-type tasks, providing a forecast of how long it will take to complete the task based on current processing parameters and system load. This information can be vital for planning and resource management in environments with time-sensitive video processing requirements. ​ progress_percent number Progress of task completion in percentage. This feature is currently available only for: 1. Video Generator APIs; 2. Text-to-Image API and Image-to-Image API.
+​ images object[] Contains information about images associated with image-type tasks. This parameter provides detailed data on each image processed or generated during the task, such as file paths, metadata, or any image-specific attributes. It is returned only for tasks that involve image operations, facilitating enhanced tracking and management of image data. Show properties ​ image_url string Image URL. ​ image_url_ttl integer Image expiration time in seconds. ​ image_type string Image type.
+Enum: jpeg , png , webp
+​ videos object[] Contains information about videos associated with video-type tasks. This parameter provides detailed data on each video processed or generated during the task, such as file paths, metadata, or any video-specific attributes. It is returned only for tasks that involve video operations, facilitating enhanced tracking and management of video data. Show properties ​ video_url string Video URL. ​ video_url_ttl string Video expiration time in seconds. ​ video_type string Video type.
+Enum: mp4 , gif
+​ audios object[] Contains information about audios associated with audio type tasks. This parameter provides detailed data on each audio processed or generated during the task, such as file paths, metadata, or any image-specific attributes. It is returned only for tasks that involve audio operations, facilitating enhanced tracking and management of audio data. Show properties ​ audio_url string Audio url. ​ audio_url_ttl string Audio url expire time in seconds. ​ audio_type string Audio type.
+Enum: wav ​ audio_metadata object Contains detailed metadata about audio files processed or generated during audio-related tasks. Show properties ​ text string ​ start_time float32 the start_time of the text in seconds. ​ end_time float32 the end_time of the text in seconds.
+## ​Example
+request
+Copy
+```
+curl --location --globoff 'https://api.novita.ai/v3/async/task-result?task_id={{Novita-TaskID}}' \
+--header 'Authorization: Bearer {{API Key}}'
+```
+response
+Copy
+```
+{
+"extra": {
+"seed": "158881667",
+"enable_nsfw_detection": false,
+"debug_info": {
+"request_info": "",
+"submit_time_ms": "",
+"execute_time_ms": "",
+"complete_time_ms": ""
+}
+},
+"task": {
+"task_id": "830d9c90-d53f-4c5a-8009-xxx",
+"status": "TASK_STATUS_SUCCEED",
+"reason": "",
+"task_type": "TXT_TO_IMG",
+"eta": 0,
+"progress_percent": 0
+},
+"images": [
+{
+"image_url": "https://faas-output-image.s3.ap-southeast-1.amazonaws.com/prod/xxx",
+"image_url_ttl": 3600,
+"image_type": "jpeg",
+"nsfw_detection_result": {}
+}
+],
+"videos": [],
+"audios": []
+}
+```
+Was this page helpful? Yes No Get Model Text to Image ⌘ I

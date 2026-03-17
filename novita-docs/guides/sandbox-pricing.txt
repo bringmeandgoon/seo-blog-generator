@@ -1,0 +1,83 @@
+Source: https://novita.ai/docs/guides/sandbox-pricing
+============================================================
+
+- Pricing - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationQuickstartPricingGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- QuickstartCreate Your First Agent Sandbox
+- E2B SDK Compatibility
+- Pricing
+- Quota Limit
+- Console
+- Learn more
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Billing Items
+- Pricing
+- Get Bills
+- Overdue Payment Notice
+Agent Sandbox supports independent billing for CPU and RAM (memory) by the second, with on-demand usage and flexible billing.
+## ​Billing Items
+Billing ItemDescription
+CPUBilled based on the number of vCPU cores used and usage duration (accurate to the second). Current pricing can be found on the here. No billing occurs after the Sandbox is stopped.
+RAM (memory)Billed based on allocated memory capacity and usage duration (accurate to the second). Current pricing can be found on the here. No billing occurs after the Sandbox is stopped.
+StorageCurrent pricing can be found on the here.
+TemplatesCurrently free.
+## ​Pricing
+- CPU
+vCPUs (cores)Unit Price
+1$0.0000098/s
+2$0.0000196/s
+3$0.0000294/s
+4$0.0000392/s
+5$0.000049/s
+6$0.0000588/s
+7$0.0000686/s
+8$0.0000784/s
+- RAM (memory)
+Memory (MiB)Unit Price
+Valid values: multiples of 512 MiB, from 512 MiB to 8192 MiB$0.0000032/GiB/s
+512 MiB$0.0000016/s
+1 GiB$0.0000032/s
+2 GiB$0.0000064/s
+- Storage
+Memory (MiB)Unit Price
+Each account includes 60 GB of free storage. Usage beyond this limit is billed on a pay-as-you-go basis.$0.00009/GB/h
+## ​Get Bills
+You can view and export Agent Sandbox bills in “Billing - Billing Details - Usage-based Billing” .
+- Go to the billing details page;
+- Select the “Usage-based Billing” tab on the right, then click the “Agent Sandbox” secondary tab below;
+- You can set the “Time Range” and “Group By” filters;
+- You can click “Export” button after querying to export bill data as an .xlsx file.
+## ​Overdue Payment Notice
+If the account’s available balance (including available balance and voucher balance) is less than the bill to be paid, the account is considered overdue. Overdue payments will result in sandboxes being terminated and data loss, affecting your service. During usage, please ensure sufficient account balance. After overdue, the system will send relevant notification emails, please recharge promptly.
+You can confirm account balance and vouchers on the payments page, recharge as needed.
+To avoid overdue payments affecting your service, it is recommended that you set up low balance alerts . When your account balance is less than the alert threshold you set, an notification email will be sent.
+The specific overdue payment impacts are as follows:
+- Unable to start new sandboxes.
+- Running sandboxes will be terminated.
+Was this page helpful? Yes No E2B SDK Compatibility Quota Limit ⌘ I

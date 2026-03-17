@@ -1,0 +1,57 @@
+Source: https://novita.ai/docs/guides/sandbox-template-version-management
+============================================================
+
+- Version Management - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationTemplateVersion ManagementGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- TemplateSandbox Templates
+- Start Command
+- Customize sandbox CPU & RAM
+- Version Management
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - View All Versions of a Sandbox Template
+- Rollback to a Specific Version
+For the same sandbox template, each time it is built, the system will add a new version number (buildID), and the sandbox template will use the latest built version by default. In some scenarios, if you find that a newly built version has errors and need to rollback to a previous version, you can use the Novita Sandbox CLI to manage the versions of the sandbox template.
+## ​View All Versions of a Sandbox Template
+Bash Copy
+```
+# novita-sandbox-cli template version [templateID]
+novita-sandbox-cli tpl version lovhlhmzeq6q0yh3lu9a
+# Example output:
+# Sandbox template versions
+# Build ID Is Default Build RAM MiB VCPUs Start Cmd Status Created At Finished At
+# f15e442a-a825-4881-9bd8-ad70a96af372 true 1024 2 /root/.jupyter/start-up.sh Uploaded 8/25/2025, 5:53:04 PM 8/25/2025, 5:55:43 PM
+# f9e12c5a-8934-4b13-b574-2f7c211adba1 false 1024 2 Uploaded 8/25/2025, 4:52:30 PM 8/25/2025, 4:56:43 PM
+```
+## ​Rollback to a Specific Version
+Bash Copy
+```
+# novita-sandbox-cli template version [templateID] -r [buildID]
+novita-sandbox-cli tpl version lovhlhmzeq6q0yh3lu9a -r f9e12c5a-8934-4b13-b574-2f7c211adba1
+```
+Was this page helpful? Yes No Customize sandbox CPU & RAM Overview ⌘ I

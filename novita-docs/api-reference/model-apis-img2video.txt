@@ -1,0 +1,246 @@
+Source: https://novita.ai/docs/api-reference/model-apis-img2video
+============================================================
+
+- Image to Video - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationVideo GeneratorImage to VideoGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video GeneratorPOSTUnified Video Generation API
+- POSTText to Video
+- POSTImage to Video
+- POSTHunyuan Video Fast
+- POSTWan 2.1 Text to Video
+- POSTWan 2.1 Image to Video
+- POSTWan 2.2 Text to Video
+- POSTWan 2.2 Image to Video
+- POSTWan 2.5 Preview Text to Video
+- POSTWan 2.5 Preview Image to Video
+- POSTWan 2.6 Text to Video
+- POSTWan 2.6 Image to Video
+- POSTWan 2.6 Reference Video
+- POSTKLING V1.6 Text to Video
+- POSTKLING V1.6 Image to Video
+- POSTKling V2.1 Master Text to Video
+- POSTKling V2.1 Image to Video
+- POSTKling V2.1 Master Image to Video
+- POSTKling V2.5 Turbo Text to Video
+- POSTKling V2.5 Turbo Image to Video
+- POSTKling V2.6 Pro Motion Control
+- POSTKling V2.6 Pro Text-to-Video
+- POSTKling V2.6 Pro Image-to-Video
+- POSTKling-o1 Image to Video
+- POSTKling-o1 Reference Video Generation
+- POSTKling-o1 Text to Video
+- POSTKling-o1 Video Editing
+- POSTKling v3.0 Standard Image-to-Video
+- POSTKling v3.0 Standard Text-to-Video
+- POSTKling v3.0 Pro Image-to-Video
+- POSTKling v3.0 Pro Text-to-Video
+- POSTMinimax Video-01
+- POSTMinimax Hailuo-02
+- POSTMinimax Hailuo 2.3 Text to Video
+- POSTMinimax Hailuo 2.3 Image to Video
+- POSTMinimax Hailuo 2.3 Fast Image to Video
+- POSTVidu Q1 Text to Video
+- POSTVidu Q1 Image to Video
+- POSTVidu Q1 Start End to Video
+- POSTVidu Q1 Reference to Video
+- POSTVidu 2.0 Image to Video
+- POSTVidu 2.0 Start End to Video
+- POSTVidu 2.0 Reference to Video
+- POSTPixVerse V4.5 Text to Video
+- POSTPixVerse V4.5 Image to Video
+- POSTSeedance V1 Lite Text to Video
+- POSTSeedance V1 Lite Image to Video
+- POSTSeedance V1 Pro Text to Video
+- POSTSeedance V1 Pro Image to Video
+- POSTSeedance 1.5 Pro Text To Video
+- POSTSeedance 1.5 Pro Image To Video
+- POSTVIDU Q2 Turbo Start-End Frame to Video
+- POSTVIDU Q2 Turbo Multi-frame to Video
+- POSTVIDU Q2 Turbo Image to Video
+- POSTVIDU Q2 Text to Video
+- POSTVIDU Q2 Reference Image to Video
+- POSTVIDU Q2 Pro Start-End Frame to Video
+- POSTVIDU Q2 Pro Multi-frame to Video
+- POSTVIDU Q2 Pro Image to Video
+- POSTVIDU Q2 Pro Fast Start-End Frame to Video
+- POSTVIDU Q2 Pro Fast Image to Video
+- POSTVIDU Q2 Template to Video
+- POSTVidu Q3 Pro Text-to-Video
+- POSTVidu Q3 Pro Image-to-Video
+- POSTHeygen Video-translate
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Image to Video cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/img2video \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"extra": {
+"response_video_type": " ",
+"webhook": {
+"url": " ",
+"test_mode": {
+"enabled": true,
+"return_task_status": " "
+}
+},
+"enterprise_plan": {
+"enabled": true
+}
+},
+"model_name": " ",
+"image_file": " ",
+"frames_num": 123,
+"frames_per_second": 123,
+"image_file_resize_mode": " ",
+"steps": 123,
+"seed": 123,
+"motion_bucket_id": 123,
+"cond_aug": 123,
+"enable_frame_interpolation": true
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+POST / v3 / async / img2video Try it Image to Video cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/img2video \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"extra": {
+"response_video_type": " ",
+"webhook": {
+"url": " ",
+"test_mode": {
+"enabled": true,
+"return_task_status": " "
+}
+},
+"enterprise_plan": {
+"enabled": true
+}
+},
+"model_name": " ",
+"image_file": " ",
+"frames_num": 123,
+"frames_per_second": 123,
+"image_file_resize_mode": " ",
+"steps": 123,
+"seed": 123,
+"motion_bucket_id": 123,
+"cond_aug": 123,
+"enable_frame_interpolation": true
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+This API seamlessly transforms an image into a cohesive video. It is designed to create smooth transitions and animations from static images, making it ideal for producing dynamic visual content for presentations, social media, and marketing campaigns.
+This is an asynchronous API; only the task_id will be returned. You should use the task_id to request the Task Result API to retrieve the video generation results.
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ extra object Optional extra parameters for the request. Show properties ​ response_video_type string The returned video type. Default is mp4.Enum: mp4, gif ​ webhook object Webhook settings. More details can be found at Webhook Documentation . Show properties ​ url string required The URL of the webhook endpoint. Novita AI will send the task generated outputs to your specified webhook endpoint. ​ test_mode object By specifying Test Mode, a mock event will be sent to the webhook endpoint. Show properties ​ enabled boolean required Set to true to enable Test Mode, or false to disable it. The default is false. ​ return_task_status string required Control the data content of the mock event. When set to TASK_STATUS_SUCCEED, you’ll receive a normal response; when set to TASK_STATUS_FAILED, you’ll receive an error response.Enum: TASK_STATUS_SUCCEED, TASK_STATUS_FAILED ​ enterprise_plan object Dedicated Endpoints settings, which only take effect for users who have already subscribed to the Dedicated Endpoints Documentation . Show properties ​ enabled boolean Set to true to schedule this task to use your Dedicated Endpoints’s dedicated resources. Default is false.
+​ model_name string required Specifies the model to be used for processing. SVD (Singular Value Decomposition): Ideal for applications involving matrix factorization and dimensionality reduction. This model is well-suited for tasks such as signal processing, recommendation systems, and data compression, offering robust feature extraction and data simplification capabilities. SVD-XT: This model is an extended version of the standard SVD, optimized for handling larger datasets and more complex computations. It provides enhanced performance and accuracy in environments requiring intensive data processing.Enum: SVD-XT, SVD
+​ image_file string required The base64 of input image, with a maximum resolution of 2048 x 2048 and a maximum file size of 30 Mb.
+​ frames_num integer required Total number of video frames. When the parameter model_name=SVD_XT, then frames_num = 25; when the parameter model_name=SVD, then frames_num = 14.
+​ frames_per_second integer required Frames per second; the larger the frame rate, the smoother the video. Currently, only the number 6 is supported.
+​ image_file_resize_mode string required The image file resize mode has two settings: When set to ORIGINAL_RESOLUTION, it retains the original image size but ensures the resolution is below 576 x 1024. When set to CROP_TO_ASPECT_RATIO, it maintains the original proportions of the image and crops it to fit within a 576 x 1024 resolution.Enum: ORIGINAL_RESOLUTION, CROP_TO_ASPECT_RATIO
+​ steps integer required The number of denoising steps. More steps usually produce higher quality content, but take more time to generate. Range [1, 50].
+​ seed integer A seed is a number from which Stable Diffusion generates noise, which, makes generation deterministic. Using the same seed and set of parameters will produce identical content each time, minimum -1. Defaults to -1.
+​ motion_bucket_id integer Identifies the specific motion bucket to be utilized during the img2video process. This parameter selects a predefined set of motion profiles, each corresponding to a unique identifier ranging from 1 to 255. Selecting an appropriate motion bucket can tailor the animation effects to better suit the specific characteristics or themes of the input images. Range [1, 255].
+​ cond_aug number The amount of noise added to the conditioning image. The higher the value, the less the video resembles the conditioning image. Increasing this value also enhances the motion in the generated video. Range [0, 1].
+​ enable_frame_interpolation boolean Enables frame interpolation to standardize video output to 24 frames per second (fps). This feature smooths out motion by generating intermediate frames, enhancing the fluidity and continuity of the video sequence. This is particularly useful for converting lower frame rate footage to a more cinematic frame rate.
+## ​Response
+​ task_id string Use the task_id to request the Task Result API to retrieve the generated outputs.
+## ​Example
+This API helps generate a video from an image. The returned video can be accessed via the API /v3/async/task-result using the task_id .
+Try it in playground .
+Request:
+Copy
+```
+curl --location --request GET 'https://api.novita.ai/v3/async/img2video' \
+--header 'Authorization: Bearer {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+"model_name": "SVD-XT",
+"image_file": "{{Base64 encoded image}}",
+"frames_num": 25,
+"frames_per_second": 6,
+"seed": 20231127,
+"image_file_resize_mode": "CROP_TO_ASPECT_RATIO",
+"steps": 20
+}'
+```
+Response:
+Copy
+```
+{
+"task_id": "fa20dff3-18cb-4417-a7f8-269456a35154"
+}
+```
+Use task_id to get videos
+HTTP status codes in the 2xx range indicate that the request has been successfully accepted, while status codes in the 5xx range indicate internal server errors.
+You can get the video URLs from the videos field in the response.
+Request:
+Copy
+```
+curl --location --request GET 'https://api.novita.ai/v3/async/task-result?task_id=fa20dff3-18cb-4417-a7f8-269456a35154' \
+--header 'Authorization: Bearer {{API Key}}'
+```
+Response:
+Copy
+```
+{
+"task": {
+"task_id": "fa20dff3-18cb-4417-a7f8-269456a35154",
+"task_type": "IMG_TO_VIDEO",
+"status": "TASK_STATUS_SUCCEED",
+"reason": ""
+},
+"images": [],
+"videos": [
+{
+"video_url": "https://faas-output-video.s3.ap-southeast-1.amazonaws.com/test/fa20dff3-18cb-4417-a7f8-269456a35154/e40de30e115947a0be2dfc78925e587d.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIASVPYCN6LRCW3SOUV%2F20231127%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Date=20231127T151757Z&X-Amz-Expires=3600&X-Amz-SignedHeaders=host&x-id=GetObject&X-Amz-Signature=14faf7df34c2c2ff68fed102095af593844db7c5c5cd2d80e80beec0613192c7",
+"video_url_ttl": "3600",
+"video_type": "mp4"
+}
+]
+}
+```
+Was this page helpful? Yes No Text to Video Hunyuan Video Fast ⌘ I

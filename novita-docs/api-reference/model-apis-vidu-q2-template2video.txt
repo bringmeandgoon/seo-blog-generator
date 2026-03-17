@@ -1,0 +1,190 @@
+Source: https://novita.ai/docs/api-reference/model-apis-vidu-q2-template2video
+============================================================
+
+- VIDU Q2 Template to Video - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationVideo GeneratorVIDU Q2 Template to VideoGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video GeneratorPOSTUnified Video Generation API
+- POSTText to Video
+- POSTImage to Video
+- POSTHunyuan Video Fast
+- POSTWan 2.1 Text to Video
+- POSTWan 2.1 Image to Video
+- POSTWan 2.2 Text to Video
+- POSTWan 2.2 Image to Video
+- POSTWan 2.5 Preview Text to Video
+- POSTWan 2.5 Preview Image to Video
+- POSTWan 2.6 Text to Video
+- POSTWan 2.6 Image to Video
+- POSTWan 2.6 Reference Video
+- POSTKLING V1.6 Text to Video
+- POSTKLING V1.6 Image to Video
+- POSTKling V2.1 Master Text to Video
+- POSTKling V2.1 Image to Video
+- POSTKling V2.1 Master Image to Video
+- POSTKling V2.5 Turbo Text to Video
+- POSTKling V2.5 Turbo Image to Video
+- POSTKling V2.6 Pro Motion Control
+- POSTKling V2.6 Pro Text-to-Video
+- POSTKling V2.6 Pro Image-to-Video
+- POSTKling-o1 Image to Video
+- POSTKling-o1 Reference Video Generation
+- POSTKling-o1 Text to Video
+- POSTKling-o1 Video Editing
+- POSTKling v3.0 Standard Image-to-Video
+- POSTKling v3.0 Standard Text-to-Video
+- POSTKling v3.0 Pro Image-to-Video
+- POSTKling v3.0 Pro Text-to-Video
+- POSTMinimax Video-01
+- POSTMinimax Hailuo-02
+- POSTMinimax Hailuo 2.3 Text to Video
+- POSTMinimax Hailuo 2.3 Image to Video
+- POSTMinimax Hailuo 2.3 Fast Image to Video
+- POSTVidu Q1 Text to Video
+- POSTVidu Q1 Image to Video
+- POSTVidu Q1 Start End to Video
+- POSTVidu Q1 Reference to Video
+- POSTVidu 2.0 Image to Video
+- POSTVidu 2.0 Start End to Video
+- POSTVidu 2.0 Reference to Video
+- POSTPixVerse V4.5 Text to Video
+- POSTPixVerse V4.5 Image to Video
+- POSTSeedance V1 Lite Text to Video
+- POSTSeedance V1 Lite Image to Video
+- POSTSeedance V1 Pro Text to Video
+- POSTSeedance V1 Pro Image to Video
+- POSTSeedance 1.5 Pro Text To Video
+- POSTSeedance 1.5 Pro Image To Video
+- POSTVIDU Q2 Turbo Start-End Frame to Video
+- POSTVIDU Q2 Turbo Multi-frame to Video
+- POSTVIDU Q2 Turbo Image to Video
+- POSTVIDU Q2 Text to Video
+- POSTVIDU Q2 Reference Image to Video
+- POSTVIDU Q2 Pro Start-End Frame to Video
+- POSTVIDU Q2 Pro Multi-frame to Video
+- POSTVIDU Q2 Pro Image to Video
+- POSTVIDU Q2 Pro Fast Start-End Frame to Video
+- POSTVIDU Q2 Pro Fast Image to Video
+- POSTVIDU Q2 Template to Video
+- POSTVidu Q3 Pro Text-to-Video
+- POSTVidu Q3 Pro Image-to-Video
+- POSTHeygen Video-translate
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+VIDU Q2 Template to Video cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/vidu-q2-template2video \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"bgm": true,
+"area": " ",
+"seed": 123,
+"beast": " ",
+"images": [
+{}
+],
+"prompt": " ",
+"wm_url": " ",
+"payload": " ",
+"template": " ",
+"meta_data": " ",
+"watermark": true,
+"wm_position": 123,
+"aspect_ratio": " "
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " ",
+"provider_request_id": " "
+}
+```
+POST / v3 / async / vidu-q2-template2video VIDU Q2 Template to Video cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/vidu-q2-template2video \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"bgm": true,
+"area": " ",
+"seed": 123,
+"beast": " ",
+"images": [
+{}
+],
+"prompt": " ",
+"wm_url": " ",
+"payload": " ",
+"template": " ",
+"meta_data": " ",
+"watermark": true,
+"wm_position": 123,
+"aspect_ratio": " "
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " ",
+"provider_request_id": " "
+}
+```
+VIDU Q2 template to video API, supports various effect scene templates, generates effect video content based on templates and input images.
+This is an asynchronous API; only the task_id will be returned. You should use the task_id to request the Task Result API to retrieve the video generation results.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ bgm boolean default: false Whether to add background music to the generated video. Default: false. When true, the system will automatically select appropriate music from the preset BGM library and add it; when not passed or false, no BGM is added. BGM duration is unlimited, the system automatically adapts to video duration
+​ area string default: "auto" Exotic princess effect exclusive parameter. Only available when template is exotic_princess. Default: auto Optional values: auto , denmark , uk , africa , china , mexico , switzerland , russia , italy , korea , thailand , india , japan
+​ seed integer default: 0 Random seed. When not passed or passed as 0, a random number will be used instead; manually set to use the specified seed
+​ beast string default: "auto" Beast companion effect exclusive parameter. Only available when template is beast_companion. Default: auto Optional values: auto , bear , tiger , elk , snake , lion , wolf
+​ images array required Input image list. The model will generate video based on the images passed in this parameter. Supports image Base64 encoding or image URL (ensure accessibility). Supports png, jpeg, jpg, webp formats. Image aspect ratio must be less than 1:4 or 4:1, size not exceeding 50MB. Base64 decoded byte length must be less than 10M, and encoding must include appropriate content type string, e.g.: data:image/png;base64, Array length: 1 - unlimited
+​ prompt string Text prompt, text description for generating video. Note: When template=subject_3 or pubg_winner_hit, prompt is not required
+​ wm_url string Watermark content, image URL. When not passed, default watermark is used: content generated by AI
+​ payload string Passthrough parameter, no processing, data transmission only. Maximum 1048576 characters Length limit: 0 - 1048576
+​ template string required Scene template parameter. Different scene templates correspond to different call parameters. Common templates: subject_3 (character costume change), pubg_winner_hit (PUBG effect), exotic_princess (exotic princess), beast_companion (beast companion), etc. Please refer to https://platform.vidu.cn/docs/templates for details
+​ meta_data string Metadata identifier, JSON format string, passthrough field. You can customize the format or use the example format. When this parameter is empty, the metadata identifier generated by vidu is used by default. Example format: Copy
+```
+{
+"Label": "your_label",
+"ContentProducer": "your_content_producer",
+"ContentPropagator": "your_content_propagator",
+"ProduceID": "your_product_id",
+"PropagateID": "your_propagate_id",
+"ReservedCode1": "your_reserved_code1",
+"ReservedCode2": "your_reserved_code2"
+}
+```
+​ watermark boolean default: false Whether to add watermark. true: add watermark; false: do not add watermark. Currently watermark content is fixed, content generated by AI, not added by default. You can query watermarked video content via watermarked_url parameter
+​ wm_position integer default: 3 Watermark position, indicates where the watermark appears in the image. 1: top-left; 2: top-right; 3: bottom-right; 4: bottom-left. Default is 3 Optional values: 1 , 2 , 3 , 4
+​ aspect_ratio string default: "16:9" Video aspect ratio. Default 16:9, options: 16:9, 9:16. Different templates support different options, see template description for details Optional values: 16:9 , 9:16
+## ​Response
+​ task_id string required Use the task_id to request the Task Result API to retrieve the generated outputs.
+​ provider_request_id string Provider request ID (optional) Was this page helpful? Yes No VIDU Q2 Pro Fast Image to Video Vidu Q3 Pro Text-to-Video ⌘ I

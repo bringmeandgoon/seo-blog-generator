@@ -1,0 +1,80 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-save-image
+============================================================
+
+- Save Instance Image - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImageSave Instance ImageGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- Instance
+- ImagePOSTSave Instance Image
+- GETGet Image Prewarm Quota
+- POSTCreate Image Prewarm Task
+- GETList Image Prewarm Tasks
+- POSTUpdate Image Prewarm Task
+- POSTDelete Image Prewarm Tasks
+- Template
+- Product
+- Network
+- Image Registry
+- Storage
+- Jobs
+- Serverless GPUs
+Save Instance Image cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/job/save/image \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"instanceId": " ",
+"image": " ",
+"registryAuthId": " "
+}
+'
+```
+200 Copy
+```
+{
+"jobId": " "
+}
+```
+POST / gpu-instance / openapi / v1 / job / save / image Try it Save Instance Image cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/job/save/image \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"instanceId": " ",
+"image": " ",
+"registryAuthId": " "
+}
+'
+```
+200 Copy
+```
+{
+"jobId": " "
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ instanceId string required Instance ID. String, length: 1-255 characters.
+​ image string required Target image address, including registry/repository:tag. String, length: 1-4095 characters.
+​ registryAuthId string Container registry authentication ID. Not required for public registries or platform-provided registries. Required for third-party private registries.
+## ​Response
+​ jobId string required Image save job ID. Use this ID to check status and logs in the Console under Job Management. Was this page helpful? Yes No Set Auto Migrate Strategy Get Image Prewarm Quota ⌘ I

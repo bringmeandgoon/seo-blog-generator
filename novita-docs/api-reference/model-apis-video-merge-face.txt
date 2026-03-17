@@ -1,0 +1,104 @@
+Source: https://novita.ai/docs/api-reference/model-apis-video-merge-face
+============================================================
+
+- Video Merge Face - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationFace EditorVideo Merge FaceGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video Generator
+- Audio
+- Face EditorPOSTMerge Face
+- POSTVideo Merge Face
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Video Merge Face cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/video-merge-face \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"extra": {
+"response_video_type": " "
+},
+"request": {
+"video_assets_id": " ",
+"enable_restore": true,
+"face_image_base64": " "
+}
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+POST / v3 / async / video-merge-face Try it Video Merge Face cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/video-merge-face \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"extra": {
+"response_video_type": " "
+},
+"request": {
+"video_assets_id": " ",
+"enable_restore": true,
+"face_image_base64": " "
+}
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+This API endpoint seamlessly integrates a face image into a target video, allowing you to replace the face in the video with the face from the image.
+Pricing: $0.0005 / Video Frame
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ extra object Optional extra parameters for the request. Show properties ​ response_video_type string The returned video type. Default is mp4.
+Enum: mp4 , gif
+​ request object required Hide properties ​ video_assets_id string required Upload your input video to our temporary secure storage following the instructions in the guide Get video assets id , and the video_assets_id is the identifier for your input video. Supported video formats: MP4, with a maximum resolution of 3840 x 2160 and a maximum file size of 100 Mb. ​ enable_restore boolean required Whether to restore the output face image. If enabled, the output face video will be more detailed, but the API latency will be longer. ​ face_image_base64 string required The base64-encoded face image, with a maximum resolution of 2048 x 2048 and a maximum file size of 30 MB.
+## ​Response
+​ task_id string Use the task_id to request the Task Result API to retrieve the generated outputs.
+## ​Example
+### ​1. Get Video Assets ID
+Request:
+Copy
+```
+curl -X PUT -T "{{video file path}}" 'https://assets.novitai.com/video'
+```
+Response:
+Copy
+```
+{
+"assets_id": "cjIvbm92aXRhLWFpLWFzc2V0L3ZpZGVvL0NLd0N3aHJwS0ZyYVduNWVoejVFV0tleGlzN0toNmRq"
+}
+```
+Was this page helpful? Yes No Merge Face Get Images URL ⌘ I

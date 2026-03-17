@@ -1,0 +1,40 @@
+Source: https://novita.ai/docs/guides/gpus-overview
+============================================================
+
+- Overview - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationGPUsOverviewGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+Novita AI GPUs provides:
+- GPU Instance: A dedicated virtual machine with full control over GPU hardware, ideal for long-running, predictable workloads.
+- Serverless GPUs: A fully managed, on-demand GPU service that dynamically scales and charges based on actual usage, perfect for burstable and sporadic tasks.
+## Create your first GPU instance
+Here’s a guide on how to create, manage and use your first GPU instance.
+## Set up a Serverless Endpoint from Scratch
+To learn about the Serverless GPUs, follow this guide. Was this page helpful? Yes No Agent Framework Integration Guide Overview ⌘ I

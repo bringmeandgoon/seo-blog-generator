@@ -1,0 +1,133 @@
+Source: https://novita.ai/docs/api-reference/model-apis-seedream-3-0-t2i
+============================================================
+
+- Novita AI Seedream 3.0 Text to Image API | Generate image from textSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImage GeneratorSeedream 3.0 Text to ImageGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image GeneratorPOSTText to Image
+- POSTImage to Image
+- POSTReimagine
+- POSTFLUX.1 [schnell] Text to Image
+- POSTFLUX.1 Kontext Dev
+- POSTFLUX.1 Kontext Pro
+- POSTFLUX.1 Kontext Max
+- POSTSeedream 3.0 Text to Image
+- POSTSeedream 4.0
+- POSTSeedream 4.5
+- POSTSeedream 5.0 lite
+- POSTQwen-Image Text to Image
+- POSTHunyuan Image 3
+- POSTFlux 2 Dev Image Gen
+- POSTFlux 2 Flex Image Gen
+- POSTFlux 2 Pro Image Gen
+- POSTZ Image Turbo LoRA
+- POSTZ Image Turbo
+- POSTGLM Image Generation
+- Image Editor
+- Video Generator
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Seedream 3.0 Text to Image cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/seedream-3-0-txt2img \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"prompt": " ",
+"model": " ",
+"response_format": " ",
+"size": " ",
+"seed": 123,
+"guidance_scale": 123,
+"watermark": true
+}
+'
+```
+200 Copy
+```
+{
+"image_urls": [
+" "
+],
+"binary_data_base64": [
+" "
+]
+}
+```
+POST / v3 / seedream-3-0-txt2img Try it Seedream 3.0 Text to Image cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/seedream-3-0-txt2img \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"prompt": " ",
+"model": " ",
+"response_format": " ",
+"size": " ",
+"seed": 123,
+"guidance_scale": 123,
+"watermark": true
+}
+'
+```
+200 Copy
+```
+{
+"image_urls": [
+" "
+],
+"binary_data_base64": [
+" "
+]
+}
+```
+Experience fast and efficient image generation with Seedream 3.0, a state-of-the-art text-to-image model that produces high-quality images from textual prompts.
+Currently, only the model version seedream-3-0-t2i-250415 is supported for Seedream 3.0.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ prompt string required The text prompt used to generate the image.
+​ model string The Model ID or inference endpoint (Endpoint ID) to be used for this request. Currently, only seedream-3-0-t2i-250415 for seedream 3.0 is supported.
+​ response_format string Specifies the format of the generated image returned in the response. Default is url .
+Supported values:
+- "url": Returns a downloadable JPEG image link.
+- "b64_json": Returns the image data as a Base64-encoded JSON string.
+​ size string Specifies the dimensions (width x height in pixels) of the generated image. Must be between [512x512, 2048x2048]. Default is 1024x1024 .
+Recommended aspect ratios and resolutions:
+- 1024x1024 (1:1)
+- 864x1152 (3:4)
+- 1152x864 (4:3)
+- 1280x720 (16:9)
+- 720x1280 (9:16)
+- 832x1248 (2:3)
+- 1248x832 (3:2)
+- 1512x648 (21:9)
+​ seed integer Random seed to control the stochasticity of image generation. Range: [-1, 2147483647]. If not specified, a seed will be automatically generated. To reproduce the same output, use the same seed value. Default is -1 .
+​ guidance_scale number Controls how closely the output image aligns with the input prompt. The higher the value, the less freedom the model has, and the stronger the prompt correlation. Range: [1, 10]. Default is 2.5 .
+​ watermark boolean Specifies whether to add a watermark to the generated image. Default is true .
+- false: No watermark.
+- true: Adds a watermark with the label “AI generated” in the bottom-right corner.
+## ​Response
+​ image_urls string[] Array of generated image URLs. When response_format is set to "url" , this array contains the downloadable image links for the generated images.
+​ binary_data_base64 string[] Array of Base64-encoded image data. When response_format is set to "b64_json" , this array contains the generated images as Base64-encoded JSON strings. Was this page helpful? Yes No FLUX.1 Kontext Max Seedream 4.0 ⌘ I

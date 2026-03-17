@@ -1,0 +1,308 @@
+Source: https://novita.ai/docs/api-reference/model-apis-image-to-image-v2-deprecated
+============================================================
+
+- Image to Image V2 - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationDeprecatedImage to Image V2GuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video Generator
+- Audio
+- Face Editor
+- Training
+- DeprecatedPOSTText to Image V2
+- POSTImage to Image V2
+- GETProgress
+- POSTUpscale V2
+GPUs - GPU Instance
+- Serverless GPUs
+Image to Image V2 cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v2/img2img \
+--header 'Authorization: ' \
+--header 'Content-Type: application/json' \
+--data '
+{
+"extra": {
+"enable_nsfw_detection": true,
+"nsfw_detection_level": 123,
+"enable_progress_info": {},
+"response_image_type": " "
+},
+"prompt": {},
+"negative_prompt": {},
+"sampler_name": {},
+"batch_size": {},
+"n_iter": {},
+"steps": {},
+"cfg_scale": {},
+"seed": {},
+"height": 123,
+"width": 123,
+"model_name": " ",
+"init_images": [
+" "
+],
+"denoising_strength": {},
+"restore_faces": {},
+"sd_vae": {},
+"clip_skip": {},
+"mask": " ",
+"mask_blur": 123,
+"resize_mode": {},
+"image_cfg_scale": {},
+"inpainting_fill": {},
+"inpaint_full_res": {},
+"inpaint_full_res_padding": {},
+"inpainting_mask_invert": 123,
+"initial_noise_multiplier": 123,
+"img_expire_ttl": 123,
+"sd_refiner": {
+"checkpoint": " ",
+"switch_at": 123
+},
+"controlnet_units": {
+"model": " ",
+"weight": {},
+"input_image": " ",
+"module": " ",
+"control_mode": {},
+"mask": {},
+"resize_mode": {},
+"processor_res": {},
+"threshold_a": {},
+"threshold_b": {},
+"guidance_start": {},
+"guidance_end": {},
+"pixel_perfect": {}
+}
+}
+'
+```
+200 Copy
+```
+{
+"code": 123,
+"msg": " ",
+"data": {
+"task_id": " ",
+"warn": " "
+}
+}
+```
+POST / v2 / img2img Try it Image to Image V2 cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v2/img2img \
+--header 'Authorization: ' \
+--header 'Content-Type: application/json' \
+--data '
+{
+"extra": {
+"enable_nsfw_detection": true,
+"nsfw_detection_level": 123,
+"enable_progress_info": {},
+"response_image_type": " "
+},
+"prompt": {},
+"negative_prompt": {},
+"sampler_name": {},
+"batch_size": {},
+"n_iter": {},
+"steps": {},
+"cfg_scale": {},
+"seed": {},
+"height": 123,
+"width": 123,
+"model_name": " ",
+"init_images": [
+" "
+],
+"denoising_strength": {},
+"restore_faces": {},
+"sd_vae": {},
+"clip_skip": {},
+"mask": " ",
+"mask_blur": 123,
+"resize_mode": {},
+"image_cfg_scale": {},
+"inpainting_fill": {},
+"inpaint_full_res": {},
+"inpaint_full_res_padding": {},
+"inpainting_mask_invert": 123,
+"initial_noise_multiplier": 123,
+"img_expire_ttl": 123,
+"sd_refiner": {
+"checkpoint": " ",
+"switch_at": 123
+},
+"controlnet_units": {
+"model": " ",
+"weight": {},
+"input_image": " ",
+"module": " ",
+"control_mode": {},
+"mask": {},
+"resize_mode": {},
+"processor_res": {},
+"threshold_a": {},
+"threshold_b": {},
+"guidance_start": {},
+"guidance_end": {},
+"pixel_perfect": {}
+}
+}
+'
+```
+200 Copy
+```
+{
+"code": 123,
+"msg": " ",
+"data": {
+"task_id": " ",
+"warn": " "
+}
+}
+```
+The Image-to-Image V2 API is deprecated and will be removed in the future. Please migrate to Image-to-Image V3 .
+## ​POST Image to Image V2
+This is the image-to-image endpoint. Only a task_id will be returned. You should use the task_id to call the /v2/progress API endpoint in order to retrieve the image generation results. The output is provided in the format of “image/png”. We will gradually phase out the V2 endpoints, and it is recommended to use the V3 endpoints to generate images.
+## ​Request Headers
+​ Authorization string required
+## ​Request Body
+​ extra object Show properties ​ enable_nsfw_detection boolean When set to true, NSFW detection will be enabled, incurring an additional cost of $0.0015 for each generated image. ​ nsfw_detection_level integer *** 0 - Explicit Nudity, Explicit Sexual Activity, Sex Toys; Hate Symbols. *** 1 - Explicit Nudity, Explicit Sexual Activity, Sex Toys; Hate Symbols; Non-Explicit Nudity, Obstructed Intimate Parts, Kissing on the Lips. *** 2 - Explicit Nudity, Explicit Sexual Activity, Sex Toys; Hate Symbols; Non-Explicit Nudity, Obstructed Intimate Parts, Kissing on the Lips; Female Swimwear or Underwear, Male Swimwear or Underwear.
+Enum: 0 , 1 , 2 ​ enable_progress_info boolean¦null You will receive empty preview images after setting enable_progress_info to false. ​ response_image_type string The format of returned images, default: png
+Enum: png , jpeg
+​ prompt string¦null required Positive prompt words, separated by commas. If you want to use LoRA, you can call the /v3/model endpoint with the parameter filter.types=lora to retrieve the sd_name_in_api field as the model_name . Remember that the format for LoRA models is <lora:$sd_name:$weight> .
+​ negative_prompt string¦null Negative prompt words, separated by commas.
+​ sampler_name string¦null required This denoising process is called sampling because Stable Diffusion generates a new sample image at each step.
+Enum: DPM++ 2M Karras , DPM++ SDE Karras , DPM++ 2M SDE Exponential , DPM++ 2M SDE Karras , Euler a , Euler , LMS , Heun , DPM2 , DPM2 a , DPM++ 2S a , DPM++ 2M , DPM++ SDE , DPM++ 2M SDE , DPM++ 2M SDE Heun , DPM++ 2M SDE Heun Karras , DPM++ 2M SDE Heun Exponential , DPM++ 3M SDE , DPM++ 3M SDE Karras , DPM++ 3M SDE Exponential , DPM fast , DPM adaptive , LMS Karras , DPM2 Karras , DPM2 a Karras , DPM++ 2S a Karras , Restart , DDIM , PLMS , UniPC
+​ batch_size integer¦null required Number of images generated in a single generation. Range: [0, 8]
+​ n_iter integer¦null required Number of generations. Range: [0, 8]
+​ steps integer¦null required Think of steps as iterations of the image creation process. Range: (0, 50]
+​ cfg_scale number¦null required This setting indicates how closely Stable Diffusion will adhere to your prompt. Range: (0, 30]
+​ seed integer¦null A seed is a number from which Stable Diffusion generates noise.
+​ height integer required Height of the image. Range: (0, 2048]
+​ width integer required Width of the image. Range: (0, 2048]
+​ model_name string required Name of the stable diffusion model. You can call the /v3/model endpoint with the parameter filter.types=checkpoint to retrieve the sd_name_in_api field as the model_name .
+​ init_images string[] required
+​ denoising_strength number¦null Indicates how much to transform the reference init_images. Must be between 0 and 1. init_images will be used as a starting point, with more noise added as the strength increases. The number of denoising steps depends on the amount of noise initially added. When denoising_strength is 1, added noise will be maximum, and the denoising process will run for the full number of iterations specified in steps. A value of 1, therefore, essentially ignores init_images.
+​ restore_faces boolean¦null Enable Stable Diffusion restore faces plugin.
+​ sd_vae string¦null VAE(Variational Auto Encoder),sd_vae can be access in api /v3/model with query params filter.types=vae to retrieve the sd_name field as the sd_vae .
+​ clip_skip integer¦null This parameter indicates the number of layers to stop from the bottom during optimization, so clip_skip on 2 would mean, that in SD1.x model where the CLIP has 12 layers, you would stop at 10th layer.
+​ mask string Base64 of png, mask of inpaintings.
+​ mask_blur integer Sets the degree of blurring of the border of the filled area.
+​ resize_mode integer¦null Resize mode, while, 0 represent Just resize, 1 represent Crop and resize, 2 represent Resize and fill, 3 represent Just resize(latent upscale)
+Enum: 0 , 1 , 2 , 3
+​ image_cfg_scale integer¦null Image cfg scale
+​ inpainting_fill integer¦null How to redraw the filled areas. 0: fill, Redraw based on the surrounding color 1: original, Redraw based on the original image 2: latent noise, Change back to noise and redraw 3: latent nothing, based on the color of the filled area
+Enum: 0 , 1 , 2 , 3
+​ inpaint_full_res integer¦null Specify whether to apply or protect the filled area. 0: Whole picture the entire illustration and change the filled parts. 1: Only masked Draws only the filled area and then restores the original image.
+Enum: 0 , 1
+​ inpaint_full_res_padding integer¦null This settings controls how many additional pixels can be used as a reference point for only masked mode. You can increase the amount if you are having trouble with producing a proper image. This is a numerical value for how much margin to set when Only masked is selected. The downside of increasing this value is that it will decrease the quality of output. Guidance: https://civitai.com/articles/161/basic-inpainting-guide
+​ inpainting_mask_invert integer Specify whether to invert the mask. 0 - Inpaint Masked 1 - Inpaint Not Masked
+Enum: 0 , 1
+​ initial_noise_multiplier number Noise multiplier for img2img in settings. This scaling factor is applied to the random latent tensor for img2img. Lowering it reduces flickering.
+​ img_expire_ttl integer Image storage time (seconds). Range [0, 604800]
+​ sd_refiner object Refiner infos to enhances the image details. Show properties ​ checkpoint string required Refiner checkpoint name. Currently only sd_xl_refiner_1.0.safetensors supported.
+Enum: sd_xl_refiner_1.0.safetensors ​ switch_at number required Weight of refiner. From 0 to 1
+​ controlnet_units object[]¦null ControlNet. Show properties ​ model string required Model to use on the image passed to this unit before using it for conditioning. ***Controlnets for SD 1.5: control_v11e_sd15_ip2p, control_v11e_sd15_shuffle, control_v11f1e_sd15_tile, control_v11f1p_sd15_depth, control_v11p_sd15_canny, control_v11p_sd15_inpaint, control_v11p_sd15_lineart, control_v11p_sd15_mlsd, control_v11p_sd15_normalbae, control_v11p_sd15_openpose, control_v11p_sd15_scribble, control_v11p_sd15_seg, control_v11p_sd15_softedge, control_v11p_sd15s2_lineart_anime, ip-adapter-plus-face_sd15, ip-adapter_sd15_plus, ip-adapter_sd15; ***Controlnets for SDXL: t2i-adapter_diffusers_xl_canny, t2i-adapter_diffusers_xl_depth_midas, t2i-adapter_diffusers_xl_depth_zoe, t2i-adapter_diffusers_xl_lineart, t2i-adapter_diffusers_xl_openpose, t2i-adapter_diffusers_xl_sketch, t2i-adapter_xl_canny, t2i-adapter_xl_openpose, t2i-adapter_xl_sketch, ip-adapter_xl ​ weight number¦null required weight of this unit. defaults to 1 ​ input_image string required base64 of input image ​ module string required preprocessor to use on the image passed to this unit before using it for conditioning.
+Enum: none , canny , depth , depth_leres , depth_leres++ , hed , hed_safe , mediapipe_face , mlsd , normal_map , openpose , openpose_hand , openpose_face , openpose_faceonly , openpose_full , clip_vision , color , pidinet , pidinet_safe , pidinet_sketch , pidinet_scribble , scribble_xdog , scribble_hed , segmentation , threshold , depth_zoe , normal_bae , oneformer_coco , oneformer_ade20k , lineart , lineart_coarse , lineart_anime , lineart_standard , shuffle , tile_resample , invert , lineart_anime_denoise , reference_only , reference_adain , reference_adain+attn , inpaint , inpaint_only , inpaint_only+lama , tile_colorfix , tile_colorfix+sharp , depth_anything ​ control_mode integer¦null required 0 for Balanced,1 for My prompt is more important 2 for ControlNet is more important
+Enum: 0 , 1 , 2 ​ mask string¦null Base64 of mask images, support jpg, jpeg and png format images. Only take effect when controlnet_units.model set to control_v11p_sd15_inpaint. ​ resize_mode integer¦null How to resize the input image so as to fit the output resolution of the generation.
+Enum: 0 , 1 , 2 ​ processor_res integer¦null Resolution of the preprocessor. ​ threshold_a integer¦null First parameter of the preprocessor, only takes effect when preprocessor accepts arguments. ​ threshold_b integer¦null Second parameter of the preprocessor, only takes effect when preprocessor accepts arguments. ​ guidance_start number¦null ratio of generation where this unit starts to have an effect. ​ guidance_end number¦null ratio of generation where this unit stops to have an effect. ​ pixel_perfect boolean¦null Enable pixel-perfect preprocessor, when set to false, it means not to resize images.
+## ​Response
+​ code integer
+​ msg string
+​ data object Show properties ​ task_id string ​ warn string
+## ​Example
+request
+Copy
+```
+curl --location 'https://api.novita.ai/v2/img2img' \
+--header 'Authorization: Bearer {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data '{
+'extra': {
+'enable_nsfw_detection': false,
+'nsfw_detection_level': 0,
+'enable_progress_info': false
+},
+'prompt': 'Photographic of a woman sitting at a cafe. 35mm photograph, film, bokeh, professional, 4k, highly detailed',
+'negative_prompt': 'ng_deepnegative_v1_75t, badhandv4, (worst quality:2), (low quality:2), (normal quality:2), lowres, ((monochrome)), ((grayscale)), watermark',
+'sampler_name': 'Euler a',
+'batch_size': 1,
+'n_iter': 1,
+'steps': 20,
+'cfg_scale': 7,
+'seed': -1,
+'height': 1024,
+'width': 1024,
+'model_name': 'sd_xl_base_1.0.safetensors',
+'init_images': [
+'{{base64 encoded image}}'
+],
+'denoising_strength': 0.5,
+'restore_faces': false,
+'sd_vae': 'sdxl_vae.safetensors',
+'clip_skip': 1,
+'mask': '',
+'mask_blur': null,
+'resize_mode': 0,
+'image_cfg_scale': null,
+'inpainting_fill': 0,
+'inpaint_full_res': 0,
+'inpaint_full_res_padding': null,
+'inpainting_mask_invert': 0,
+'initial_noise_multiplier': null,
+'img_expire_ttl': null,
+'sd_refiner': {
+'checkpoint': 'sd_xl_refiner_1.0.safetensors',
+'switch_at': 1
+},
+'controlnet_units': [
+{
+'model': 't2i-adapter_xl_sketch',
+'weight': 0.5,
+'input_image': '{{base64 encoded image}}',
+'module': 'none',
+'control_mode': 0,
+'mask': '',
+'resize_mode': 0,
+'processor_res': null,
+'threshold_a': null,
+'threshold_b': null,
+'guidance_start': null,
+'guidance_end': null,
+'pixel_perfect': false,
+'lowvram': true
+}
+],
+'controlnet_no_detectmap': true
+}'
+```
+response
+Copy
+```
+{
+"code": 0,
+"msg": "",
+"data": {
+"task_id": "d4cf3973-8414-4a5e-aa6f-ef54caf73662"
+}
+}
+```
+Was this page helpful? Yes No Text to Image V2 Progress ⌘ I

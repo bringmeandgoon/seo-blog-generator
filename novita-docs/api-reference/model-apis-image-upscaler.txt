@@ -1,0 +1,88 @@
+Source: https://novita.ai/docs/api-reference/model-apis-image-upscaler
+============================================================
+
+- Image Upscaling - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImage EditorImage UpscalingGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image EditorPOSTUpscale
+- POSTRemove Background
+- POSTReplace Background
+- POSTInpainting
+- POSTRemove Text
+- POSTCleanup
+- POSTImage to Prompt
+- POSTQwen-Image Edit
+- POSTImage Eraser
+- POSTImage Upscaling
+- POSTImage Remove Background
+- Video Generator
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Image Upscaling cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/image-upscaler \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"image": " ",
+"resolution": " ",
+"output_format": " "
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+POST / v3 / async / image-upscaler Image Upscaling cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/image-upscaler \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"image": " ",
+"resolution": " ",
+"output_format": " "
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+AI-powered image upscaling service that enhances low-resolution images to higher resolutions, providing high-quality image processing: out-of-the-box REST inference API, best performance, no cold start, and affordable pricing.
+This is an asynchronous API; only the task_id will be returned. You should use the task_id to request the Task Result API to retrieve the video generation results.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ image string required The URL of the original image to be upscaled.
+​ resolution string default: "4k" Target resolution after upscaling. Optional values: 2k , 4k , 8k
+​ output_format string default: "jpeg" The output image format. Optional values: jpeg , png , webp
+## ​Response
+​ task_id string required Use the task_id to request the Task Result API to retrieve the generated outputs. Was this page helpful? Yes No Image Eraser Image Remove Background ⌘ I

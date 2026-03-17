@@ -1,0 +1,119 @@
+Source: https://novita.ai/docs/guides/llm-deepseek-ocr
+============================================================
+
+- DeepSeek-OCR Usage - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationLLMDeepSeek-OCR UsageGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLMLarge Language Models
+- Vision Language Models
+- Recommended Models
+- Reasoning Models
+- DeepSeek-OCR Usage
+- Function Calling
+- Structured Outputs
+- Prompt Cache
+- Dedicated Endpoint User Manual
+- Batch Inference
+- Rate limits
+- LLM Monitoring
+- Interactive Playground
+- Anthropic SDK Compatibility
+- Interleaved Thinking Supporty
+- Common Error Codes
+- LLM FAQs
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Overview
+- Recommended Preset Prompts
+- Usage Example
+## ​Overview
+DeepSeek-OCR is designed for document recognition and image-to-text scenarios, pushing the limits of visual and textual compression. The model can render long texts into highly compressed images, achieving an OCR accuracy of 97% at a lossless compression ratio of 10x and around 60% accuracy at 20x compression.
+This model currently supports only single-turn, independent recognition tasks. It does not support multi-turn conversations. Only one image can be uploaded per request, and it is strongly recommended to use preset prompts for optimal performance.
+## ​Recommended Preset Prompts
+Copy
+```
+# Convert the document contents to markdown format
+Convert the document to markdown.
+# Perform text recognition on this image
+OCR this image.
+# Extract all text without layout consideration
+Free OCR.
+# Parse any figures or tables in the document
+Parse the figure.
+# Provide a detailed description of the image content
+Describe this image in detail.
+# Locate the position of xxxx in the image
+Locate xxxx in the image.
+```
+## ​Usage Example
+This example uses the <|grounding|>OCR this image. preset prompt to perform image text recognition.
+Copy
+```
+from openai import OpenAI
+client = OpenAI(
+base_url="https://api.novita.ai/openai",
+api_key=" ",
+)
+response = client.chat.completions.create(
+model="deepseek/deepseek-ocr",
+messages=[
+{
+"role": "user",
+"content": [
+{
+"type": "image_url",
+"image_url": {
+"url": "https://example.com/image.png"
+}
+},
+{
+"type": "text",
+"text": " OCR this image."
+}
+]
+}
+],
+stream=False,
+max_tokens=4096
+)
+content = response.choices[0].message.content
+print(content)
+```
+Example input image:
+Example output:
+Copy
+```
+[[37, 48, 279, 140]]
+Deploy open-source and specialized models [[42, 48, 857, 133]]
+smarterandfasterwithsimpleApls.Accessthe [[44, 185, 902, 246]]
+latest chat, code, image, audio, video models and [[41, 291, 945, 370]]
+more,ready for production with built-in [[40, 407, 756, 488]]
+scalability. [[39, 515, 232, 606]]
+Explore [[87, 813, 266, 879]]
+Models [[289, 816, 432, 878]]
+```
+Was this page helpful? Yes No Reasoning Models Function Calling ⌘ I

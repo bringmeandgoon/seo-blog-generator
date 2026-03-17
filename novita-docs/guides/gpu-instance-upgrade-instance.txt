@@ -1,0 +1,47 @@
+Source: https://novita.ai/docs/guides/gpu-instance-upgrade-instance
+============================================================
+
+- Upgrade Instance - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationGuidesUpgrade InstanceGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU InstanceOverview
+- Quickstart
+- GuidesGPU Instance Pricing
+- Edit Instance
+- Upgrade Instance
+- Save Image
+- How to Choose a GPU?
+- Jupyter Lab
+- Image Prewarm
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+When you need to modify the “Docker Image”, “Container Start Parameters” or “Container Environment Variables” of a GPU instance, you can use Novita AI Upgrade Instance feature. Here’s how to use this feature.
+- While upgrading the instance, the instance will be reset, but the resources originally occupied by the instance will be retained.
+- When upgrading the instance, the platform will save your system disk data, but if the data is incompatible with the upgraded instance system, the data cannot be successfully restored to the new instance.
+- Go to the Instances page and locate the instance you want to upgrade. Click “More Operations - Upgrade”.
+- In the pop-up edit dialog, modify the image and other configurations, and click the “Upgrade” button after confirming everything is correct.
+Was this page helpful? Yes No Edit Instance Save Image ⌘ I

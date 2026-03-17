@@ -1,0 +1,70 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-stop-instance
+============================================================
+
+- Stop Instance - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationInstanceStop InstanceGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- InstancePOSTCreate GPU Instance
+- POSTCreate CPU Instance
+- GETList Instances
+- GETGet Instance
+- POSTEdit Instance
+- POSTStart Instance
+- POSTStop Instance
+- POSTRestart Instance
+- POSTUpgrade Instance
+- POSTMigrate Instance
+- GETMonitor Metrics
+- POSTRenew Subscription Instance
+- POSTConvert Pay-As-You-Go Instance to Subscription
+- POSTDelete Instance
+- POSTSet Auto Renew
+- POSTSet Auto Migrate Strategy
+- Image
+- Template
+- Product
+- Network
+- Image Registry
+- Storage
+- Jobs
+- Serverless GPUs
+Stop Instance cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/gpu/instance/stop \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"instanceId": " "
+}
+'
+```
+POST / gpu-instance / openapi / v1 / gpu / instance / stop Try it Stop Instance cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/gpu/instance/stop \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"instanceId": " "
+}
+'
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ instanceId string required ID of the instance to be stopped. Was this page helpful? Yes No Start Instance Restart Instance ⌘ I

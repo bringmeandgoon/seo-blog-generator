@@ -1,0 +1,99 @@
+Source: https://novita.ai/docs/api-reference/model-apis-z-image-turbo
+============================================================
+
+- Z Image Turbo - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImage GeneratorZ Image TurboGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image GeneratorPOSTText to Image
+- POSTImage to Image
+- POSTReimagine
+- POSTFLUX.1 [schnell] Text to Image
+- POSTFLUX.1 Kontext Dev
+- POSTFLUX.1 Kontext Pro
+- POSTFLUX.1 Kontext Max
+- POSTSeedream 3.0 Text to Image
+- POSTSeedream 4.0
+- POSTSeedream 4.5
+- POSTSeedream 5.0 lite
+- POSTQwen-Image Text to Image
+- POSTHunyuan Image 3
+- POSTFlux 2 Dev Image Gen
+- POSTFlux 2 Flex Image Gen
+- POSTFlux 2 Pro Image Gen
+- POSTZ Image Turbo LoRA
+- POSTZ Image Turbo
+- POSTGLM Image Generation
+- Image Editor
+- Video Generator
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Z Image Turbo cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/z-image-turbo \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"seed": 123,
+"size": " ",
+"prompt": " ",
+"enable_base64_output": true
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+POST / v3 / async / z-image-turbo Z Image Turbo cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/z-image-turbo \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"seed": 123,
+"size": " ",
+"prompt": " ",
+"enable_base64_output": true
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+Z-Image Turbo is a high-speed image generation model that supports rapid generation of high-quality images based on text prompts.
+This is an asynchronous API; only the task_id will be returned. You should use the task_id to request the Task Result API to retrieve the video generation results.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ seed integer Random seed for generation. -1 means using a random seed. Range: -1 to 2147483647 Value range: [-1, 2147483647]
+​ size string default: "1024*1024" Pixel dimensions of the generated image (width*height). Each dimension ranges from 256 to 1536 pixels
+​ prompt string required Positive prompt for generation
+​ enable_base64_output boolean default: false If enabled, the output will be encoded as a BASE64 string instead of a URL. This property is only available via API
+## ​Response
+​ task_id string required Use the task_id to request the Task Result API to retrieve the generated outputs. Was this page helpful? Yes No Z Image Turbo LoRA GLM Image Generation ⌘ I

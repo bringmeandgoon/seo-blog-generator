@@ -1,0 +1,53 @@
+Source: https://novita.ai/docs/guides/gpu-instance-quickstart-manage-instances
+============================================================
+
+- Manage Instances - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationQuickstartManage InstancesGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU InstanceOverview
+- QuickstartPreparations
+- Create Instances
+- Manage Instances
+- Manage Network Volume
+- Connect to Instance
+- Guides
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Stop an Instance
+- Terminate an Instance
+In this guide, we will show you how to stop or terminate your instances.
+## ​Stop an Instance
+- Go to Console - Instances;
+- In the instance list, select the instance you need to stop;
+- Click the More Operations - Stop button;
+- Confirm the Stop action in the pop-up window.
+After stopping your instance, you can start it later, but it is not guaranteed to be available because the resources may have been preempted, and all data will be saved for 7 days at most. Please note that you will be charged for volume storage while your instance is stopped. If you won’t start this instance later, please terminate it to avoid disk charges.
+## ​Terminate an Instance
+- In the instance list, find the instance and click the More Operations button;
+- In the action menu, select the Terminate option;
+- Confirm the Terminate action in the pop-up window.
+Please note that terminating an instance will permanently delete the data on the instance. Was this page helpful? Yes No Create Instances Manage Network Volume ⌘ I

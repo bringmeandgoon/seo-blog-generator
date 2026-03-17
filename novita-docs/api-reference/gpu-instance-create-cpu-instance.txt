@@ -1,0 +1,158 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-create-cpu-instance
+============================================================
+
+- Create CPU Instance - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationInstanceCreate CPU InstanceGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- InstancePOSTCreate GPU Instance
+- POSTCreate CPU Instance
+- GETList Instances
+- GETGet Instance
+- POSTEdit Instance
+- POSTStart Instance
+- POSTStop Instance
+- POSTRestart Instance
+- POSTUpgrade Instance
+- POSTMigrate Instance
+- GETMonitor Metrics
+- POSTRenew Subscription Instance
+- POSTConvert Pay-As-You-Go Instance to Subscription
+- POSTDelete Instance
+- POSTSet Auto Renew
+- POSTSet Auto Migrate Strategy
+- Image
+- Template
+- Product
+- Network
+- Image Registry
+- Storage
+- Jobs
+- Serverless GPUs
+Create CPU Instance cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/gpu/instance/create \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"name": " ",
+"productId": " ",
+"imageUrl": " ",
+"imageAuth": " ",
+"imageAuthId": " ",
+"ports": " ",
+"envs": [
+{
+"key": " ",
+"value": " "
+}
+],
+"tools": [
+{
+"name": " ",
+"port": " ",
+"type": " "
+}
+],
+"command": " ",
+"entrypoint": " ",
+"clusterId": " ",
+"localStorageMountPoint": " ",
+"networkStorages": [
+{
+"Id": " ",
+"mountPoint": " "
+}
+],
+"networkId": " ",
+"kind": " "
+}
+'
+```
+200 Copy
+```
+{
+"id": " "
+}
+```
+POST / gpu-instance / openapi / v1 / gpu / instance / create Try it Create CPU Instance cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/gpu/instance/create \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"name": " ",
+"productId": " ",
+"imageUrl": " ",
+"imageAuth": " ",
+"imageAuthId": " ",
+"ports": " ",
+"envs": [
+{
+"key": " ",
+"value": " "
+}
+],
+"tools": [
+{
+"name": " ",
+"port": " ",
+"type": " "
+}
+],
+"command": " ",
+"entrypoint": " ",
+"clusterId": " ",
+"localStorageMountPoint": " ",
+"networkStorages": [
+{
+"Id": " ",
+"mountPoint": " "
+}
+],
+"networkId": " ",
+"kind": " "
+}
+'
+```
+200 Copy
+```
+{
+"id": " "
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ name string CPU instance name. String, length limit: 0-255 characters.
+​ productId string required Product ID for deploying the instance. You can query this via the List CPU Products API . String, length limit: 1-255 characters.
+​ imageUrl string required Container image URL. String, length limit: 1-500 characters.
+​ imageAuth string Image repository authentication. Format: username:password. Required for private images; not required for public images or platform images. String, length limit: 0-10239 characters.
+​ imageAuthId string Image repository authentication ID.
+​ ports string Ports exposed by the instance. String, e.g.: 80/http, 3306/tcp. Supported port range: 1-65535, except for 2222, 2223, 2224 which are reserved for internal use. Supported port types: tcp, http. The total number of ports used by ports + tools must not exceed 15.
+​ envs object[] Instance environment variables. Array, up to 100 environment variables. Show properties ​ key string Environment variable name. String, length limit: 0-511 characters. ​ value string Environment variable value. String, length limit: 0-4095 characters.
+​ tools object[] Enable official image support tools. Array. Currently, some official images only include Jupyter. The total number of ports used by ports + tools must not exceed 15. Show properties ​ name string Tool name. Valid value: Jupyter. ​ port string Port used by the tool. Supported port range: 1-65535, except for 2222, 2223, 2224 which are reserved for internal use. ​ type string Port type used by the tool. Valid values: tcp, http.
+​ command string Container startup command. This setting will override the Docker image’s CMD. String, length limit: 0-2047 characters.
+​ entrypoint string Container startup entrypoint. This setting will override the Docker image’s ENTRYPOINT. String, length limit: 0-2047 characters.
+​ clusterId string Specify the cluster ID to create the instance in. If left empty, the instance will be created in a random cluster. String, length limit: 0-255 characters.
+​ localStorageMountPoint string Mount point for local storage. Default: “/workspace”. String, length limit: 1-4095 characters.
+​ networkStorages object[] Cloud storage mount configuration. Array, up to 30 cloud storages can be mounted. Show properties ​ Id string Cloud storage ID. ​ mountPoint string Mount point for cloud storage. Default: “/network”. String, length limit: 1-4095 characters.
+​ networkId string VPC network ID. Leave empty if not using a VPC network.
+​ kind string required Instance type. Valid values: cpu, gpu. Must be set to cpu.
+## ​Response
+​ id string Created instance ID. Was this page helpful? Yes No Create GPU Instance List Instances ⌘ I

@@ -1,0 +1,58 @@
+Source: https://novita.ai/docs/guides/sandbox-template-customize-cpu-ram
+============================================================
+
+- Customize sandbox CPU & RAM - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationTemplateCustomize sandbox CPU & RAMGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- TemplateSandbox Templates
+- Start Command
+- Customize sandbox CPU & RAM
+- Version Management
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Through Configuration File
+You can customize the CPU and RAM of your sandbox template via CLI.
+You need to create a sandbox template first.
+During the build step, you can specify the CPU and RAM of your sandbox template.
+The following command will create a sandbox template with 2 vCPUs and 2GB RAM.
+Bash Copy
+```
+novita-sandbox-cli template build -c "/root/.jupyter/start-up.sh" --cpu-count 2 --memory-mb 2048
+```
+## ​Through Configuration File
+You can also specify the vCPU and RAM specifications for the sandbox template in the novita.toml file in the same directory where you run the novita-sandbox-cli template build command.
+Toml Copy
+```
+template_id = "0r0efkbfwzfp9p7qpc1c"
+dockerfile = "novita.Dockerfile"
+template_name = "my-agent-sandbox"
+ready_cmd = " "
+# Specify sandbox template vCPU and RAM specifications as 2 vCPUs and 2GB RAM
+cpu_count = 2
+memory_mb = 2_048
+```
+Was this page helpful? Yes No Start Command Version Management ⌘ I

@@ -1,0 +1,277 @@
+Source: https://novita.ai/docs/guides/llm-structured-outputs
+============================================================
+
+- Structured Outputs - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationLLMStructured OutputsGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLMLarge Language Models
+- Vision Language Models
+- Recommended Models
+- Reasoning Models
+- DeepSeek-OCR Usage
+- Function Calling
+- Structured Outputs
+- Prompt Cache
+- Dedicated Endpoint User Manual
+- Batch Inference
+- Rate limits
+- LLM Monitoring
+- Interactive Playground
+- Anthropic SDK Compatibility
+- Interleaved Thinking Supporty
+- Common Error Codes
+- LLM FAQs
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Supported Models
+- Quick Start Guide
+- 1. Initialize the Client
+- 2. Define the JSON schema
+- 3. Request chat completion API
+- The Complete Code
+Structured Outputs enables the model to generate responses that adhere to your supplied JSON Schema .
+## ​Supported Models
+The following models support Structured Outputs :
+## ​Quick Start Guide
+This guide demonstrates how to use Structured Outputs ability to generate the JSON response via json_schema response format. We will walk through a complete Python code example.
+### ​1. Initialize the Client
+First, you need to initialize the client with your Novita API key.
+Copy
+```
+from openai import OpenAI
+client = OpenAI(
+base_url="https://api.novita.ai/openai",
+# Get the Novita AI API Key from: https://novita.ai/settings/key-management.
+api_key=" ",
+)
+# Go to the [Models](https://novita.ai/models) page to see the models that support `Structured Outputs`.
+model = "mistralai/mistral-7b-instruct"
+```
+### ​2. Define the JSON schema
+This example creates a schema for extracting expense information from the user’s input.
+Copy
+```
+# Define system prompt for expense tracking.
+system_prompt = """You are an expense tracking assistant.
+Extract expense information from the user's input and format it according to the provided schema."""
+# Define JSON schema for structured response.
+response_format = {
+"type": "json_schema",
+"json_schema": {
+"name": "expense_tracking_schema",
+"schema": {
+"type": "object",
+"properties": {
+"expenses": {
+"type": "array",
+"items": {
+"type": "object",
+"properties": {
+"description": {
+"type": "string",
+"description": "Description of the expense"
+},
+"amount": {
+"type": "number",
+"description": "Amount spent in dollars"
+},
+"date": {
+"type": "string",
+"description": "When the expense occurred"
+},
+"category": {
+"type": "string",
+"description": "Category of expense (e.g., food, office, travel)"
+}
+},
+"required": [
+"description",
+"amount"
+]
+}
+},
+"total": {
+"type": "number",
+"description": "Total amount of all expenses"
+}
+},
+"required": [
+"expenses",
+"total"
+],
+},
+},
+}
+```
+### ​3. Request chat completion API
+Now, make the chat completion request to the Novita endpoint.
+This request includes the response_format parameter, defining the JSON schema we defined in the previous step.
+Copy
+```
+chat_completion = client.chat.completions.create(
+model=model,
+messages=[
+{
+"role": "system",
+"content": system_prompt,
+},
+{
+"role": "user",
+"content": """I spent $120 on dinner at an Italian restaurant last Friday with my colleagues.
+Also bought office supplies for $45 on Monday.""",
+},
+],
+max_tokens=1024,
+temperature=0.8,
+stream=False,
+response_format=response_format,
+)
+response_content = chat_completion.choices[0].message.content
+# Parse and prettify the JSON
+try:
+json_response = json.loads(response_content)
+prettified_json = json.dumps(json_response, indent=2)
+print(prettified_json)
+except json.JSONDecodeError:
+print("Could not parse response as JSON. Raw response:")
+print(response_content)
+```
+Output:
+Copy
+```
+{
+"expenses": [
+{
+"date": "2023-03-17",
+"description": "Dinner at Italian restaurant",
+"amount": 120,
+"category": "Food & Dining"
+},
+{
+"date": "2023-03-13",
+"description": "Office supplies",
+"amount": 45,
+"category": "Office Supplies"
+}
+],
+"total": 165
+}
+```
+### ​The Complete Code
+Copy
+```
+from openai import OpenAI
+import json
+client = OpenAI(
+base_url="https://api.novita.ai/openai",
+# Get the Novita AI API Key from: https://novita.ai/settings/key-management.
+api_key=" ",
+)
+# Go to the [Models](https://novita.ai/models) page to see the models that support `Structured Outputs`.
+model = "mistralai/mistral-7b-instruct"
+# Example of using JSON Schema for structured output
+# This example creates a schema for extracting expense information
+# Define system prompt for expense tracking
+system_prompt = """You are an expense tracking assistant.
+Extract expense information from the user's input and format it according to the provided schema."""
+# Define JSON schema for structured response
+response_format = {
+"type": "json_schema",
+"json_schema": {
+"name": "expense_tracking_schema",
+"schema": {
+"type": "object",
+"properties": {
+"expenses": {
+"type": "array",
+"items": {
+"type": "object",
+"properties": {
+"description": {
+"type": "string",
+"description": "Description of the expense"
+},
+"amount": {
+"type": "number",
+"description": "Amount spent in dollars"
+},
+"date": {
+"type": "string",
+"description": "When the expense occurred"
+},
+"category": {
+"type": "string",
+"description": "Category of expense (e.g., food, office, travel)"
+}
+},
+"required": [
+"description",
+"amount"
+]
+}
+},
+"total": {
+"type": "number",
+"description": "Total amount of all expenses"
+}
+},
+"required": [
+"expenses",
+"total"
+],
+},
+},
+}
+chat_completion = client.chat.completions.create(
+model=model,
+messages=[
+{
+"role": "system",
+"content": system_prompt,
+},
+{
+"role": "user",
+"content": """I spent $120 on dinner at an Italian restaurant last Friday with my colleagues.
+Also bought office supplies for $45 on Monday.""",
+},
+],
+max_tokens=1024,
+temperature=0.8,
+stream=False,
+response_format=response_format,
+)
+response_content = chat_completion.choices[0].message.content
+# Parse and prettify the JSON
+try:
+json_response = json.loads(response_content)
+prettified_json = json.dumps(json_response, indent=2)
+print(prettified_json)
+except json.JSONDecodeError:
+print("Could not parse response as JSON. Raw response:")
+print(response_content)
+```
+Was this page helpful? Yes No Function Calling Prompt Cache ⌘ I

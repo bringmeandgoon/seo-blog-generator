@@ -1,0 +1,28 @@
+name: SEO Monitor Weekly
+
+on:
+  schedule:
+    - cron: '0 2 * * 1'   # 每周一 UTC 02:00 = 北京时间 10:00
+  workflow_dispatch:
+
+jobs:
+  weekly:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install -r requirements.txt
+      - name: Weekly sync + GSC update + report + dashboard
+        env:
+          WP_SITE_URL: ${{ secrets.WP_SITE_URL }}
+          GSC_CREDENTIALS_JSON_B64: ${{ secrets.GSC_CREDENTIALS_JSON_B64 }}
+          GSC_SITE_URL: ${{ secrets.GSC_SITE_URL }}
+          HTTPS_PROXY: ""
+          FEISHU_APP_ID: ${{ secrets.FEISHU_APP_ID }}
+          FEISHU_APP_SECRET: ${{ secrets.FEISHU_APP_SECRET }}
+          FEISHU_BITABLE_APP_TOKEN: ${{ secrets.FEISHU_BITABLE_APP_TOKEN }}
+          FEISHU_TABLE_ARTICLES: ${{ secrets.FEISHU_TABLE_ARTICLES }}
+          FEISHU_TABLE_HISTORY: ${{ secrets.FEISHU_TABLE_HISTORY }}
+        run: python main.py weekly

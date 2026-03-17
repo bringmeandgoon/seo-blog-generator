@@ -1,0 +1,94 @@
+Source: https://novita.ai/docs/guides/chatbox
+============================================================
+
+- ChatBox - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationIntegrationsChatBoxGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- IntegrationsClaude Code Integration Guide
+- OpenAI Agents SDK
+- AnythingLLM
+- Dify
+- Helicone
+- Hugging Face
+- Langflow
+- Continue
+- Cursor
+- LangChain
+- Skyvern
+- LobeChat
+- AI Gradio
+- Langfuse
+- MLflow
+- Verba
+- Portkey
+- DocsGPT
+- LlamaIndex
+- LoLLMS WebUI
+- CodeCompanion
+- Page Assist
+- DeepSearcher
+- Browser Use
+- OWL
+- LiteLLM
+- ChatBox
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - What is ChatBox
+- Integration Steps
+- Step 1 Open Settings
+- Step 2 Locate Novita AI
+- Step 3 Model Selection
+- Step 4 Check API Key
+- Step 5 Start Using
+- Embedded Model Use
+- Step 1 Locate Knowledge Base
+- Step 2 Create Knowledge Base
+- Step 3 Start Using
+With the Novita AI & Chatbox integration, you gain comprehensive access to Novita AI’s powerful suite of LLMs, including GLM 4.5, Deepseek, Qwen, and more.
+This guide will walk you through integrating Novita AI’s LLMs with the ChatBox platform.
+## ​What is ChatBox
+ChatBox is an open-source, cross-platform AI chat application designed to interact with a variety of LLMs. It supports a wide range of LLM providers including OpenAI, Claude, Google Gemini, and Novita AI. With features like multi-language support, advanced prompt management, image generation via DALL·E 3, and collaboration tools, Chatbox enables developers and users alike to create and manage AI workflows efficiently.
+## ​Integration Steps
+### ​Step 1 Open Settings
+Open the Chatbox app and find the Settings at the bottom left.
+### ​Step 2 Locate Novita AI
+The Settings page defaults to the Model Providers tab. Scroll through the model list to find Novita AI.
+### ​Step 3 Model Selection
+Select Novita AI to view the model selection section, where several default models are available, including models supported by Novita such as deepseek-v3-0324, deepseek-r1-0528, glm 4.5, and more. For the complete list of available models, visit https://novita.ai/models .
+Click Fetch to open the model list. From there, you can add models to the default list or remove existing ones as needed.
+### ​Step 4 Check API Key
+Here, you can enter your API key. After entering it, click Check . If you see the message “Connection successful” , it means you’re all set to start using it.
+### ​Step 5 Start Using
+Start a new chat. Enter “Hello” and receive a reply. You should see that the response is provided by Novita AI.
+## ​Embedded Model Use
+### ​Step 1 Locate Knowledge Base
+Click “Settings” , then “Knowledge Base” . If there’s nothing there yet, you’ll be prompted to create a new one (the screenshot shows one already created).
+### ​Step 2 Create Knowledge Base
+When creating a new knowledge base, remember to select your desired embedding model , then click “Create” .
+### ​Step 3 Start Using
+Return to the chat page , and click the knowledge base icon below the input box. Then, select the knowledge base you just created. Now start your conversation with Novita AI LLM on ChatBox.
+Was this page helpful? Yes No LiteLLM Overview ⌘ I

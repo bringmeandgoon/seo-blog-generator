@@ -1,0 +1,113 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-list-jobs
+============================================================
+
+- List Jobs - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationJobsList JobsGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- Instance
+- Image
+- Template
+- Product
+- Network
+- Image Registry
+- Storage
+- JobsGETList Jobs
+- POSTBreak Job
+- Serverless GPUs
+List Jobs cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/jobs \
+--header 'Authorization: '
+```
+200 Copy
+```
+{
+"jobs": [
+{
+"Id": " ",
+"user": " ",
+"type": " ",
+"envs": [
+{
+"key": " ",
+"value": " "
+}
+],
+"state": {
+"state": " ",
+"error": " ",
+"errorMessage": " "
+},
+"logAddress": " ",
+"createdAt": " ",
+"instanceId": " "
+}
+]
+}
+```
+GET / gpu-instance / openapi / v1 / jobs Try it List Jobs cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/jobs \
+--header 'Authorization: '
+```
+200 Copy
+```
+{
+"jobs": [
+{
+"Id": " ",
+"user": " ",
+"type": " ",
+"envs": [
+{
+"key": " ",
+"value": " "
+}
+],
+"state": {
+"state": " ",
+"error": " ",
+"errorMessage": " "
+},
+"logAddress": " ",
+"createdAt": " ",
+"instanceId": " "
+}
+]
+}
+```
+## ​API Description
+Retrieve a paginated list of background jobs for GPU instances. You can filter by job ID, state, type, time range, and creators.
+## ​Request Headers
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Query Parameters
+​ pageSize integer Maximum number of items returned per page. Integer, value >= 0.
+​ pageNum integer Page number to retrieve. Integer, value >= 0.
+​ jobId string Filter by job ID. String, length 0–255.
+​ state string Filter by job state. One of: pulling (preparing), running , fail , success , break .
+​ type string Filter by job type. One of: saveImage , instanceMigrate , autoInstanceMigrate .
+​ startTime integer Start of time range (Unix timestamp in seconds). Integer, value >= 0. Default: 0.
+​ endTime integer End of time range (Unix timestamp in seconds). Integer, value >= 0. Default: 0.
+​ creators string Filter by creator user ID.
+## ​cURL Example
+Copy
+```
+curl --location --request GET 'https://api.novita.ai/gpu-instance/openapi/v1/jobs?pageSize=5&pageNum=1&jobId=&type=&state=&startTime=&endTime=&creators=' \
+--header 'Authorization: Bearer {{API_KEY}}'
+```
+## ​Response
+​ jobs object[] required Job list. Hide properties ​ Id string required Job ID. ​ user string required The user ID who initiated the job. ​ type string required Job type. One of: saveImage , instanceMigrate , autoInstanceMigrate . ​ envs object[] Environment variables for the job. Show properties ​ key string Environment variable name. ​ value string Environment variable value. ​ state object required Current job state information. Show properties ​ state string required Current job state. One of: pulling , running , fail , success , break . ​ error string Error code, if any. ​ errorMessage string Error message, if any. ​ logAddress string Log URL for viewing job execution logs. ​ createdAt string required Job creation time (Unix timestamp in seconds). ​ instanceId string required Associated instance ID when the job was executed.
+Was this page helpful? Yes No List Network Storage Break Job ⌘ I

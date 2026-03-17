@@ -1,0 +1,105 @@
+Source: https://novita.ai/docs/guides/sandbox-commit
+============================================================
+
+- Sandbox Snapshot Template - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationSandboxSandbox Snapshot TemplateGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- SandboxSandbox Lifecycle
+- Sandbox Persistence
+- Sandbox Metrics
+- Sandbox Metadata
+- Environment variables
+- List sandboxes
+- Connect to running sandbox
+- Internet access
+- Mount object storage bucket
+- Auto Pause and Resume
+- Sandbox Clone
+- Sandbox Snapshot Template
+- Idle Timeout
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Terminology
+- Feature Description
+- Committing a Running Sandbox
+- Committing a Paused Sandbox
+- Parameter Description
+- Return Value
+- Code Examples
+## ​Terminology
+- Commit: A commit operation saves the current state of a sandbox as a template, resulting in a new template of type snapshot template.
+- Origin Sandbox: The sandbox instance being committed.
+- Snapshot Template: The template generated after a commit operation.
+## ​Feature Description
+### ​Committing a Running Sandbox
+During the commit process:
+- The origin sandbox will be briefly suspended during committing;
+- The sandbox instance is unavailable during suspension;
+- The suspension duration is close to the time required for a single pause operation.
+After committing is complete:
+Origin Sandbox:
+- The existing pause record will be refreshed to a new pause record, based on the current sandbox state;
+- The origin sandbox continues to run;
+- A new template record is generated.
+### ​Committing a Paused Sandbox
+During the commit process:
+- The commit process will not trigger the origin sandbox to start;
+- The origin sandbox remains in paused state.
+After committing is complete:
+Origin Sandbox:
+- The existing pause record is not cleared;
+- A new template record is generated.
+## ​Parameter Description
+ParameterTypeRequiredDescription
+sandbox_idstringYesThe ID of the sandbox instance to commit
+aliasstringNoSet an alias for the generated template
+## ​Return Value
+After a successful commit operation, a Template object is returned.
+## ​Code Examples
+Python TypeScript Copy
+```
+from novita_sandbox.core import Sandbox
+# Commit an existing sandbox by ID to create a template snapshot
+# sandbox_id: str - Required. The ID of the sandbox to commit
+# alias: Optional[str] - Optional alias name for the created template
+# Note: Default timeout is 10 minutes for commit operation
+template = Sandbox.commit(
+sandbox_id="existing-sandbox-id",
+alias="my-template-alias"
+)
+print(f"Template ID: {template.template_id}")
+print(f"Build ID: {template.build_id}")
+```
+Additionally, you can also use the Novita Sandbox CLI to commit a specified sandbox instance:
+Bash Copy
+```
+# Basic commit - creates a template snapshot from a sandbox
+novita-sandbox-cli sandbox commit
+# Commit with alias - assign a friendly name to the template
+novita-sandbox-cli sandbox commit --alias my-template-alias
+```
+Was this page helpful? Yes No Sandbox Clone Idle Timeout ⌘ I

@@ -1,0 +1,118 @@
+Source: https://novita.ai/docs/guides/anythingllm
+============================================================
+
+- AnythingLLM - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationIntegrationsAnythingLLMGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- IntegrationsClaude Code Integration Guide
+- OpenAI Agents SDK
+- AnythingLLM
+- Dify
+- Helicone
+- Hugging Face
+- Langflow
+- Continue
+- Cursor
+- LangChain
+- Skyvern
+- LobeChat
+- AI Gradio
+- Langfuse
+- MLflow
+- Verba
+- Portkey
+- DocsGPT
+- LlamaIndex
+- LoLLMS WebUI
+- CodeCompanion
+- Page Assist
+- DeepSearcher
+- Browser Use
+- OWL
+- LiteLLM
+- ChatBox
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - What is AnythingLLM?
+- Key Features
+- Prerequisites
+- How to install AnythingLLM on Linux locally?
+- Integration Steps
+- 1. Connect Novita AI to AnythingLLM
+- 2. Enable Web Search
+- 3. Create a Knowledge Base
+- 4. Try Asking Questions
+With AnythingLLM, you gain seamless access to a comprehensive suite of Novita AI LLM models, including DeepSeek, Llama, Qwen, and more, along with vector database solutions. The integration enables you to effortlessly build and deploy AI-powered applications that handle complex language tasks while ensuring privacy and control.
+This guide will walk you through installing and integrating AnythingLLM, connecting Novita AI’s models, enabling web search functionality, and setting up a knowledge base for dynamic and intelligent document interactions.
+## ​What is AnythingLLM?
+AnythingLLM is a full-stack application designed to give you the flexibility of using both commercial LLMs and popular open-source LLMs, along with vector database solutions. You can run this application locally or host it remotely, offering a secure, private environment to interact intelligently with your documents.
+By integrating these resources, AnythingLLM allows you to build a highly functional AI-powered chat interface that handles complex language tasks without compromising privacy or control.
+## ​Key Features
+- Thread-like Structure Workspace: Workspaces act as threads, organizing related documents in a contained space. Each Workspace isolates documents from others, preserving a unique context for each project or topic.
+- Flexibility for Personal and Businesses: Install AnythingLLM and its full suite of tools as a single application on your personal desktop. And Fine-grained permissioning and access control for organization is also built-in.
+- Security: AnythingLLM only talks to the services you connect to and can run fully on your machine without internet connectivity.
+## ​Prerequisites
+Before you begin, make sure you have the following:
+- Novita AI LLM API Key:
+Visit Novita AI’s website and create an account.
+- After logging in, go to the Key Management page to generate your API Key. This key is required to connect Novita AI’s models to AnythingLLM.
+- AnythingLLM Software:Download and install AnythingLLM software from the official website.
+- A Working Knowledge Base (Optional):If you plan to use your own documents for knowledge augmentation, prepare them for upload.
+## ​How to install AnythingLLM on Linux locally?
+For Linux users, you can install AnythingLLM by running this command on terminal:
+curl -fsSL
+https://s3.us-west-1.amazonaws.com/public.useanything.com/latest/installer.sh | sh
+This will download the latest version of AnythingLLM’s AppImage, unpack it, and then supply a symlink to seamlessly run AnythingLLM. This script will unpack the app in $HOME/AnythingLLMDesktop .
+You can start the app at any time by running ./AnythingLLMDesktop/start . This will boot the app with full logging.
+## ​Integration Steps
+### ​1. Connect Novita AI to AnythingLLM
+To connect Novita AI’s models with AnythingLLM , follow these steps:
+- In the application, click on the 🔧 Settings icon located in the lower-left corner.
+- Go to the LLM API Providers section, and then select Novita AI from the dropdown menu.
+- In the Novita API Key field, paste your Novita AI API Key (the one you generated earlier).
+- Click Save to complete the integration.
+Now, AnythingLLM will have access to all Novita AI’s models, allowing you to use them in your applications.
+### ​2. Enable Web Search
+AnythingLLM allows you to search the web in real-time by enabling web search capabilities. Follow these steps to set up web search functionality:
+- Navigate to Agent Skills: In the settings or main interface, locate the Agent Skills section.
+- Enable Scrape Websites and Web Search: Toggle the option to turn on both Scrape Websites and Web Search capabilities.
+- Choose Web Search Providers: You can choose from the following recommended search providers:
+DuckDuckGo: A free and privacy-focused web search using DuckDuckGo’s HTML interface.
+- Google Search Engine: Powered by a custom Google Search Engine. It’s free for up to 100 queries per day.
+- Bing Search: Powered by the Bing Search API. It’s free for up to 1000 queries per month.
+### ​3. Create a Knowledge Base
+Next, you’ll want to build a knowledge base for your assistant to use. Follow these steps:
+- Click the Upload icon of the Workspace.
+- Upload local documents or website links.
+- Select the file(s) or webpage you wish to upload to the workspace.
+- Once the file is selected, click Move to Workspace to transfer the document(s) to the AnythingLLM workspace.
+- Save your files and click Save and Embed to finalize the process.
+- Your knowledge base is now set up and ready for use.
+### ​4. Try Asking Questions
+In AnythingLLM, ask questions using @agent .
+The model will respond based on your documents and search results, with citations or references from the files.
+Was this page helpful? Yes No OpenAI Agents SDK Dify ⌘ I

@@ -1,0 +1,59 @@
+Source: https://novita.ai/docs/guides/gpu-instance-quickstart-create-instances
+============================================================
+
+- Create Instances - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationQuickstartCreate InstancesGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU InstanceOverview
+- QuickstartPreparations
+- Create Instances
+- Manage Instances
+- Manage Network Volume
+- Connect to Instance
+- Guides
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Step 1: Prepare Docker Image
+- Step 2: Create GPU Instance
+- Configuration Explanation
+## ​Step 1: Prepare Docker Image
+You need to package your runtime environment into a Docker image and upload it to an image repository in advance. Currently, Novita AI supports specifying both “public image repository” and “private image repository” (including access credentials).
+Additionally, you can use the public image templates provided by the platform to quickly create instances.
+## ​Step 2: Create GPU Instance
+After entering the Explore page, select an image template and choose your desired specifications, then click the “Deploy” button.
+You can use the “Filter” feature in the bottom right corner to find the instance specifications you need.
+## ​Configuration Explanation
+ConfigurationDescription
+CPUThe number of vCPU cores you select for your instance. The vCPU count will affect the instance’s processing capability and performance, with more vCPUs being beneficial for compute-intensive applications.
+MemoryThe size of RAM in GB specified for each instance. Memory is crucial for running applications and overall instance speed.
+Supported CUDA VersionCUDA is a parallel computing platform and API model developed by NVIDIA. Choosing the correct CUDA version is important if you plan to run applications optimized for NVIDIA GPUs, such as machine learning and 3D rendering applications.
+PortsYou can expose your ports according to your service needs. The platform will provide port mapping services for your service. Multiple ports can be entered, separated by commas.
+Environment VariablesUsed to specify parameters for the operating system’s runtime environment. You can set environment variables here directly, and the platform will automatically initialize them for you.
+GPU Instance PricingMore details can be found at GPU Instance Pricing.
+Base ImageThe Docker image provided by the platform.
+Custom ImageThe Docker image name you specify, which the platform will default to pulling from DockerHub. Ensure that the image name is entered correctly.
+After the instance is successfully created, you can refer to the Manage Instances guide to access the instance. Was this page helpful? Yes No Preparations Manage Instances ⌘ I

@@ -1,0 +1,47 @@
+Source: https://novita.ai/docs/guides/gpu-instance-jupyterlab
+============================================================
+
+- Jupyter Lab - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationGuidesJupyter LabGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU InstanceOverview
+- Quickstart
+- GuidesGPU Instance Pricing
+- Edit Instance
+- Upgrade Instance
+- Save Image
+- How to Choose a GPU?
+- Jupyter Lab
+- Image Prewarm
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Accessing Jupyter Lab
+Jupyter Lab is an interactive notebook that supports over 40 programming languages. Jupyter Lab is an open-source web application that facilitates the creation and sharing of literate programming documents, supporting real-time code execution, mathematical equations, visualizations, and markdown editing.
+The official templates of GPU instance come with a pre-installed Jupyter Lab environment. To enable this feature, please checkout the “Start Jupyter Notebook” option when deploying the instance.
+Some official templates may not support the Jupyter Lab environment. If you have specific requirements, please reach out to us through the Discord channel .
+## ​Accessing Jupyter Lab
+While the GPU instance is running, you can click the “Connect” button in the bottom right corner of the instance, then click “Connect to Jupyter Lab” in the pop-up window to access the Jupyter Lab webpage deployed on that instance. Was this page helpful? Yes No How to Choose a GPU? Image Prewarm ⌘ I

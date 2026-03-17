@@ -1,0 +1,68 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-get-image-quota
+============================================================
+
+- Get Image Prewarm Quota - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImageGet Image Prewarm QuotaGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- Instance
+- ImagePOSTSave Instance Image
+- GETGet Image Prewarm Quota
+- POSTCreate Image Prewarm Task
+- GETList Image Prewarm Tasks
+- POSTUpdate Image Prewarm Task
+- POSTDelete Image Prewarm Tasks
+- Template
+- Product
+- Network
+- Image Registry
+- Storage
+- Jobs
+- Serverless GPUs
+Get Image Prewarm Quota cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/image/prewarm/quota \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"total": 123,
+"limit": 123,
+"perImageSize": 123
+}
+```
+GET / gpu-instance / openapi / v1 / image / prewarm / quota Try it Get Image Prewarm Quota cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/image/prewarm/quota \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"total": 123,
+"limit": 123,
+"perImageSize": 123
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Response
+​ total integer required Number of created prewarm tasks.
+​ limit integer required Maximum number of prewarm tasks that can be created.
+​ perImageSize integer required Maximum image size per prewarm task (GB). Was this page helpful? Yes No Save Instance Image Create Image Prewarm Task ⌘ I

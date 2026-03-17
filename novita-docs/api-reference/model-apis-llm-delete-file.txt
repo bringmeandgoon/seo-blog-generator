@@ -1,0 +1,72 @@
+Source: https://novita.ai/docs/api-reference/model-apis-llm-delete-file
+============================================================
+
+- Delete file - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationBatchDelete fileGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM APIPOSTCreate chat completion
+- POSTCreate completion
+- POSTCreate embeddings
+- POSTCreate rerank
+- GETList models
+- GETRetrieve model
+- BatchPOSTCreate batch
+- GETRetrieve batch
+- POSTCancel batch
+- GETList batch
+- POSTUpload file
+- GETList files
+- GETRetrieve file
+- DELDelete file
+- GETRetrieve file content
+- Image, Audio and Video
+GPUs - GPU Instance
+- Serverless GPUs
+Delete file cURL Copy
+```
+curl --request DELETE \
+--url https://api.novita.ai/openai/v1/files/{file_id} \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"deleted": true,
+"id": " ",
+"object": " "
+}
+```
+DELETE / openai / v1 / files / {file_id} Try it Delete file cURL Copy
+```
+curl --request DELETE \
+--url https://api.novita.ai/openai/v1/files/{file_id} \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"deleted": true,
+"id": " ",
+"object": " "
+}
+```
+Deletes a specific file using its file ID.
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Path Parameters
+​ file_id string required The unique identifier of the file to delete.
+## ​Response
+​ deleted boolean required Indicates whether the file was successfully deleted. Returns true if the deletion was successful.
+​ id string required The unique identifier of the deleted file.
+​ object string required The object type, which is always file . Was this page helpful? Yes No Retrieve file Retrieve file content ⌘ I

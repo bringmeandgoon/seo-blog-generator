@@ -1,0 +1,206 @@
+Source: https://novita.ai/docs/skill.md
+============================================================
+
+---
+name: Novitaai
+description: Use when building AI applications with LLM APIs, generating images/videos/audio, deploying GPU instances, or running isolated code execution with Agent Sandbox. Reach for this skill when integrating open-source models, handling async tasks, managing API authentication, or troubleshooting rate limits and errors.
+metadata:
+    mintlify-proj: novitaai
+    version: "1.0"
+---
+
+# Novita AI Skill
+
+## Product summary
+
+Novita AI is a cloud inference platform providing cost-effective APIs for LLMs, image/video/audio generation, GPU instances, and Agent Sandbox (isolated code execution). Agents use Novita to ship AI models without managing infrastructure. Key endpoints: `https://api.novita.ai` (base) and `https://api.novita.ai/openai` (OpenAI-compatible). Authentication uses Bearer tokens in the `Authorization` header. Get API keys from the [Key Management page](https://novita.ai/settings/key-management). Primary docs: [https://novita.ai/docs](https://novita.ai/docs).
+
+## When to use
+
+- **LLM APIs**: Building chatbots, text generation, embeddings, or reasoning tasks with OpenAI-compatible endpoints
+- **Image/Video/Audio**: Generating or editing images, creating videos from text/images, text-to-speech, or voice cloning
+- **GPU Instances**: Deploying custom models, training, or running long-running inference workloads
+- **Agent Sandbox**: Executing AI-generated code safely in isolated environments with millisecond startup
+- **Batch Processing**: Running large-scale inference jobs asynchronously (up to 50k requests per batch)
+- **Integrations**: Connecting with LangChain, LiteLLM, Portkey, Hugging Face, or other frameworks
+- **Error Handling**: Debugging 401 (auth), 429 (rate limits), 503/504 (timeouts), or 400 (invalid params)
+
+## Quick reference
+
+### Authentication
+```bash
+# All requests require Bearer token in header
+Authorization: Bearer {{API_KEY}}
+
+# Get API key from console
+https://novita.ai/settings/key-management
+```
+
+### LLM API (OpenAI-compatible)
+```bash
+# Base URL for OpenAI-compatible endpoints
+https://api.novita.ai/openai
+
+# Chat completion (streaming or non-streaming)
+POST /v1/chat/completions
+# Completion (legacy)
+POST /v1/completions
+# Embeddings
+POST /v1/embeddings
+# Rerank
+POST /v1/rerank
+```
+
+### Model APIs (Image/Video/Audio)
+```bash
+# Base URL for model APIs
+https://api.novita.ai
+
+# Image generation (async)
+POST /v1/txt2img
+POST /v1/img2img
+POST /v1/upscale
+POST /v1/remove-background
+
+# Video generation (async)
+POST /v1/txt2video
+POST /v1/img2video
+
+# Audio
+POST /v1/txt2speech
+POST /v1/asr
+```
+
+### GPU Instance API
+```bash
+# Create instance
+POST /v1/gpu-instances
+
+# Manage instances
+GET /v1/gpu-instances
+GET /v1/gpu-instances/{instance_id}
+POST /v1/gpu-instances/{instance_id}/start
+POST /v1/gpu-instances/{instance_id}/stop
+DELETE /v1/gpu-instances/{instance_id}
+```
+
+### Agent Sandbox SDK
+```bash
+# Install SDK
+npm i novita-sandbox          # JavaScript/TypeScript
+pip install novita-sandbox    # Python
+
+# Install CLI
+npm i -g novita-sandbox-cli
+```
+
+### Batch API (LLM)
+```bash
+# Upload JSONL file
+POST /v1/files (purpose: "batch")
+
+# Create batch (48h completion window)
+POST /v1/batches
+
+# Check status
+GET /v1/batches/{batch_id}
+
+# Retrieve results
+GET /v1/files/{file_id}/content
+```
+
+## Decision guidance
+
+| Scenario | Use This | Why |
+|----------|----------|-----|
+| Need immediate LLM response | Chat/Completion API (streaming) | Low latency, real-time results |
+| Processing 1000+ requests | Batch API | Higher rate limits, cost-effective, async |
+| Generating images/videos | Model APIs (async) | Specialized models, webhook support |
+| Running custom code | GPU Instance | Full control, persistent storage, Jupyter |
+| Executing AI-generated code | Agent Sandbox | Secure isolation, fast startup, multi-language |
+| OpenAI-compatible client | Set base_url to api.novita.ai/openai | Drop-in replacement for OpenAI |
+| Polling vs webhooks | Webhooks for async tasks | Reduces polling overhead, real-time notification |
+| Rate limit hit (429) | Check TPM vs RPM, retry with backoff | TPM = tokens/min, RPM = requests/min |
+| Timeout (503/504) | Switch to streaming, increase timeout | Streaming returns tokens as generated |
+
+## Workflow
+
+### 1. Set up authentication
+- Log in to [novita.ai](https://novita.ai/user/login)
+- Navigate to [Key Management](https://novita.ai/settings/key-management)
+- Generate API key and store securely
+- Set `Authorization: Bearer {{API_KEY}}` in request headers
+
+### 2. Choose your use case
+- **LLM**: Use OpenAI-compatible endpoint at `api.novita.ai/openai`
+- **Image/Video/Audio**: Use base endpoint `api.novita.ai` with async task polling or webhooks
+- **GPU**: Use instance API to create and manage compute resources
+- **Sandbox**: Use SDK to spawn isolated execution environments
+
+### 3. Make your first request
+- For LLM: POST to `/v1/chat/completions` with model name and messages
+- For images: POST to `/v1/txt2img` with prompt, receive task_id, poll `/v1/tasks/{task_id}` for results
+- For GPU: POST to `/v1/gpu-instances` with image, specs, and configuration
+- For Sandbox: Use SDK to spawn sandbox, execute commands, manage filesystem
+
+### 4. Handle async operations
+- Image/video/audio APIs return `task_id` immediately
+- Poll `/v1/tasks/{task_id}` or set up webhook to receive `ASYNC_TASK_RESULT` event
+- Webhook payload matches Task Result API response schema
+
+### 5. Monitor and scale
+- Check account balance: GET `/v1/user/balance`
+- Monitor rate limits in console (RPM/TPM for LLM, IPM/RPM for images)
+- Request limit increase via console "Increase Limit" button or contact support
+- Use batch API for high-volume workloads to get higher rate limits
+
+### 6. Verify and deploy
+- Test with small requests before production
+- Implement exponential backoff for retries
+- Log task IDs and batch IDs for debugging
+- Monitor error files from batch jobs (error_file_id)
+
+## Common gotchas
+
+- **Missing API key**: Requests without `Authorization: Bearer` header return 401. Always set header before making requests.
+- **Expired API key**: If key is lost, delete it and create a new one—old keys cannot be recovered.
+- **Rate limit (429)**: Check if limit is TPM (tokens/min) or RPM (requests/min). Batch API has higher limits. Retry with exponential backoff.
+- **Timeout (503/504)**: Use streaming mode for LLM (returns tokens as generated). For images/video, increase client timeout to 60+ seconds.
+- **Async task polling**: Image/video/audio APIs are async. Don't expect results in response—use task_id to poll or set webhook.
+- **Batch file format**: JSONL format required, one request per line. All requests in batch must target same model. Max 50k requests, 100MB file size.
+- **Batch expiration**: 48-hour completion window is fixed. Unfinished requests expire; you only pay for completed ones.
+- **Webhook payload**: Matches Task Result API schema exactly. Test webhook endpoint before production.
+- **GPU instance billing**: Charged per second of runtime. Stop instances when not in use. Automatic migration enabled by default for new instances.
+- **Sandbox startup**: <200ms startup time but requires SDK/CLI. Not suitable for synchronous request-response patterns.
+- **Model names**: Use full model identifiers (e.g., `deepseek/deepseek-r1`, `meta-llama/llama-4-scout-17b`). Check [model list](https://novita.ai/models) for available models.
+- **Identity verification**: Some models require account verification. Check console if you get 403 access denied.
+- **File retention**: Batch input files retained 15 days, output files 30 days. Download results promptly.
+
+## Verification checklist
+
+Before submitting work with Novita AI:
+
+- [ ] API key is valid and set in `Authorization: Bearer` header
+- [ ] Base URL is correct (`api.novita.ai` or `api.novita.ai/openai`)
+- [ ] Model name matches available models (check [model list](https://novita.ai/models))
+- [ ] Request parameters match API documentation (required fields, data types)
+- [ ] For async tasks: task_id is captured and polling/webhook is implemented
+- [ ] For batch: JSONL file is valid, all requests target same model, file size <100MB
+- [ ] Rate limits are checked in console; if hitting 429, implement backoff or request increase
+- [ ] Error handling covers 400 (invalid params), 401 (auth), 403 (permissions), 429 (rate limit), 503/504 (timeout)
+- [ ] For streaming: `stream: true` is set in request
+- [ ] For GPU instances: image, specs, and ports are configured; billing is understood
+- [ ] For Sandbox: SDK is installed, API key is set, sandbox lifecycle is managed (spawn/pause/resume)
+- [ ] Webhook endpoint is tested and returns 200 OK
+- [ ] Account has sufficient credit balance (check [billing page](https://novita.ai/billing))
+
+## Resources
+
+- **Comprehensive navigation**: [https://novita.ai/docs/llms.txt](https://novita.ai/docs/llms.txt) — page-by-page reference for all documentation
+- **API Reference Overview**: [https://novita.ai/docs/api-reference/api-reference-overview](https://novita.ai/docs/api-reference/api-reference-overview) — all endpoints, authentication, error codes
+- **LLM API Guide**: [https://novita.ai/docs/guides/llm-api](https://novita.ai/docs/guides/llm-api) — chat/completion, streaming, parameters, code examples
+- **Agent Sandbox Overview**: [https://novita.ai/docs/guides/sandbox-overview](https://novita.ai/docs/guides/sandbox-overview) — secure code execution, features, pricing
+
+---
+
+> For additional documentation and navigation, see: https://novita.ai/docs/llms.txt

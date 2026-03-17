@@ -1,0 +1,191 @@
+Source: https://novita.ai/docs/api-reference/model-apis-get-model
+============================================================
+
+- Novita AI Query Model API | Access Public & Private Model DetailsSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationModelGet ModelGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- ModelGETGet Model
+- Task
+- Image Generator
+- Image Editor
+- Video Generator
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Get Model cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/v3/model \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"models": [
+{
+"id": 123,
+"name": " ",
+"hash_sha256": " ",
+"sd_name": " ",
+"type": {
+"name": " ",
+"display_name": " "
+},
+"categories": [
+" "
+],
+"status": 123,
+"download_url": " ",
+"tags": [
+" "
+],
+"cover_url": " ",
+"source": " ",
+"base_model": " ",
+"base_model_type": " ",
+"download_url_ttl": 123,
+"sd_name_in_api": " "
+}
+],
+"pagination": {
+"next_cursor": " "
+}
+}
+```
+GET / v3 / model Try it Get Model cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/v3/model \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"models": [
+{
+"id": 123,
+"name": " ",
+"hash_sha256": " ",
+"sd_name": " ",
+"type": {
+"name": " ",
+"display_name": " "
+},
+"categories": [
+" "
+],
+"status": 123,
+"download_url": " ",
+"tags": [
+" "
+],
+"cover_url": " ",
+"source": " ",
+"base_model": " ",
+"base_model_type": " ",
+"download_url_ttl": 123,
+"sd_name_in_api": " "
+}
+],
+"pagination": {
+"next_cursor": " "
+}
+}
+```
+This API endpoint is designed to retrieve information on both public and private models. It allows users to access details such as model specifications, status, and usage guidelines, ensuring comprehensive insights into the available modeling resources.
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Query Parameters
+​ filter.visibility string Model types: public or private . If not set, the interface will query all types of models.
+​ filter.source string Source of the model.
+Enum: civitai , training , uploading
+​ filter.types string Specifies the types of models to include in the query.
+Enum: checkpoint , lora , vae , controlnet , upscaler , textualinversion
+​ filter.is_sdxl boolean Whether the model is SDXL or not. Setting this parameter to true includes only SDXL models in the query results, which are typically large-scale, high-performance models designed for extensive data processing tasks. Conversely, setting it to false excludes these models from the results. If left unspecified, the filter will not discriminate based on the SDXL classification, including all model types in the search results.
+​ filter.query string Searches the content of sd_name, name, and tags.
+​ filter.is_inpainting boolean If set to true, it will filter out the checkpoints used for inpainting. The default is false.
+​ pagination.limit string Number of models to query per request, range (0, 100].
+​ pagination.cursor string pagination.cursor is used to specify which record to start returning from. If it is empty, it means to get it from the beginning. Generally, the content of the next page is obtained by passing in the next_cursor field value from the response packet.
+## ​Response
+​ models object[] Show properties ​ id integer ID of the model. ​ name string Model name. ​ hash_sha256 string Hash of the model file. ​ sd_name string Model file name. ​ type object Show properties ​ name string Model type name. ​ display_name string ​ categories string[] Model categories. ​ status integer Model status: 0 for unavailable, 1 for available. ​ download_url string Model download URL. ​ tags string[] Model tags, such as photorealistic, anatomical, base model, CGI, realistic, semi-realistic. ​ cover_url string Model cover image URL. ​ source string The source of the model, such as civitai, training, uploading. ​ base_model string Base model of the model, such as SD 1.5 or SDXL 1.0. ​ base_model_type string Base model type of the model, such as Inpainting or Standard. ​ download_url_ttl integer The expiration time of the download URL in seconds, default is 1 day. ​ sd_name_in_api string The name users can add in the interface.
+​ pagination object Show properties ​ next_cursor string Next request starting cursor.
+## ​Example
+request
+Copy
+```
+curl --location 'https://api.novita.ai/v3/model?filter.visibility=public&pagination.limit=2&pagination.cursor=c_0' \
+--header 'Authorization: Bearer {{API Key}}'
+```
+response
+Copy
+```
+{
+"models": [
+{
+"id": 114600,
+"name": "V4.0-inpainting (VAE)",
+"hash_sha256": "1A805277C8",
+"sd_name": "realisticVisionV40_v40VAE-inpainting_81543.safetensors",
+"type": {
+"name": "checkpoint",
+"display_name": "Checkpoint"
+},
+"categories": [],
+"status": 1,
+"tags": [
+"photorealistic",
+"anatomical",
+"base model",
+"cgi",
+"realistic",
+"semi-realistic"
+],
+"cover_url": "https://next-app-static.s3.amazonaws.com/images-prod/xG1nkqKTMzGDvpLrqFT7WA/f291a219-4a86-45ab-96eb-c53446b3e4df/width=450/1495044.jpeg",
+"base_model": "SD 1.5",
+"base_model_type": "Inpainting",
+"download_url_ttl": 2592000,
+"sd_name_in_api": "realisticVisionV40_v40VAE-inpainting_81543.safetensors",
+"is_sdxl": false
+},
+{
+"id": 55199,
+"name": "beta2",
+"hash_sha256": "BA43B0EFEE",
+"sd_name": "GoodHands-beta2_39807.safetensors",
+"type": {
+"name": "locon",
+"display_name": "locon"
+},
+"categories": [],
+"status": 1,
+"tags": ["photorealistic", "concept", "hands"],
+"cover_url": "https://next-app-static.s3.amazonaws.com/images-prod/xG1nkqKTMzGDvpLrqFT7WA/031a378c-3d66-45da-5d67-966c47cd4800/width=450/599083.jpeg",
+"base_model": "SD 1.5",
+"base_model_type": "Standard",
+"download_url_ttl": 2592000,
+"sd_name_in_api": "GoodHands-beta2_39807",
+"is_sdxl": false
+}
+],
+"pagination": {
+"next_cursor": "c_WzgwNDY2NiwiNTUxOTkiXQ=="
+}
+}
+```
+Was this page helpful? Yes No Webhook Task Result ⌘ I

@@ -1,0 +1,92 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-delete-template
+============================================================
+
+- Delete Template - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationTemplateDelete TemplateGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- Instance
+- Image
+- TemplatePOSTCreate Template
+- POSTDelete Template
+- GETGet Template
+- GETList Templates
+- Product
+- Network
+- Image Registry
+- Storage
+- Jobs
+- Serverless GPUs
+Delete Template cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/template/delete \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"templateId": " "
+}
+'
+```
+200 Copy
+```
+{
+"templateId": " "
+}
+```
+POST / gpu-instance / openapi / v1 / template / delete Try it Delete Template cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/template/delete \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"templateId": " "
+}
+'
+```
+200 Copy
+```
+{
+"templateId": " "
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ templateId string required The ID of the template to be deleted.
+## ​Response
+​ templateId string The ID of the deleted template.
+## ​Example
+Request
+Copy
+```
+curl --request POST \
+--url 'https://api.novita.ai/gpu-instance/openapi/v1/template/delete' \
+--header 'Authorization: Bearer {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data '{
+"templateId": " "
+}'
+```
+Response
+Copy
+```
+{
+"templateId": " "
+}
+```
+Was this page helpful? Yes No Create Template Get Template ⌘ I

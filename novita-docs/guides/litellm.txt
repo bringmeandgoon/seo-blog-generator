@@ -1,0 +1,46 @@
+Source: https://novita.ai/docs/guides/litellm
+============================================================
+
+LiteLLM is an open-source Python library and proxy server that provides access, spend tracking, and fallbacks to over 100 LLMs through a unified interface in the OpenAI format. By leveraging Novita AI’s cutting-edge models, the integration with LiteLLM empowers your AI applications with seamless model switching, dependable fallbacks, and intelligent request routing—all through a standardized completion API that ensures compatibility across multiple providers.
+This guide will show you how to quickly get started with integrating Novita AI and LiteLLM, enabling you to set up this powerful combination and streamline your workflow with ease.
+​
+How to Integrate Novita AI with LiteLLM
+​
+Step 1: Install LiteLLM
+Install the LiteLLM library using pip to create a unified interface for working with different language models.
+Copy
+pip install litellm
+
+​
+Step 2: Set Up Your API Credentials
+Log in to the key management page in Novita AI and click Add New Keyto generate your API key.
+​
+Step 3: Structure Your Basic API Call
+Create a completion request to Novita AI’s models through LiteLLM’s standardized interface.
+Copy
+from litellm import completion
+import os
+
+## set ENV variables. Visit https://novita.ai/settings/key-management to get your API key
+os.environ["NOVITA_API_KEY"] = "novita-api-key"
+
+response = completion(
+  model="novita/deepseek/deepseek-r1",
+  messages=[{ "content": "Hello, how are you?","role": "user"}]
+)
+
+​
+Step 4: Implement Streaming for Better User Experience
+Enable streaming mode for more interactive applications or when handling longer responses.
+Copy
+from litellm import completion
+import os
+
+## set ENV variables. Visit https://novita.ai/settings/key-management to get your API key
+os.environ["NOVITA_API_KEY"] = "novita_api_key"
+
+response = completion(
+  model="novita/deepseek/deepseek-r1",
+  messages = [{ "content": "Hello, how are you?","role": "user"}],
+  stream=True,
+)

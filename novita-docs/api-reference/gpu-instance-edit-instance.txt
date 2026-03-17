@@ -1,0 +1,86 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-edit-instance
+============================================================
+
+- Edit Instance - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationInstanceEdit InstanceGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- InstancePOSTCreate GPU Instance
+- POSTCreate CPU Instance
+- GETList Instances
+- GETGet Instance
+- POSTEdit Instance
+- POSTStart Instance
+- POSTStop Instance
+- POSTRestart Instance
+- POSTUpgrade Instance
+- POSTMigrate Instance
+- GETMonitor Metrics
+- POSTRenew Subscription Instance
+- POSTConvert Pay-As-You-Go Instance to Subscription
+- POSTDelete Instance
+- POSTSet Auto Renew
+- POSTSet Auto Migrate Strategy
+- Image
+- Template
+- Product
+- Network
+- Image Registry
+- Storage
+- Jobs
+- Serverless GPUs
+Edit Instance cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/gpu/instance/edit \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"instanceId": " ",
+"ports": [
+{
+"port": 123,
+"type": " "
+}
+],
+"expandRootDisk": 123
+}
+'
+```
+POST / gpu-instance / openapi / v1 / gpu / instance / edit Try it Edit Instance cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/gpu/instance/edit \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"instanceId": " ",
+"ports": [
+{
+"port": 123,
+"type": " "
+}
+],
+"expandRootDisk": 123
+}
+'
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ instanceId string required ID of the instance to edit.
+​ ports object[] Ports to be exposed by the instance. The total number of ports used by ports + tools must not exceed 15. Show properties ​ port integer Port number. Supported port range: 1-65535, except for 2222, 2223, and 2224 which are reserved for internal use. ​ type string Protocol type. Supported values: tcp , http .
+​ expandRootDisk integer Size to expand the root disk, in GB. Integer, value must be >= 0. Set to 0 if no expansion is needed. Was this page helpful? Yes No Get Instance Start Instance ⌘ I

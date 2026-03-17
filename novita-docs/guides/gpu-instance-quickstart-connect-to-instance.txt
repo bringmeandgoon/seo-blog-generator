@@ -1,0 +1,81 @@
+Source: https://novita.ai/docs/guides/gpu-instance-quickstart-connect-to-instance
+============================================================
+
+- Connect to Instance - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationQuickstartConnect to InstanceGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU InstanceOverview
+- QuickstartPreparations
+- Create Instances
+- Manage Instances
+- Manage Network Volume
+- Connect to Instance
+- Guides
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Connect via SSH with an SSH Key (Recommended)
+- Linux/MacOS
+- Windows
+- Common Issues
+- Connect via SSH with a Password
+## ​Connect via SSH with an SSH Key (Recommended)
+### ​Linux/MacOS
+- On Ubuntu or Mac, use the following command to generate an RSA SSH public/private key pair:
+Copy
+```
+ssh-keygen -t rsa
+```
+- Force the agent to load the new private key and verify that it’s loaded:
+Copy
+```
+ssh-add; ssh-add -l
+```
+- Retrieve the content of your SSH public key:
+Copy
+```
+cat ~/.ssh/id_rsa.pub
+```
+- Paste the content into the “SSH Public Keys” section in the Console - Settings.
+Here is an example of an SSH public key:
+Copy
+```
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDopiaR1Q6Na6dW1QTK7hMuHVi+gXqutY5pUvrWCgeyjcBtBLHejxDQjdNt+qWQRORK/fZzrmyA8/ghani0rZlGPN3bYw1RXFHitt+bD1jVgtJzOmjMQdpMVALnZASQMoQQcCqVJ8PG5Xc08TciACS7S/Ltz3VdZfIq1tih969GCzCe3sctSFBuTwqUDnyrQ6iqSBhPSfQS7nCC/CwzMi3rDg0JzW2NHzIBsbvy0gdXy1ZtC4kkCr7/lUWAgZLk52v3s2CTXCg6QXnhWx+Q/dHOJVAEEucY4o8bo4rF4Bj+ifgEHFtUEfoK9+yj3OLbWfpIxyzhHK+nNXz3UaOMSC8D ultra@novita.ai
+```
+### ​Windows
+Generating SSH keys on Windows requires additional command-line tools like Cmder, with operations similar to those on Linux.
+Since most machine learning and AI programming is performed on Linux, we strongly recommend installing a Linux subsystem on your Windows machine, such as WSL.
+### ​Common Issues
+If you encounter a “Permission denied (publickey)” error, it might be due to:
+- Attempting to run SSH/SCP from within an instance;
+- Incorrect key setup or using the wrong/unmatched key;
+- The SSH key format used is incorrect or unsupported;
+- The private key wasn’t correctly loaded with ssh-add; you may need to use the -i parameter;
+- New or updated keys not taking effect for already created resources;
+- Incorrect SSH key permission settings.
+Use the ssh -vv command for detailed information.
+## ​Connect via SSH with a Password
+Go to Console - Instances , select the instance you want to connect to, click “Connect”, and copy the “Basic SSH Terminal” command to your terminal. Log in using the password provided in the pop-up window. Was this page helpful? Yes No Manage Network Volume GPU Instance Pricing ⌘ I

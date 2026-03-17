@@ -1,0 +1,82 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-break-job
+============================================================
+
+- Break Job - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationJobsBreak JobGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- Instance
+- Image
+- Template
+- Product
+- Network
+- Image Registry
+- Storage
+- JobsGETList Jobs
+- POSTBreak Job
+- Serverless GPUs
+Break Job cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/job/break \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"jobId": " "
+}
+'
+```
+200 Copy
+```
+{
+"jobId": " "
+}
+```
+POST / gpu-instance / openapi / v1 / job / break Try it Break Job cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/job/break \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"jobId": " "
+}
+'
+```
+200 Copy
+```
+{
+"jobId": " "
+}
+```
+## ​API Description
+Forcefully interrupt a running job.
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ jobId string required The job ID to be interrupted. String, length 0–255.
+## ​cURL Example
+Copy
+```
+curl --location --request POST 'https://api.novita.ai/gpu-instance/openapi/v1/job/break' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer {{API_KEY}}' \
+--data-raw '{
+"jobId": "10wi9visv0rqt57w"
+}'
+```
+## ​Response
+​ jobId string required The job ID. Was this page helpful? Yes No List Jobs Get Endpoint Parameter Limit Ranges ⌘ I

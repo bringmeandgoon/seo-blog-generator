@@ -1,0 +1,102 @@
+Source: https://novita.ai/docs/guides/docsgpt
+============================================================
+
+- DocsGPT - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationIntegrationsDocsGPTGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- IntegrationsClaude Code Integration Guide
+- OpenAI Agents SDK
+- AnythingLLM
+- Dify
+- Helicone
+- Hugging Face
+- Langflow
+- Continue
+- Cursor
+- LangChain
+- Skyvern
+- LobeChat
+- AI Gradio
+- Langfuse
+- MLflow
+- Verba
+- Portkey
+- DocsGPT
+- LlamaIndex
+- LoLLMS WebUI
+- CodeCompanion
+- Page Assist
+- DeepSearcher
+- Browser Use
+- OWL
+- LiteLLM
+- ChatBox
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - How to use DocsGPT
+- Prerequisites:
+- Launching DocsGPT (macOS and Linux)
+- Launching DocsGPT (Windows)
+- How to Integrate Novita AI API with DocsGPT
+DocsGPT simplifies documentation with AI-powered assistance. Integrating it with Novita AI enhances its performance, offering faster processing, scalable resources, and advanced model support for improved productivity.
+This guide walks you through how to use DocsGPT with Novita AI based on the OpenAl APl, offering a way to query your content and get served customized answers.
+## ​How to use DocsGPT
+### ​Prerequisites:
+Docker: Ensure you have Docker installed and running on your system.
+### ​Launching DocsGPT (macOS and Linux)
+For macOS and Linux users, the easiest way to launch DocsGPT is using the provided setup.sh script. This script automates the configuration process and offers several setup options.
+Step 1: Download the DocsGPT repository
+- First, you need to download the DocsGPT repository to your local machine. You can do this using Git:
+Copy
+```
+git clone https://github.com/arc53/DocsGPT.git
+cd DocsGPT
+```
+Step 2: Run the setup.sh script
+- Navigate to the DocsGPT directory in your terminal and execute the setup.sh script:
+Copy
+```
+./setup.sh
+```
+This interactive script will guide you through setting up DocsGPT. It offers four options: using the public API, running locally, connecting to a local inference engine, or using a cloud API provider. The script will automatically configure your .env file and handle necessary downloads and installations based on your chosen option.
+### ​Launching DocsGPT (Windows)
+For Windows users, please refer to the Docker Deployment documentation for detailed step-by-step instructions on setting up DocsGPT using Docker.
+## ​How to Integrate Novita AI API with DocsGPT
+Step 1: Log in to Novita AI and create an API Key
+Step 2: Select option4 and connect cloud API provider in your terminal
+Step 3: Choose option7 Novita and enter the API key you just created
+Step 4: Wait for the startup process to complete
+Step 5: Access DocsGPT in your browser
+- Once the setup is complete and Docker containers are running, navigate to http://localhost:5173/ in your web browser to access the DocsGPT web application.
+Step 6: Stopping DocsGPT
+- To stop DocsGPT, simply open a new terminal in the DocsGPT directory and run:
+Copy
+```
+docker compose -f deployment/docker-compose.yaml down
+```
+- (or the specific docker compose command shown at the end of the setup.sh execution, which may include optional compose files depending on your choices).
+Was this page helpful? Yes No Portkey LlamaIndex ⌘ I

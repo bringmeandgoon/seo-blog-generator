@@ -1,0 +1,87 @@
+Source: https://novita.ai/docs/guides/sandbox-auto-persistence
+============================================================
+
+- Auto Pause and Resume - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationSandboxAuto Pause and ResumeGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- SandboxSandbox Lifecycle
+- Sandbox Persistence
+- Sandbox Metrics
+- Sandbox Metadata
+- Environment variables
+- List sandboxes
+- Connect to running sandbox
+- Internet access
+- Mount object storage bucket
+- Auto Pause and Resume
+- Sandbox Clone
+- Sandbox Snapshot Template
+- Idle Timeout
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Enable Auto Pause
+- Enable Auto Resume
+When the sandbox instance is not currently needed but you need to be able to resume it at any time later, you can refer to the documentation to manually pause and resume sandbox instances.
+The “Auto Pause and Resume” feature allows your sandbox instance to automatically pause after timeout and resume when needed. When you attempt to perform operations (such as executing commands, running code, or file operations) on a paused sandbox, it will automatically resume without manual intervention.
+## ​Enable Auto Pause
+You can enable the auto pause feature by setting the auto_pause parameter to true when creating a sandbox instance. The sandbox instance will automatically pause after timeout and can be resumed later.
+Note: The resumed sandbox instance will still have the auto pause feature enabled and will automatically pause again after timeout.
+JavaScript & TypeScript Python Copy
+```
+import { Sandbox } from 'novita-sandbox/code-interpreter';
+const sandbox = await Sandbox.create(
+{
+timeoutMs: 5_000,
+autoPause: true
+},
+);
+console.log('Sandbox created', sandbox.sandboxId)
+console.log('Waiting for 10 seconds...')
+await new Promise(resolve => setTimeout(resolve, 10000));
+const resumedSandbox = await Sandbox.connect(sandbox.sandboxId)
+console.log('Sandbox resumed', resumedSandbox.sandboxId)
+await sandbox.kill()
+```
+## ​Enable Auto Resume
+You can enable the auto resume feature by setting the auto_resume key in metadata to true when creating a sandbox instance. Once enabled, when you attempt to operate on a paused sandbox (such as executing commands, running code, file operations, etc.), the sandbox will automatically resume.
+Note: The default timeout for the resumed sandbox is 5 minutes. You can update the sandbox timeout using the setTimeout or set_timeout method.
+JavaScript & TypeScript Python Copy
+```
+import { Sandbox } from 'novita-sandbox/code-interpreter';
+const sandbox = await Sandbox.create(
+{
+metadata:{"auto_resume": "true"}
+}
+);
+console.log('Sandbox created', sandbox.sandboxId)
+await sandbox.betaPause()
+console.log('Sandbox paused', sandbox.sandboxId)
+const result = await sandbox.commands.run('ls -al')
+console.log('Command result', result)
+await sandbox.kill()
+```
+Was this page helpful? Yes No Mount object storage bucket Sandbox Clone ⌘ I

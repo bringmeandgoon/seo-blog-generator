@@ -1,0 +1,199 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-get-template
+============================================================
+
+- Get Template - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationTemplateGet TemplateGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- Instance
+- Image
+- TemplatePOSTCreate Template
+- POSTDelete Template
+- GETGet Template
+- GETList Templates
+- Product
+- Network
+- Image Registry
+- Storage
+- Jobs
+- Serverless GPUs
+Get Template cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/template \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"template": {
+"Id": " ",
+"name": " ",
+"readme": " ",
+"type": " ",
+"channel": " ",
+"image": " ",
+"imageAuth": " ",
+"startCommand": " ",
+"entrypoint": " ",
+"rootfsSize": 123,
+"ports": [
+{
+"type": " ",
+"ports": {}
+}
+],
+"envs": [
+{
+"key": " ",
+"value": " "
+}
+],
+"tools": [
+{
+"name": " ",
+"describe": " ",
+"port": 123,
+"type": " "
+}
+],
+"createdAt": " ",
+"recommendCards": [
+{
+"gpuSpecId": " ",
+"cardNum": " "
+}
+],
+"minCudaVersion": " "
+}
+}
+```
+GET / gpu-instance / openapi / v1 / template Try it Get Template cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/template \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"template": {
+"Id": " ",
+"name": " ",
+"readme": " ",
+"type": " ",
+"channel": " ",
+"image": " ",
+"imageAuth": " ",
+"startCommand": " ",
+"entrypoint": " ",
+"rootfsSize": 123,
+"ports": [
+{
+"type": " ",
+"ports": {}
+}
+],
+"envs": [
+{
+"key": " ",
+"value": " "
+}
+],
+"tools": [
+{
+"name": " ",
+"describe": " ",
+"port": 123,
+"type": " "
+}
+],
+"createdAt": " ",
+"recommendCards": [
+{
+"gpuSpecId": " ",
+"cardNum": " "
+}
+],
+"minCudaVersion": " "
+}
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Query Parameters
+​ templateId string required ID of the template being queried.
+## ​Response
+​ template object Template settings. Show properties ​ Id string Template ID. ​ name string Template name. ​ readme string Template README content (in Markdown format). ​ type string Template type.Enum: instance ​ channel string Template channel.Enum: private ​ image string Docker image address for instance startup. ​ imageAuth string Image repository authentication ID for private images. ​ startCommand string Startup command for the instance. ​ entrypoint string Instance startup entrypoint. ​ rootfsSize integer Rootfs storage (GB). ​ ports object[] Exposed ports settings. Show properties ​ type string Exposed port types.Enum: http, tcp ​ ports [integer] Exposed ports (maximum 10). ​ envs object[] Environment variables injected into instance. Show properties ​ key string Environment variable key. ​ value string Environment variable value. ​ tools object[] Template built-in tools (only available for official templates). Show properties ​ name string Tool name. ​ describe string Tool description. ​ port integer Tool port. ​ type string Tool protocol type. Enum: http , tcp ​ createdAt string Template creation timestamp (Unix seconds). ​ recommendCards object[] Recommended GPU card specs (only available for official templates). Show properties ​ gpuSpecId string GPU spec ID. ​ cardNum string Recommended card number. ​ minCudaVersion string Minimum required CUDA version, e.g. 11.8, 12.4.
+## ​Example
+Request
+Copy
+```
+curl --request GET \
+--url 'https://api.novita.ai/gpu-instance/openapi/v1/template' \
+--header 'Authorization: Bearer {{API Key}}'
+```
+Response
+Copy
+```
+{
+"template": {
+"Id": "212",
+"name": "ubuntu",
+"readme": "readme",
+"type": "instance",
+"channel": "private",
+"image": "ubuntu:latest",
+"imageAuth": "",
+"startCommand": "",
+"entrypoint": "",
+"rootfsSize": 10,
+"ports": [
+{
+"type": "tcp",
+"ports": [8080, 8090]
+},
+{
+"type": "http",
+"ports": [6000, 60001]
+}
+],
+"envs": [
+{
+"key": "testkey",
+"value": "123"
+}
+],
+"tools": [
+{
+"name": "Jupyter",
+"describe": "Start Jupyter Notebook",
+"port": 8888,
+"type": "http"
+}
+],
+"createdAt": "1713162260",
+"recommendCards": [
+{
+"gpuSpecId": "4090.18c.60g",
+"cardNum": "2"
+}
+],
+"minCudaVersion": "11.8"
+}
+}
+```
+Was this page helpful? Yes No Delete Template List Templates ⌘ I

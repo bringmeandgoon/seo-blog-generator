@@ -1,0 +1,111 @@
+Source: https://novita.ai/docs/api-reference/model-apis-llm-create-rerank
+============================================================
+
+- Create rerank - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationLLM APICreate rerankGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM APIPOSTCreate chat completion
+- POSTCreate completion
+- POSTCreate embeddings
+- POSTCreate rerank
+- GETList models
+- GETRetrieve model
+- Batch
+- Image, Audio and Video
+GPUs - GPU Instance
+- Serverless GPUs
+Create rerank cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/openai/v1/rerank \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"model": " ",
+"query": " ",
+"documents": [
+" "
+],
+"top_n": 123
+}
+'
+```
+200 Copy
+```
+{
+"id": " ",
+"results": [
+{
+"document": {
+"text": " "
+},
+"index": 123,
+"relevance_score": 123
+}
+],
+"usage": {
+"completion_tokens": 123,
+"prompt_tokens": 123,
+"total_tokens": 123
+}
+}
+```
+POST / openai / v1 / rerank Try it Create rerank cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/openai/v1/rerank \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"model": " ",
+"query": " ",
+"documents": [
+" "
+],
+"top_n": 123
+}
+'
+```
+200 Copy
+```
+{
+"id": " ",
+"results": [
+{
+"document": {
+"text": " "
+},
+"index": 123,
+"relevance_score": 123
+}
+],
+"usage": {
+"completion_tokens": 123,
+"prompt_tokens": 123,
+"total_tokens": 123
+}
+}
+```
+Creates a rerank request.
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ model string required The name of the model to use.
+​ query string required The search query.
+​ documents string[] required Document List.
+​ top_n integer Number of most relevant documents or indices to return.
+## ​Response
+​ id string required ID
+​ results object[] required Show properties ​ document object Original document content. Show properties ​ text string ​ index integer The index value of the position in the input candidate doc array. ​ relevance_score number Similarity score.
+​ usage object Token usage statistics. Show properties ​ completion_tokens integer required The number of tokens in the generated completion. ​ prompt_tokens integer required The number of tokens in the prompt. ​ total_tokens integer required The total number of tokens used in the request (prompt + completion). Was this page helpful? Yes No Create embeddings List models ⌘ I

@@ -1,0 +1,65 @@
+Source: https://novita.ai/docs/guides/sandbox-console
+============================================================
+
+- Agent Sandbox Console - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationQuickstartAgent Sandbox ConsoleGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- QuickstartCreate Your First Agent Sandbox
+- E2B SDK Compatibility
+- Pricing
+- Quota Limit
+- Console
+- Learn more
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Sandbox Management
+- Template Management
+- Usage Statistics
+Agent Sandbox console helps you view and manage sandboxes, templates, and usage statistics.
+## ​Sandbox Management
+- Display the list of currently running sandboxes.
+- Support searching for a sandbox by ID.
+- Support filtering sandboxes by creation time, template, vCPUs, memory, etc.
+## ​Template Management
+- Display the list of available templates, including official templates provided by Novita official and your custom templates.
+- Support searching for a template by ID.
+- Support filtering templates by visibility (public, private, or all), vCPUs, and memory.
+## ​Usage Statistics
+Console provides daily resource usage and cost analysis to help you monitor your consumption and optimize your usage.
+- vCPU Hours
+Display the total vCPU usage time for all sandboxes on the current day (unit: hours).
+- This data can be accurate to the second, and can be used to evaluate the current computing resource usage.
+- Memory Hours
+Display the total memory usage time for all sandboxes on the current day (unit: GB·hours).
+- The system calculates the memory allocation and usage time for each sandbox during runtime.
+- Usage Costs
+Display the total cost of resources on the current day (unit: USD).
+- Includes the total cost of all vCPUs and memory. The storage space and templates are currently free to use.
+- All resources are billed by the second, and displayed in daily granularity.
+- The chart shows the trend of the past 30 days, which can be used to monitor the trend of usage changes.
+- This data may not include the latest usage, which may be slightly different from the bill. The final settlement is based on the billing details page.
+Was this page helpful? Yes No Quota Limit Learn more ⌘ I

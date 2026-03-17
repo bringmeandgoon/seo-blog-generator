@@ -1,0 +1,169 @@
+Source: https://novita.ai/docs/api-reference/model-apis-vidu-q2-pro-multiframe
+============================================================
+
+- VIDU Q2 Pro Multi-frame to Video - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationVideo GeneratorVIDU Q2 Pro Multi-frame to VideoGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video GeneratorPOSTUnified Video Generation API
+- POSTText to Video
+- POSTImage to Video
+- POSTHunyuan Video Fast
+- POSTWan 2.1 Text to Video
+- POSTWan 2.1 Image to Video
+- POSTWan 2.2 Text to Video
+- POSTWan 2.2 Image to Video
+- POSTWan 2.5 Preview Text to Video
+- POSTWan 2.5 Preview Image to Video
+- POSTWan 2.6 Text to Video
+- POSTWan 2.6 Image to Video
+- POSTWan 2.6 Reference Video
+- POSTKLING V1.6 Text to Video
+- POSTKLING V1.6 Image to Video
+- POSTKling V2.1 Master Text to Video
+- POSTKling V2.1 Image to Video
+- POSTKling V2.1 Master Image to Video
+- POSTKling V2.5 Turbo Text to Video
+- POSTKling V2.5 Turbo Image to Video
+- POSTKling V2.6 Pro Motion Control
+- POSTKling V2.6 Pro Text-to-Video
+- POSTKling V2.6 Pro Image-to-Video
+- POSTKling-o1 Image to Video
+- POSTKling-o1 Reference Video Generation
+- POSTKling-o1 Text to Video
+- POSTKling-o1 Video Editing
+- POSTKling v3.0 Standard Image-to-Video
+- POSTKling v3.0 Standard Text-to-Video
+- POSTKling v3.0 Pro Image-to-Video
+- POSTKling v3.0 Pro Text-to-Video
+- POSTMinimax Video-01
+- POSTMinimax Hailuo-02
+- POSTMinimax Hailuo 2.3 Text to Video
+- POSTMinimax Hailuo 2.3 Image to Video
+- POSTMinimax Hailuo 2.3 Fast Image to Video
+- POSTVidu Q1 Text to Video
+- POSTVidu Q1 Image to Video
+- POSTVidu Q1 Start End to Video
+- POSTVidu Q1 Reference to Video
+- POSTVidu 2.0 Image to Video
+- POSTVidu 2.0 Start End to Video
+- POSTVidu 2.0 Reference to Video
+- POSTPixVerse V4.5 Text to Video
+- POSTPixVerse V4.5 Image to Video
+- POSTSeedance V1 Lite Text to Video
+- POSTSeedance V1 Lite Image to Video
+- POSTSeedance V1 Pro Text to Video
+- POSTSeedance V1 Pro Image to Video
+- POSTSeedance 1.5 Pro Text To Video
+- POSTSeedance 1.5 Pro Image To Video
+- POSTVIDU Q2 Turbo Start-End Frame to Video
+- POSTVIDU Q2 Turbo Multi-frame to Video
+- POSTVIDU Q2 Turbo Image to Video
+- POSTVIDU Q2 Text to Video
+- POSTVIDU Q2 Reference Image to Video
+- POSTVIDU Q2 Pro Start-End Frame to Video
+- POSTVIDU Q2 Pro Multi-frame to Video
+- POSTVIDU Q2 Pro Image to Video
+- POSTVIDU Q2 Pro Fast Start-End Frame to Video
+- POSTVIDU Q2 Pro Fast Image to Video
+- POSTVIDU Q2 Template to Video
+- POSTVidu Q3 Pro Text-to-Video
+- POSTVidu Q3 Pro Image-to-Video
+- POSTHeygen Video-translate
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+VIDU Q2 Pro Multi-frame to Video cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/vidu-q2-pro-multiframe \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"wm_url": " ",
+"payload": " ",
+"meta_data": " ",
+"watermark": true,
+"resolution": " ",
+"start_image": " ",
+"wm_position": " ",
+"image_settings": [
+{
+"prompt": " ",
+"duration": 123,
+"key_image": " "
+}
+]
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+POST / v3 / async / vidu-q2-pro-multiframe VIDU Q2 Pro Multi-frame to Video cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/vidu-q2-pro-multiframe \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"wm_url": " ",
+"payload": " ",
+"meta_data": " ",
+"watermark": true,
+"resolution": " ",
+"start_image": " ",
+"wm_position": " ",
+"image_settings": [
+{
+"prompt": " ",
+"duration": 123,
+"key_image": " "
+}
+]
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+VIDU Q2 Pro multi-frame to video API, generates high-quality coherent video content from multiple keyframe images.
+This is an asynchronous API; only the task_id will be returned. You should use the task_id to request the Task Result API to retrieve the video generation results.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ wm_url string Watermark image URL. Uses default watermark if enabled but not provided. Ignored if watermark is false.
+​ payload string Pass-through parameter. No processing, only data transmission. Maximum 1048576 characters.
+​ meta_data string Metadata identifier in JSON format string. Transparent field.
+​ watermark boolean default: false Whether to add watermark. true: add watermark; false: no watermark. Default is no watermark.
+​ resolution string default: "720p" Video resolution. Default is 720p. Optional values: 540p , 720p , 1080p
+​ start_image string required First frame image. Supports Base64 encoding or image URL. Only 1 image supported. Supports png, jpeg, jpg, webp formats. Image ratio should be less than 1:4 or 4:1. Maximum size 50 MB.
+​ wm_position string default: "bottom_left" Watermark position. Default is bottom_left. Ignored if watermark is false. Optional values: top_left , top_right , bottom_right , bottom_left
+​ image_settings array required Keyframe configuration array, minimum 2 keyframes, maximum 9 keyframes Array length: 2 - 9 Hide properties ​ prompt string Prompt for continuing from the previous image, used to control the generated video content. ​ duration integer default: 5 Duration between keyframes in seconds. Default is 5s. Valid range: 2-7 seconds. Value range: [2, 7] ​ key_image string required Intermediate frame reference image. Model uses this as the end frame to generate video. Supports Base64 encoding or image URL. Only 1 image supported. Input order is timeline order (from start to end). Supports png, jpeg, jpg, webp formats. Image ratio should be less than 1:4 or 4:1. Maximum size 50 MB.
+## ​Response
+​ task_id string required Use the task_id to request the Task Result API to retrieve the generated outputs. Was this page helpful? Yes No VIDU Q2 Pro Start-End Frame to Video VIDU Q2 Pro Image to Video ⌘ I

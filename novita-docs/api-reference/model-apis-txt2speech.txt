@@ -1,0 +1,168 @@
+Source: https://novita.ai/docs/api-reference/model-apis-txt2speech
+============================================================
+
+- Novita AI Text-To-Speech API | Natural-Sounding Speech SynthesisSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationAudioText to SpeechGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video Generator
+- AudioPOSTMiniMax Speech-02-hd Text to Speech
+- POSTMiniMax Speech-02-hd Async Long TTS
+- POSTMiniMax Speech-02-turbo Text to Speech
+- POSTMiniMax Speech-02-turbo Async Long TTS
+- POSTMiniMax Speech-2.5-hd-preview Text to Speech
+- POSTMiniMax Speech-2.5-hd-preview Async Long TTS
+- POSTMiniMax Speech-2.5-turbo-preview Text to Speech
+- POSTMiniMax Speech-2.5-turbo-preview Async Long TTS
+- POSTMiniMax Speech-2.6-hd Text to Speech
+- POSTMiniMax Speech-2.6-hd Async Long TTS
+- POSTMiniMax Speech-2.6-turbo Text to Speech
+- POSTMiniMax Speech-2.6-turbo Async Long TTS
+- POSTMiniMax Speech 2.8 Turbo Async Text-to-Speech
+- POSTMiniMax Speech 2.8 HD Async Text-to-Speech
+- POSTMiniMax Speech 2.8 Turbo Sync Text-to-Speech
+- POSTMiniMax Speech 2.8 HD Sync Text-to-Speech
+- POSTMiniMax Voice Cloning
+- POSTFish Audio Text to Speech
+- POSTFish Audio Voice Cloning
+- POSTText to Speech
+- POSTGLM Text to Speech
+- POSTGLM Audio to Text
+- POSTGLM Voice Clone
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Text to Speech cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/txt2speech \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"extra": {
+"response_audio_type": " ",
+"webhook": {
+"url": " ",
+"test_mode": {
+"enabled": true,
+"return_task_status": " "
+}
+},
+"enterprise_plan": {
+"enabled": true
+}
+},
+"request": {
+"voice_id": " ",
+"language": " ",
+"texts": [
+" "
+],
+"volume": 123,
+"speed": 123
+}
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+POST / v3 / async / txt2speech Try it Text to Speech cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/txt2speech \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"extra": {
+"response_audio_type": " ",
+"webhook": {
+"url": " ",
+"test_mode": {
+"enabled": true,
+"return_task_status": " "
+}
+},
+"enterprise_plan": {
+"enabled": true
+}
+},
+"request": {
+"voice_id": " ",
+"language": " ",
+"texts": [
+" "
+],
+"volume": 123,
+"speed": 123
+}
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+This Text-To-Speech API converts written text into natural-sounding speech across multiple languages. Utilizing advanced voice synthesis technology, it delivers clear and lifelike vocal output, suitable for a wide range of applications, including e-learning platforms, accessibility tools, virtual assistants, and multimedia presentations.
+This is an asynchronous API; only the task_id will be returned. You should use the task_id to request the Task Result API to retrieve the speech generation results.
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ extra object Optional extra parameters for the request. Show properties ​ response_audio_type string The returned audio type. Default is wav.
+Enum: wav , mp3 ​ webhook object Webhook settings. More details can be found at Webhook Documentation . Show properties ​ url string required The URL of the webhook endpoint. Novita AI will send the task generated outputs to your specified webhook endpoint. ​ test_mode object By specifying Test Mode, a mock event will be sent to the webhook endpoint. Show properties ​ enabled boolean required Set to true to enable Test Mode, or false to disable it. The default is false. ​ return_task_status string required Control the data content of the mock event. When set to TASK_STATUS_SUCCEED, you’ll receive a normal response; when set to TASK_STATUS_FAILED, you’ll receive an error response.
+Enum: TASK_STATUS_SUCCEED , TASK_STATUS_FAILED ​ enterprise_plan object Dedicated Endpoints settings, which only take effect for users who have already subscribed to the Dedicated Endpoints Documentation . Show properties ​ enabled boolean Set to true to schedule this task to use your Dedicated Endpoints’s dedicated resources. Default is false.
+​ request object required Hide properties ​ voice_id string required Voice ID
+Enum: Emily , James , Olivia , Michael , Sarah , John ​ language string required Identify the languages spoken in the generated audio
+Enum: en-US , zh-CN , ja-JP ​ texts string[] required Source text for synthetic speech, UTF-8 encoded, supporting a maximum of 512 characters. ​ volume number Control the volume of the generated audio; select a value between 1.0 and 2.0. The default value is 1.0. ​ speed number Control the speed of the generated audio; select a value between 0.8 and 3.0. The default value is 1.0.
+## ​Response
+​ task_id string Use the task_id to request the Task Result API to retrieve the generated outputs.
+## ​Example
+request
+Copy
+```
+curl --location 'https://api.novita.ai/v3/async/txt2speech' \
+--header 'Authorization: Bearer {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data '{
+"request": {
+"voice_id": "Emily",
+"language": "en-US",
+"texts": [
+"To be or not to be, that is a question."
+],
+"volume": 1.2,
+"speed": 1.0
+}
+}'
+```
+response
+Copy
+```
+{
+"task_id": "b49df8dc-4a72-474b-a863-xxx"
+}
+```
+Was this page helpful? Yes No Fish Audio Voice Cloning GLM Text to Speech ⌘ I

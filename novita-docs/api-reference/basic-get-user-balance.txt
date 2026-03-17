@@ -1,0 +1,58 @@
+Source: https://novita.ai/docs/api-reference/basic-get-user-balance
+============================================================
+
+- User Balance Info - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationBasicUser Balance InfoGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU Instance
+- Serverless GPUs
+User Balance Info cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/openapi/v1/billing/balance/detail \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"availableBalance": " ",
+"cashBalance": " ",
+"creditLimit": " ",
+"outstandingInvoices": " "
+}
+```
+GET / openapi / v1 / billing / balance / detail Try it User Balance Info cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/openapi/v1/billing/balance/detail \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"availableBalance": " ",
+"cashBalance": " ",
+"creditLimit": " ",
+"outstandingInvoices": " "
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Response
+​ availableBalance string The user’s credit balance, unit is 0.0001 USD.
+​ cashBalance string The remaining balance of your top-up. The Unit is 0.0001 USD.
+​ creditLimit string Your credit limit (i.e., the maximum amount you can owe), unit is 0.0001 USD.
+​ outstandingInvoices string The amount you currently owe, unit is 0.0001 USD. Was this page helpful? Yes No API Error Codes Query Monthly Bill ⌘ I

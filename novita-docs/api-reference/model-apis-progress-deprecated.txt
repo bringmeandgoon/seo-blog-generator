@@ -1,0 +1,169 @@
+Source: https://novita.ai/docs/api-reference/model-apis-progress-deprecated
+============================================================
+
+- Progress - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationDeprecatedProgressGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video Generator
+- Audio
+- Face Editor
+- Training
+- DeprecatedPOSTText to Image V2
+- POSTImage to Image V2
+- GETProgress
+- POSTUpscale V2
+GPUs - GPU Instance
+- Serverless GPUs
+Progress cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/v2/progress \
+--header 'Authorization: '
+```
+200 Copy
+```
+{
+"code": 123,
+"msg": " ",
+"data": {
+"status": 123,
+"progress": 123,
+"eta_relative": 123,
+"imgs": {},
+"failed_reason": " ",
+"current_images": [
+" "
+],
+"submit_time": " ",
+"execution_time": " ",
+"txt2img_time": " ",
+"finish_time": " ",
+"info": " ",
+"enable_nsfw_detection": true,
+"nsfw_detection_result": [
+{
+"valid": true,
+"confidence": 123
+}
+]
+}
+}
+```
+GET / v2 / progress Try it Progress cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/v2/progress \
+--header 'Authorization: '
+```
+200 Copy
+```
+{
+"code": 123,
+"msg": " ",
+"data": {
+"status": 123,
+"progress": 123,
+"eta_relative": 123,
+"imgs": {},
+"failed_reason": " ",
+"current_images": [
+" "
+],
+"submit_time": " ",
+"execution_time": " ",
+"txt2img_time": " ",
+"finish_time": " ",
+"info": " ",
+"enable_nsfw_detection": true,
+"nsfw_detection_result": [
+{
+"valid": true,
+"confidence": 123
+}
+]
+}
+}
+```
+## ​GET Progress
+This API provides a query for the result of image generation, which can be in progress, failed, or successful. If successful, it will return the S3 URL of the generated image.
+## ​Request Headers
+​ Authorization string required
+## ​Query Parameters
+​ task_id arraystring[] required The ID of the task being queried.
+## ​Response
+​ code integer CodeNormal=0, CodeInternalError=-1, CodeInvalidJSON=1, CodeModelNotExist=2, CodeTaskIdNotExist=3, CodeInvalidAuth=4, CodeHostUnavailable=5, CodeParamRangeOutOfLimit=6, CodeCostBalanceFailure=7, CodeSamplerNotExist=8, CodeTimeout=9, CodeNotSupport=10
+​ msg string
+​ data object Show properties ​ status integer ​ progress number ​ eta_relative number ​ imgs string[]¦null ​ failed_reason string ​ current_images string[] ​ submit_time string ​ execution_time string ​ txt2img_time string ​ finish_time string ​ info string ​ enable_nsfw_detection boolean ​ nsfw_detection_result object[] Show properties ​ valid boolean ​ confidence number
+## ​Example
+request
+Copy
+```
+curl --location 'https://api.novita.ai/v2/progress?task_id=' \
+--header 'Authorization: Bearer {{API Key}}'
+```
+response
+Copy
+```
+{
+"code": 0,
+"msg": "",
+"data": {
+"status": 2,
+"progress": 1,
+"eta_relative": 0,
+"imgs": [
+"https://stars-test.s3.amazonaws.com/free/859d452b-f682-45fc-b0e7-5bd7b61a107d-0.png",
+"https://stars-test.s3.amazonaws.com/free/859d452b-f682-45fc-b0e7-5bd7b61a107d-1.png",
+"https://stars-test.s3.amazonaws.com/free/859d452b-f682-45fc-b0e7-5bd7b61a107d-2.png",
+"https://stars-test.s3.amazonaws.com/free/859d452b-f682-45fc-b0e7-5bd7b61a107d-3.png"
+],
+"failed_reason": "",
+"current_images": [""],
+"submit_time": "2024-01-24 15:08:17",
+"execution_time": "2024-01-24 15:08:17",
+"txt2img_time": "2024-01-24 15:08:22",
+"finish_time": "2024-01-24 15:08:22",
+"info": "",
+"enable_nsfw_detection": true,
+"nsfw_detection_result": [
+{
+"valid": true,
+"confidence": 57.62467
+},
+{
+"valid": true,
+"confidence": 3.908125
+},
+{
+"valid": true,
+"confidence": 99.84468
+},
+{
+"valid": true,
+"confidence": 2.440833
+}
+],
+"debug_info": {
+"submit_time_ms": 1706080097101,
+"execution_time_ms": 1706080097369,
+"txt2img_time_ms": 1706080102333,
+"finish_time_ms": 1706080102479
+}
+}
+}
+```
+Was this page helpful? Yes No Image to Image V2 Upscale V2 ⌘ I

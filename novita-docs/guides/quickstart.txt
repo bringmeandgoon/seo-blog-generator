@@ -1,0 +1,46 @@
+Source: https://novita.ai/docs/guides/quickstart
+============================================================
+
+- Novita AI Get startedSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - 1. Log into novita.ai
+- 2. Manage API Key
+- 3. Maintain sufficient credit balance in your account
+Novita AI is the go-to inference platform for AI developers seeking a low-cost, reliable, and simple solution for shipping AI models. This is a quickstart guide to help you set up your account and get started.
+If you have questions, please check our FAQs first or reach out to our support team on Discord .
+## ​1. Log into novita.ai
+You can log in using Google or GitHub authentication, and a new account will be automatically created on your first login. You can also sign up using your email address .
+## ​2. Manage API Key
+Novita AI authenticates API access using Bearer authentication with an API Key in the request header, e.g., “Authorization: Bearer {API Key}”.
+If you need to access APIs, you can go to Key Management setting page to create or manage your API keys.
+## ​3. Maintain sufficient credit balance in your account
+We offer new users a voucher with some credit to try our products. To add more credit, please visit Billing and Payments and follow the guide on Payment Methods .
+Also, to avoid any interruption to your service, please ensure your account has sufficient credit balance, and Setup Automatic Top-up is a recommended practice. Was this page helpful? Yes No Introduction Overview ⌘ I

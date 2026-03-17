@@ -1,0 +1,116 @@
+Source: https://novita.ai/docs/guides/model-apis-training-guidance
+============================================================
+
+- Training Image Caption Guidance - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImage, Audio and VideoTraining Image Caption GuidanceGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and VideoSDKs for Model APIs
+- How to subscribe to Dedicated Endpoints?
+- Configure Custom AWS S3 Bucket
+- Upload Custom LoRA Models
+- A Brief Introduction to Sampler
+- A Brief Introduction to Clip Skip
+- What's the Variational Autoencoder VAE?
+- Training Image Caption Guidance
+- API V2 to V3 Migration Guide
+- Rate limits
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Preparation
+- Captioning – General Notes
+- Avoid Automated Captioning
+- Caption in the Same Manner You Prompt
+- Follow a Set Structure per Concept
+- Captions are Like Variables You Can Use in Your Prompts
+- Leveraging Classes as Tags
+- Consistent Captioning
+- Avoid Repetition
+- Take Note of Ordering
+- Use Your Model’s Existing Knowledge to Your Advantage
+- Captioning – Structure
+- General Format
+- Loose Associations
+- FULL EXAMPLE OF A SINGLE IMAGE
+### ​Preparation
+Depending on how and what you are training, you may need to crop the photos to a specific width and height. Other types of training may categorize images into various sizes and do not require cropping. Look into what is required for the training method you are using, the model you are training, and the program you are using to train your model.
+### ​Captioning – General Notes
+#### ​Avoid Automated Captioning
+- BLIP and deepbooru are exciting, but it is still a bit early for them.
+- BLIP and deepbooru struggle with context and relative importance.
+- It is faster to manually caption than to fix mistakes made by BLIP or deepbooru and still have to manually caption.
+#### ​Caption in the Same Manner You Prompt
+- Captioning and prompting are related.
+- Recognize how you typically prompt. Do you use verbose sentences? Short descriptions? Vague or detailed prompts?
+- Caption in a similar style and verbosity to how you usually prompt.
+#### ​Follow a Set Structure per Concept
+- Following a structure will benefit the learning process.
+- You might have one structure for photographs and another for illustrations. However, try to avoid mixing and matching structures when captioning a single dataset.
+#### ​Captions are Like Variables You Can Use in Your Prompts
+Everything you describe in a caption can be thought of as a variable that you can manipulate in your prompt. This has two implications:
+- You want to describe as many details as possible about anything that isn’t the concept you are trying to implicitly teach. In other words, describe everything that you want to become a variable. For example, if you are teaching a specific face but want to be able to change the hair color, you should describe the hair color in each image so that “hair color” becomes one of your variables.
+- You don’t want to describe anything (beyond a class-level description) that you want to be implicitly taught. In other words, the thing you are trying to teach shouldn’t become a variable. For example, if you are teaching a specific face, you should not describe it as having a big nose. You don’t want the nose size to be variable because then it isn’t that specific face anymore. However, you can still caption “face” if you want, which provides context to the model you are training. This does have some implications described in the following point.
+#### ​Leveraging Classes as Tags
+- There are two concepts here.
+- Using generic class tags will bias that entire class toward your training data. This may or may not be desired depending on your goals.
+- Using generic class tags provides context to the learning process. Conceptually, it is easier to learn what a “face” is when the model already has a reasonable approximation of “face”.
+- If you want to bias the entire class of your model toward your training images, use broad class tags rather than specific ones. For example, if you want to teach your model that every man should look like Brad Pitt, your captions should contain the tag “man” but should not be more specific than that. This influences your model to produce a Brad Pitt-looking man whenever you use the word “man” in your prompt. This also allows your model to draw on and leverage what it already knows about the concept of “man” while it is training.
+- If you want to reduce the impact of your training on the entire class, include specific tags and de-emphasize class tags. For example, if you want to teach your model that only “ohwxman” should look like Brad Pitt, and you don’t want every “man” to look like Brad Pitt, you would not use “man” as a tag, only tagging it with “ohwxman”. This reduces the impact of your training images on the tag “man” and strongly associates your training images with “ohwxman”. Your model will draw on what it knows about “ohwxman”, which is practically nothing (see note), thus building up knowledge almost solely from your training images, creating a very strong association.
+- Note: This is simplified for the sake of understanding. This would actually be tokenized into two tokens, “ohwx” and “man”, but these tokens would be strongly correlated for training purposes, which should still reduce the impact on the overall class of “man” compared to training with “man” as a token in the caption. The mathematics involved is quite complex and well beyond the scope of this document.
+#### ​Consistent Captioning
+- Use consistent captions across all of your training. This will help you consistently invoke your concept when prompting.
+- Using inconsistent tags across your dataset will make the concept you are trying to teach harder for the model to grasp, as you are essentially forcing it to learn both the concept and the different phrasings for that concept. It’s much better to have it just learn the concept under a single term.
+- For example, you probably don’t want to have both “legs raised in air” and “raised legs” if you are trying to teach a single concept of a person with their legs up in the air. You want to be able to consistently invoke this pose in your prompt, so choose one way to caption it.
+#### ​Avoid Repetition
+- Try to avoid repetition wherever possible. Similar to prompting, repeating words increases the weighting of those words.
+- For example, if we repeat the word “background” too much, we may have three tags that say “background” (e.g., simple background, white background, lamp in background). Even though we want the background to have low weight, we have unintentionally increased the weighting significantly. It would be better to combine these or reword them (e.g., simple white background with a lamp).
+#### ​Take Note of Ordering
+- Again, just like with prompting, order matters for the relative weighting of tags.
+- Having a specific structure or order that you generally use for captions can help you maintain the relative weightings of tags between images in your dataset, which should benefit the training process.
+- Having a standardized ordering makes the whole captioning process faster as you become familiar with captioning in that structure.
+#### ​Use Your Model’s Existing Knowledge to Your Advantage
+- Your model already produces decent results and reasonably understands what you are prompting. Take advantage of that by captioning with words that already work well in your prompts.
+- You want to use descriptive words, but if you use words that are too obscure or niche, you likely can’t leverage much of the existing knowledge. For example, you could say “sarcastic” or “mordacious”. The model has some idea of what “sarcastic” conveys, but it likely has no clue what “mordacious” means.
+- You can also look at this from the opposite perspective. If you were trying to teach the concept of “mordacious”, you might have a dataset full of images that convey “sarcastic” and caption them with both the tags “sarcastic” and “mordacious” side by side (so that they are close in relative weighting).
+### ​Captioning – Structure
+This is mainly for people or characters, so it might not be quite as applicable to something like fantasy landscapes, but perhaps it can provide some inspiration.
+#### ​General Format
+#### ​Loose Associations
+- This is where we put any final loose associations we have with the image.
+- This could be anything that pops up in our head, usually “feelings” that we feel when looking at the image or concepts we feel are portrayed, really anything goes here as long as it exists in the image.
+- Keep in mind this is for loose associations. If the image is very obviously portraying some feeling, we may want it tagged closer to the start of the caption for higher weighting.
+- For example: happy, sad, joyous, hopeful, lonely, sombre
+#### ​FULL EXAMPLE OF A SINGLE IMAGE
+This is an example of how we would caption a single image we picked off of safebooru. We will assume that I want to train the style of this image and associate it with the tag “ohwxStyle”, and we will assume that we have many images in this style within our dataset.
+Sample Image: https://safebooru.org/index.php?page=post&s=view&id=3887414
+- Globals: ohwxStyle
+- Type or Perspective Of a: anime, drawing, of a young woman, full body shot, from side
+- Action words: sitting, looking at viewer, smiling, head tilt, holding a phone, eyes closed
+- Subject description: short brown hair, pale pink dress with dark edges, stuffed animal in lap, brown slippers
+- Notable details: sunlight through windows as lighting source
+- Background or location: brown couch, red patterned fabric on couch, wooden floor, white water-stained paint on walls, refrigerator in background, coffee machine sitting on a countertop, table in front of couch, bananas and coffee pot on table, white board on wall, clock on wall, stuffed animal chicken on floor
+- Loose associations: dreary environment
+All together: ohwxStyle, anime, drawing, of a young woman, full body shot, from side, sitting, looking at viewer, smiling, head tilt, holding a phone, eyes closed, short brown hair, pale pink dress with dark edges, stuffed animal in lap, brown slippers, sunlight through windows as lighting source, brown couch, red patterned fabric on couch, wooden floor, white water-stained paint on walls, refrigerator in background, coffee machine sitting on a countertop, table in front of couch, bananas and coffee pot on table, white board on wall, clock on wall, stuffed animal chicken on floor, dreary environment Was this page helpful? Yes No What's the Variational Autoencoder VAE? API V2 to V3 Migration Guide ⌘ I

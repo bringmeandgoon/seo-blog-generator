@@ -1,0 +1,233 @@
+Source: https://novita.ai/docs/guides/llm-vision
+============================================================
+
+- Vision Language Models - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationLLMVision Language ModelsGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLMLarge Language Models
+- Vision Language Models
+- Recommended Models
+- Reasoning Models
+- DeepSeek-OCR Usage
+- Function Calling
+- Structured Outputs
+- Prompt Cache
+- Dedicated Endpoint User Manual
+- Batch Inference
+- Rate limits
+- LLM Monitoring
+- Interactive Playground
+- Anthropic SDK Compatibility
+- Interleaved Thinking Supporty
+- Common Error Codes
+- LLM FAQs
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Overview
+- Typical Use Cases
+- API Usage Guide
+- Image Detail Parameter
+- Example Message Format
+- Image via URL
+- Image via Base64
+- Python Code: Encode Image to Base64
+- Multi-Image Input
+- Supported Models
+- Billing
+- API Call Examples
+- Single Image Description
+- Multi-Image Comparison
+- Notes & Troubleshooting
+## ​Overview
+Vision-Language Models (VLMs) are a type of multimodal foundation model capable of processing both image and text inputs. These models understand visual content in conjunction with language instructions, and generate high-quality responses based on the combined context. They are widely used in scenarios involving image recognition, content interpretation, and intelligent visual Q&A.
+### ​Typical Use Cases
+- Image Recognition and Description: Automatically identifies objects, colors, scenes, and spatial relationships in images, and generates natural language descriptions.
+- Multimodal Understanding: Combines image input and contextual text for multi-turn dialogue and task completion.
+- Visual Question Answering: Acts as an advanced OCR tool by recognizing and interpreting text embedded in images.
+- Emerging Applications: Ideal for use in intelligent vision assistants, robot perception, AR interfaces, and more.
+## ​API Usage Guide
+To invoke a Vision-Language Model, use the /chat/completions endpoint with both image and text inputs.
+### ​Image Detail Parameter
+Use the detail field to control image resolution. The following modes are available:
+- high: High resolution, preserves more detail—ideal for precision tasks.
+- low: Low resolution, faster response—suitable for real-time usage.
+- auto: Automatically selects the appropriate mode.
+### ​Example Message Format
+#### ​Image via URL
+Copy
+```
+{
+"role": "user",
+"content": [
+{
+"type": "image_url",
+"image_url": {
+"url": "https://example.com/image.png",
+"detail": "high"
+}
+},
+{
+"type": "text",
+"text": "Please describe the scene in the image."
+}
+]
+}
+```
+#### ​Image via Base64
+Copy
+```
+{
+"role": "user",
+"content": [
+{
+"type": "image_url",
+"image_url": {
+"url": "data:image/jpeg;base64,{base64_image}",
+"detail": "low"
+}
+},
+{
+"type": "text",
+"text": "What text is present in the image?"
+}
+]
+}
+```
+### ​Python Code: Encode Image to Base64
+Copy
+```
+import base64
+from PIL import Image
+import io
+def image_to_base64(image_path):
+with Image.open(image_path) as img:
+buffered = io.BytesIO()
+img.save(buffered, format="JPEG")
+return base64.b64encode(buffered.getvalue()).decode('utf-8')
+base64_image = image_to_base64("path/to/your/image.jpg")
+```
+## ​Multi-Image Input
+The API supports sending multiple images alongside text input. For best results, we recommend sending no more than two images per request.
+Copy
+```
+{
+"role": "user",
+"content": [
+{
+"type": "image_url",
+"image_url": {
+"url": "https://example.com/image1.png"
+}
+},
+{
+"type": "image_url",
+"image_url": {
+"url": "data:image/jpeg;base64,{base64_image}"
+}
+},
+{
+"type": "text",
+"text": "Compare the common features of these two images."
+}
+]
+}
+```
+## ​Supported Models
+The following Vision-Language Models are currently supported on the Novita platform:
+Visit the Model Hub for a complete and up-to-date list of available models.
+## ​Billing
+Image input is tokenized and counted toward billing together with text.
+- Each model uses a different image-to-token conversion method.
+- Refer to each model’s pricing page for detailed billing and token policy.
+## ​API Call Examples
+### ​Single Image Description
+Copy
+```
+from openai import OpenAI
+client = OpenAI(api_key="YOUR_KEY", base_url="https://api.novita.ai/openai")
+response = client.chat.completions.create(
+model="qwen/qwen2.5-vl-72b-instruct",
+messages=[
+{
+"role": "user",
+"content": [
+{
+"type": "image_url",
+"image_url": {
+"url": "https://example.com/cityscape.jpg"
+}
+},
+{
+"type": "text",
+"text": "Describe the main buildings in the image."
+}
+]
+}
+],
+stream=True
+)
+for chunk in response:
+print(chunk.choices[0].delta.content or "", end="", flush=True)
+```
+### ​Multi-Image Comparison
+Copy
+```
+response = client.chat.completions.create(
+model="qwen/qwen2.5-vl-72b-instruct",
+messages=[
+{
+"role": "user",
+"content": [
+{
+"type": "image_url",
+"image_url": {
+"url": "https://example.com/product1.jpg"
+}
+},
+{
+"type": "image_url",
+"image_url": {
+"url": "https://example.com/product2.jpg"
+}
+},
+{
+"type": "text",
+"text": "Please compare the key differences between these two products."
+}
+]
+}
+],
+stream=True
+)
+for chunk in response:
+print(chunk.choices[0].delta.content or "", end="", flush=True)
+```
+## ​Notes & Troubleshooting
+- Image resolution and clarity significantly affect model performance. Use high-quality sources where possible.
+- Base64-encoded images should ideally be under 1MB to avoid timeouts or errors.
+- For detailed usage, book a call with our sales team or contact support if needed.
+Was this page helpful? Yes No Large Language Models Recommended Models ⌘ I

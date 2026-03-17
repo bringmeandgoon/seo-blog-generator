@@ -1,0 +1,76 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-delete-network-storage
+============================================================
+
+- Delete Network Storage - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationStorageDelete Network StorageGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- Instance
+- Image
+- Template
+- Product
+- Network
+- Image Registry
+- StoragePOSTCreate Network Storage
+- POSTDelete Network Storage
+- POSTEdit Network Storage
+- GETList Network Storage
+- Jobs
+- Serverless GPUs
+Delete Network Storage cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/networkstorage/delete \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"storageId": " "
+}
+'
+```
+POST / gpu-instance / openapi / v1 / networkstorage / delete Try it Delete Network Storage cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/networkstorage/delete \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"storageId": " "
+}
+'
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ storageId string required
+## ​Example
+Request
+Copy
+```
+curl --request POST \
+--url 'https://api.novita.ai/gpu-instance/openapi/v1/networkstorage/delete' \
+--header 'Authorization: Bearer {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data '{
+"storageId": "string"
+}'
+```
+Response
+Copy
+```
+{}
+```
+Was this page helpful? Yes No Create Network Storage Edit Network Storage ⌘ I

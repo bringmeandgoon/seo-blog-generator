@@ -1,0 +1,82 @@
+Source: https://novita.ai/docs/guides/skyvern
+============================================================
+
+- Skyvern - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationIntegrationsSkyvernGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- IntegrationsClaude Code Integration Guide
+- OpenAI Agents SDK
+- AnythingLLM
+- Dify
+- Helicone
+- Hugging Face
+- Langflow
+- Continue
+- Cursor
+- LangChain
+- Skyvern
+- LobeChat
+- AI Gradio
+- Langfuse
+- MLflow
+- Verba
+- Portkey
+- DocsGPT
+- LlamaIndex
+- LoLLMS WebUI
+- CodeCompanion
+- Page Assist
+- DeepSearcher
+- Browser Use
+- OWL
+- LiteLLM
+- ChatBox
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Setting Up Docker Compose
+- Leveraging Novita AI in Skyvern
+The collaboration between Skyvern and Novita AI marks a significant advancement in AI-powered automation and development capabilities. By combining Skyvern’s expertise in browser-based workflow automation with Novita AI’s robust GPU infrastructure and model deployment platform, developers and businesses can now access a comprehensive solution for building and scaling AI applications.
+Our comprehensive guide will walk you through Novita AI implementation on Skyvern, including setting up Docker Compose and leveraging Novita AI in Skyvern.
+## ​Setting Up Docker Compose
+Step 1: Ensure  Docker Desktop  is installed and running on your machine.
+Step 2: Check for running PostgreSQL instances using docker ps the command.
+Step 3: Navigate to the project directory after cloning the repository.
+Copy
+```
+git clone && cd
+```
+Step 4: Add your LLM provider API Key on the  docker-compose.yml . ( If you want to run Skyvern on a remote server, make sure you set the correct server ip for the UI container in   docker-compose.yml .)
+Step 5: Enter the following command via the command line.
+Copy
+```
+docker compose up -d
+```
+Step 6: Access the application interface at http://localhost:8080  in your browser to start using the UI.
+## ​Leveraging Novita AI in Skyvern
+Step 1: Update environment variables in docker-compose.yml before building the docker image.
+Step 2: Start Novita AI LLM service by running docker compose up -d .
+Was this page helpful? Yes No LangChain LobeChat ⌘ I

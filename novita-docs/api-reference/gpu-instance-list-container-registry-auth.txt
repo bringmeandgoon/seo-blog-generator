@@ -1,0 +1,102 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-list-container-registry-auth
+============================================================
+
+- List Container Registry Auth - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImage RegistryList Container Registry AuthGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- Instance
+- Image
+- Template
+- Product
+- Network
+- Image RegistryPOSTCreate Container Registry Authentication
+- POSTDelete Container Registry Auth
+- GETList Container Registry Auth
+- Storage
+- Jobs
+- Serverless GPUs
+List Container Registry Auth cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/repository/auths \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"data": [
+{
+"id": " ",
+"name": " ",
+"username": " ",
+"password": " "
+}
+]
+}
+```
+GET / gpu-instance / openapi / v1 / repository / auths Try it List Container Registry Auth cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/repository/auths \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"data": [
+{
+"id": " ",
+"name": " ",
+"username": " ",
+"password": " "
+}
+]
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Response
+​ data object[] Show properties ​ id string ​ name string ​ username string ​ password string
+## ​Example
+Request
+Copy
+```
+curl --request GET \
+--url 'https://api.novita.ai/gpu-instance/openapi/v1/repository/auths' \
+--header 'Authorization: Bearer {{API Key}}'
+```
+Response
+Copy
+```
+{
+"data": [
+{
+"id": "75irlsvvsehnqdajg2r481mjk54ecodc",
+"name": "test",
+"username": "uuuu",
+"password": "1111"
+},
+{
+"id": "eih4rdk77avum5lyau291w1i54zd897w",
+"name": "test",
+"username": "uuuu",
+"password": "1111"
+}
+]
+}
+```
+Was this page helpful? Yes No Delete Container Registry Auth Create Network Storage ⌘ I

@@ -1,0 +1,172 @@
+Source: https://novita.ai/docs/api-reference/model-apis-seedance-v1.5-pro-i2v
+============================================================
+
+- Seedance 1.5 Pro Image To Video - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationVideo GeneratorSeedance 1.5 Pro Image To VideoGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video GeneratorPOSTUnified Video Generation API
+- POSTText to Video
+- POSTImage to Video
+- POSTHunyuan Video Fast
+- POSTWan 2.1 Text to Video
+- POSTWan 2.1 Image to Video
+- POSTWan 2.2 Text to Video
+- POSTWan 2.2 Image to Video
+- POSTWan 2.5 Preview Text to Video
+- POSTWan 2.5 Preview Image to Video
+- POSTWan 2.6 Text to Video
+- POSTWan 2.6 Image to Video
+- POSTWan 2.6 Reference Video
+- POSTKLING V1.6 Text to Video
+- POSTKLING V1.6 Image to Video
+- POSTKling V2.1 Master Text to Video
+- POSTKling V2.1 Image to Video
+- POSTKling V2.1 Master Image to Video
+- POSTKling V2.5 Turbo Text to Video
+- POSTKling V2.5 Turbo Image to Video
+- POSTKling V2.6 Pro Motion Control
+- POSTKling V2.6 Pro Text-to-Video
+- POSTKling V2.6 Pro Image-to-Video
+- POSTKling-o1 Image to Video
+- POSTKling-o1 Reference Video Generation
+- POSTKling-o1 Text to Video
+- POSTKling-o1 Video Editing
+- POSTKling v3.0 Standard Image-to-Video
+- POSTKling v3.0 Standard Text-to-Video
+- POSTKling v3.0 Pro Image-to-Video
+- POSTKling v3.0 Pro Text-to-Video
+- POSTMinimax Video-01
+- POSTMinimax Hailuo-02
+- POSTMinimax Hailuo 2.3 Text to Video
+- POSTMinimax Hailuo 2.3 Image to Video
+- POSTMinimax Hailuo 2.3 Fast Image to Video
+- POSTVidu Q1 Text to Video
+- POSTVidu Q1 Image to Video
+- POSTVidu Q1 Start End to Video
+- POSTVidu Q1 Reference to Video
+- POSTVidu 2.0 Image to Video
+- POSTVidu 2.0 Start End to Video
+- POSTVidu 2.0 Reference to Video
+- POSTPixVerse V4.5 Text to Video
+- POSTPixVerse V4.5 Image to Video
+- POSTSeedance V1 Lite Text to Video
+- POSTSeedance V1 Lite Image to Video
+- POSTSeedance V1 Pro Text to Video
+- POSTSeedance V1 Pro Image to Video
+- POSTSeedance 1.5 Pro Text To Video
+- POSTSeedance 1.5 Pro Image To Video
+- POSTVIDU Q2 Turbo Start-End Frame to Video
+- POSTVIDU Q2 Turbo Multi-frame to Video
+- POSTVIDU Q2 Turbo Image to Video
+- POSTVIDU Q2 Text to Video
+- POSTVIDU Q2 Reference Image to Video
+- POSTVIDU Q2 Pro Start-End Frame to Video
+- POSTVIDU Q2 Pro Multi-frame to Video
+- POSTVIDU Q2 Pro Image to Video
+- POSTVIDU Q2 Pro Fast Start-End Frame to Video
+- POSTVIDU Q2 Pro Fast Image to Video
+- POSTVIDU Q2 Template to Video
+- POSTVidu Q3 Pro Text-to-Video
+- POSTVidu Q3 Pro Image-to-Video
+- POSTHeygen Video-translate
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Seedance 1.5 Pro Image To Video cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/seedance-v1.5-pro-i2v \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"fps": 123,
+"seed": 123,
+"image": " ",
+"ratio": " ",
+"prompt": " ",
+"duration": 123,
+"watermark": true,
+"last_image": " ",
+"resolution": " ",
+"camera_fixed": true,
+"service_tier": " ",
+"generate_audio": true,
+"execution_expires_after": 123
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+POST / v3 / async / seedance-v1.5-pro-i2v Seedance 1.5 Pro Image To Video cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/seedance-v1.5-pro-i2v \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"fps": 123,
+"seed": 123,
+"image": " ",
+"ratio": " ",
+"prompt": " ",
+"duration": 123,
+"watermark": true,
+"last_image": " ",
+"resolution": " ",
+"camera_fixed": true,
+"service_tier": " ",
+"generate_audio": true,
+"execution_expires_after": 123
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+Seedance 1.5 pro Image to Video API.
+This is an asynchronous API; only the task_id will be returned. You should use the task_id to request the Task Result API to retrieve the video generation results.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ fps integer default: 24 Frame rate (frames per second). Only 24 fps is supported. Optional values: 24
+​ seed integer Seed integer for controlling randomness. Range: [-1, 2^32-1]. -1 means using a random seed. The same seed with the same request produces similar (but not identical) results. Value range: [-1, 4294967295]
+​ image string required The first frame image for image-to-video generation. Can be an image URL or Base64-encoded image. URL must be accessible. Base64 format: data:image/<image format>;base64,<Base64 encoding> . Supported formats: jpeg, png, webp, bmp, tiff, gif. Aspect ratio: (0.4, 2.5), dimensions: (300, 6000) pixels, size: < 30 MB.
+​ ratio string default: "adaptive" Aspect ratio of the generated video. ‘adaptive’: For text-to-video, the model intelligently selects the best ratio based on the prompt; for image-to-video, it automatically selects based on the uploaded first frame image ratio. Optional values: 16:9 , 4:3 , 1:1 , 3:4 , 9:16 , 21:9 , adaptive
+​ prompt string required Text prompt describing the expected video content. Supports both Chinese and English. Recommended not to exceed 500 characters. To generate audio with dialogue, place the spoken content within double quotes for better audio generation results.
+​ duration integer default: 5 Video duration in seconds. Supports specified duration within the range [4, 12]. Note: Duration affects billing. Value range: [4, 12]
+​ watermark boolean default: false Whether the generated video includes a watermark. true: with watermark. false: without watermark.
+​ last_image string The last frame image for first-and-last-frame image-to-video generation. Can be an image URL or Base64-encoded image. Requirements are the same as the image field. When aspect ratios differ, the last frame will be automatically cropped to match the first frame.
+​ resolution string default: "720p" Video resolution. Seedance 1.5 pro supports 480p and 720p (1080p is not currently supported). Optional values: 480p , 720p
+​ camera_fixed boolean default: false Whether to fix the camera position. true: The platform appends a fixed camera instruction to the prompt (effect not guaranteed). false: Camera is not fixed.
+​ service_tier string default: "default" Service tier for processing the request. ‘default’: Online inference mode with lower RPM and concurrency quota, suitable for time-sensitive scenarios. ‘flex’: Offline inference mode with higher TPD quota at 50% of the online mode price, suitable for latency-insensitive scenarios. Optional values: default , flex
+​ generate_audio boolean default: true Whether the generated video includes synchronized audio. true: Video includes automatically generated speech, sound effects, and background music based on the prompt and visual content. false: Output silent video.
+​ execution_expires_after integer default: 172800 Task timeout threshold in seconds, calculated from the created_at timestamp. Default: 172800 (48 hours). Range: [3600, 259200]. Tasks exceeding this time will be automatically terminated and marked as ‘expired’. Value range: [3600, 259200]
+## ​Response
+​ task_id string required Use the task_id to request the Task Result API to retrieve the generated outputs. Was this page helpful? Yes No Seedance 1.5 Pro Text To Video VIDU Q2 Turbo Start-End Frame to Video ⌘ I

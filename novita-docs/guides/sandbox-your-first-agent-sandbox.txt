@@ -1,0 +1,92 @@
+Source: https://novita.ai/docs/guides/sandbox-your-first-agent-sandbox
+============================================================
+
+- Create Your First Agent Sandbox - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationQuickstartCreate Your First Agent SandboxGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- QuickstartCreate Your First Agent Sandbox
+- E2B SDK Compatibility
+- Pricing
+- Quota Limit
+- Console
+- Learn more
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Create an Account
+- Create API Key
+- Install SDK
+- Configure Environment Variables
+- Use SDK to Start Agent Sandbox
+## ​Create an Account
+If you don’t have a Novita account, you need to sign up first. For details, please refer to Quickstart guide .
+## ​Create API Key
+Go to the Novita Key Management page , you can create an API key and save the API key value for use in subsequent steps.
+## ​Install SDK
+You can install the SDK by executing the following commands.
+JavaScript & TypeScript SDK Python SDK Copy
+```
+npm i novita-sandbox
+```
+## ​Configure Environment Variables
+Create a .env file in your project folder (if it doesn’t exist), and configure the API key and API domain address.
+For JavaScript and TypeScript projects, you need to import the dotenv/config package in your project; for Python projects, you need to import the dotenv library in your project and call the load_dotenv method to load environment variables.
+For details, please refer to the example .
+.env Copy
+```
+NOVITA_API_KEY=sk_*** # Novita API key obtained from previous steps
+```
+Or you can configure the API key and API domain address by setting environment variables in your terminal.
+Bash Copy
+```
+export NOVITA_API_KEY=sk_*** # Novita API key obtained from previous steps
+```
+## ​Use SDK to Start Agent Sandbox
+Below is a simple example showing how to create a sandbox through the SDK and run specified commands.
+JavaScript & TypeScript Python Copy
+```
+// index.ts
+import 'dotenv/config'
+import { Sandbox } from 'novita-sandbox/code-interpreter'
+// The .env file should be located in the project root directory
+// dotenv/config will automatically look for .env in the current working directory
+// Or
+// You can set the environment variable in the command line
+// export NOVITA_API_KEY=sk_***
+const sandbox = await Sandbox.create()
+const execution = await sandbox.runCode('print("hello world")')
+console.log(execution.logs)
+const files = await sandbox.files.list('/tmp')
+console.log(files)
+// Close sandbox when no longer needed
+await sandbox.kill()
+```
+Execute the following commands to run the above code.
+index.ts main.py Copy
+```
+npx tsx ./index.ts
+```
+Was this page helpful? Yes No Installing SDKs & CLI E2B SDK Compatibility ⌘ I

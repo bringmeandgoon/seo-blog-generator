@@ -1,0 +1,73 @@
+Source: https://novita.ai/docs/guides/sandbox-agent-runtime-installation
+============================================================
+
+- Installation - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationAgent RuntimeInstallationGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent RuntimeOverview
+- Installation
+- Quick Start
+- Advanced Features
+- Agent Framework Integration Guide
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Install Python SDK with pip
+- Install Node.js CLI
+- Option 1: Run with npx (Recommended)
+- Option 2: Global Installation
+This feature is currently in beta . You need to install the beta versions of both the Novita Sandbox Python SDK and the CLI tool:
+## ​Install Python SDK with pip
+Use the --pre flag to install the latest beta version:
+Copy
+```
+pip install --pre novita-sandbox
+```
+## ​Install Node.js CLI
+### ​Option 1: Run with npx (Recommended)
+Install the beta CLI locally in your project directory using npm , then run it with npx . This avoids polluting your global environment with the beta version.
+Copy
+```
+# Install the latest beta version CLI
+npm install novita-sandbox-cli@beta
+# First, complete authentication
+npx novita-sandbox-cli auth login
+# Run agent configure command to configure your Agent
+npx novita-sandbox-cli agent configure
+```
+### ​Option 2: Global Installation
+If you use the CLI frequently, you can install it globally:
+Copy
+```
+# Install the latest beta version
+npm install -g novita-sandbox-cli@beta
+```
+After installation, you can use the command directly:
+Copy
+```
+novita-sandbox-cli agent configure
+```
+Was this page helpful? Yes No Overview Quick Start ⌘ I

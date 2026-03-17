@@ -1,0 +1,149 @@
+Source: https://novita.ai/docs/guides/browseruse
+============================================================
+
+- Browser Use - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationIntegrationsBrowser UseGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- IntegrationsClaude Code Integration Guide
+- OpenAI Agents SDK
+- AnythingLLM
+- Dify
+- Helicone
+- Hugging Face
+- Langflow
+- Continue
+- Cursor
+- LangChain
+- Skyvern
+- LobeChat
+- AI Gradio
+- Langfuse
+- MLflow
+- Verba
+- Portkey
+- DocsGPT
+- LlamaIndex
+- LoLLMS WebUI
+- CodeCompanion
+- Page Assist
+- DeepSearcher
+- Browser Use
+- OWL
+- LiteLLM
+- ChatBox
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - How to Use Browser Use with Novita AI
+- Prerequisites
+- Installation
+- Obtaining Novita AI LLM API Key
+- Environment Setup
+- Basic Implementation
+- Creating Your Own Tasks
+Browser Use is an open-source library that empowers LLMs to directly control web browsers, revolutionizing web interaction with advanced automation. By integrating Novita AI’s powerful LLMs and tools, Browser Use enables seamless browsing, content generation, and task automation for an optimized user experience.
+This tutorial will show you how to integrate the Novita AI API with Browser Use to automate browser interactions.
+## ​How to Use Browser Use with Novita AI
+### ​Prerequisites
+- Python 3.11 or higher
+- A Novita AI API key
+### ​Installation
+Step 1: Install Browser Use using pip:
+Copy
+```
+pip install browser-use
+```
+Step 2: Install Playwright (required for browser automation):
+Copy
+```
+playwright install chromium
+```
+### ​Obtaining Novita AI LLM API Key
+- Create an account: Visit Novita AI’s website and sign up for an account.
+- Generate your API Key: After logging in, navigate to the Key Management page to generate your API key. This key is essential to connect Novita AI’s models to Cursor.
+### ​Environment Setup
+Create a .env file in your project root and add your Novita API key:
+Copy
+```
+NOVITA_API_KEY=your_api_key_here
+```
+### ​Basic Implementation
+- Here’s a complete example of using Browser Use with Novita AI’s API:
+Copy
+```
+"""
+Web automation using Novita AI and Browser Use
+"""
+import asyncio
+import os
+from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
+from pydantic import SecretStr
+from browser_use import Agent
+# Load environment variables
+load_dotenv()
+api_key = os.getenv('NOVITA_API_KEY', '')
+if not api_key:
+raise ValueError('NOVITA_API_KEY is not set')
+async def run_search():
+agent = Agent(
+task=(
+'1. Go to https://www.reddit.com/r/LocalLLaMA '
+"2. Search for 'browser use' in the search bar "
+'3. Click on first result '
+'4. Return the first comment'
+),
+llm=ChatOpenAI(
+base_url='https://api.novita.ai/openai',
+model='deepseek/deepseek-v3-0324',
+api_key=SecretStr(api_key),
+),
+use_vision=False,
+)
+await agent.run()
+if __name__ == '__main__':
+asyncio.run(run_search())
+```
+### ​Creating Your Own Tasks
+- You can customize the task parameter to perform a wide variety of web tasks:
+Copy
+```
+task="Compare the price of gpt-4o and DeepSeek-V3"
+```
+- For more complex tasks, you might want to enable vision capabilities:
+Copy
+```
+agent = Agent(
+task="Find and summarize the latest news about AI on TechCrunch",
+llm=ChatOpenAI(
+base_url='https://api.novita.ai/openai',
+model='deepseek/deepseek-v3-0324',
+api_key=SecretStr(api_key),
+),
+use_vision=True,
+)
+```
+Was this page helpful? Yes No DeepSearcher OWL ⌘ I

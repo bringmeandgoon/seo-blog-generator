@@ -1,0 +1,107 @@
+Source: https://novita.ai/docs/guides/owl
+============================================================
+
+- OWL - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationIntegrationsOWLGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- IntegrationsClaude Code Integration Guide
+- OpenAI Agents SDK
+- AnythingLLM
+- Dify
+- Helicone
+- Hugging Face
+- Langflow
+- Continue
+- Cursor
+- LangChain
+- Skyvern
+- LobeChat
+- AI Gradio
+- Langfuse
+- MLflow
+- Verba
+- Portkey
+- DocsGPT
+- LlamaIndex
+- LoLLMS WebUI
+- CodeCompanion
+- Page Assist
+- DeepSearcher
+- Browser Use
+- OWL
+- LiteLLM
+- ChatBox
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - How to Integrate Novita AI with RAGFlow
+- Step 1: Pre-Configuration Setup
+- Step 2: Install OWL
+- Step 3: Configure OWL
+- Step 4: View Results
+OWL is an open-source framework for multi-agent collaboration that specializes in real-world task automation, built on the CAMEL-AI Foundation. By integrating with various AI models, OWL combines dynamic agent interactions with powerful toolkits for online search, browser automation, document processing, and code execution. This framework enables more natural, efficient, and robust task automation across diverse domains, delivering actionable insights tailored to your specific needs.
+This guide will enable you to seamlessly integrate Novita AI with OWL and elevate your AI-driven processes for faster, smarter outcomes.
+## ​How to Integrate Novita AI with RAGFlow
+### ​Step 1: Pre-Configuration Setup
+- Access the API Endpoint
+- Use the official API endpoint: https://api.novita.ai/openai.
+- Create an API Key
+- Visit the key management page and select Add New Key to generate your API key.
+- Keep your API key safe.
+Note: API keys are securely encrypted on the server. If you lose it, you’ll need to delete the old key and create a new one.
+- Identify the Model ID
+- meta-llama/llama-4-scout-17b-16e-instruct
+### ​Step 2: Install OWL
+- To begin, download and install OWL by following the step-by-step instructions on the Github: https://github.com/camel-ai/owl.
+### ​Step 3: Configure OWL
+- Prepare OWL for use by setting up environment variables and adding your API key. Run the following commands in your terminal:
+Copy
+```
+cd owl
+cp .env_template .env
+```
+- Start OWL and specify your task by executing:
+Copy
+```
+python examples/run_novita_ai.py
+```
+### ​Step 4: View Results
+- Terminal Output
+- Once launched, OWL will display the execution results directly in the terminal window.
+- Web Interface
+- For a more intuitive experience, use OWL’s web-based interface. Launch it by running:
+Copy
+```
+cd owl
+python webapp.py
+```
+- Steps to use the Web UI:
+Select run_novita_ai from the left-hand menu and go to the Environment Variable Management tab on the right and input your NOVITA_API_KEY.
+- Click Run to execute your task.
+- To perform a new task, update the input field and click Run again.
+- Results will be displayed in the terminal, or a new file will be generated in the root directory, depending on the task.
+- Alternatively, you can directly input your desired task into the content box and click the Run button to execute it.
+Was this page helpful? Yes No Browser Use LiteLLM ⌘ I

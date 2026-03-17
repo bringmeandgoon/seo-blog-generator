@@ -1,0 +1,144 @@
+Source: https://novita.ai/docs/api-reference/model-apis-fish-audio-text-to-speech
+============================================================
+
+- Text to Speech API | Fish AudioSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationAudioFish Audio Text to SpeechGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video Generator
+- AudioPOSTMiniMax Speech-02-hd Text to Speech
+- POSTMiniMax Speech-02-hd Async Long TTS
+- POSTMiniMax Speech-02-turbo Text to Speech
+- POSTMiniMax Speech-02-turbo Async Long TTS
+- POSTMiniMax Speech-2.5-hd-preview Text to Speech
+- POSTMiniMax Speech-2.5-hd-preview Async Long TTS
+- POSTMiniMax Speech-2.5-turbo-preview Text to Speech
+- POSTMiniMax Speech-2.5-turbo-preview Async Long TTS
+- POSTMiniMax Speech-2.6-hd Text to Speech
+- POSTMiniMax Speech-2.6-hd Async Long TTS
+- POSTMiniMax Speech-2.6-turbo Text to Speech
+- POSTMiniMax Speech-2.6-turbo Async Long TTS
+- POSTMiniMax Speech 2.8 Turbo Async Text-to-Speech
+- POSTMiniMax Speech 2.8 HD Async Text-to-Speech
+- POSTMiniMax Speech 2.8 Turbo Sync Text-to-Speech
+- POSTMiniMax Speech 2.8 HD Sync Text-to-Speech
+- POSTMiniMax Voice Cloning
+- POSTFish Audio Text to Speech
+- POSTFish Audio Voice Cloning
+- POSTText to Speech
+- POSTGLM Text to Speech
+- POSTGLM Audio to Text
+- POSTGLM Voice Clone
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Fish Audio Text to Speech cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v4beta/txt2speech \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"text": " ",
+"temperature": 123,
+"top_p": 123,
+"references": {
+"text": " "
+},
+"reference_id": {},
+"prosody": {
+"speed": 123,
+"volume": 123
+},
+"chunk_length": 123,
+"normalize": true,
+"format": {},
+"sample_rate": {},
+"mp3_bitrate": {},
+"opus_bitrate": {},
+"latency": {}
+}
+'
+```
+POST / v4beta / txt2speech Try it Fish Audio Text to Speech cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v4beta/txt2speech \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"text": " ",
+"temperature": 123,
+"top_p": 123,
+"references": {
+"text": " "
+},
+"reference_id": {},
+"prosody": {
+"speed": 123,
+"volume": 123
+},
+"chunk_length": 123,
+"normalize": true,
+"format": {},
+"sample_rate": {},
+"mp3_bitrate": {},
+"opus_bitrate": {},
+"latency": {}
+}
+'
+```
+For best results, upload reference audio using the create model before using this one. This improves speech quality and reduces latency.
+Fish Audio converts text into speech.
+Audio formats supported:
+- WAV / PCM
+Sample Rate: 8kHz, 16kHz, 24kHz, 32kHz, 44.1kHz
+- Default Sample Rate: 44.1kHz
+- 16-bit, mono
+- MP3
+Sample Rate: 32kHz, 44.1kHz
+- Default Sample Rate: 44.1kHz
+- mono
+- Bitrate: 64kbps, 128kbps (default), 192kbps
+- Opus
+Sample Rate: 48kHz
+- Default Sample Rate: 48kHz
+- mono
+- Bitrate: -1000 (auto), 24kbps, 32kbps (default), 48kbps, 64kbps
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+​ model enum<string> default: "s1" Specify which TTS model to use. Only supports model: s1 .
+## ​Request Body
+​ text string required Text to be converted to speech.
+​ temperature number Controls randomness in the speech generation. Higher values (e.g., 1.0) make the output more random, while lower values (e.g., 0.1) make it more deterministic. We recommend 0.9 for s1 model. Required range: 0 <= x <= 1
+​ top_p number Controls diversity via nucleus sampling. Lower values (e.g., 0.1) make the output more focused, while higher values (e.g., 1.0) allow more diversity. We recommend 0.9 for s1 model. Required range: 0 <= x <= 1
+​ references ReferenceAudio · object[] | null References to be used for the speech, this requires MessagePack serialization, this will override reference_voices and reference_texts. Show properties ​ audio file required Reference audio file. ​ text string required Reference text corresponding to the audio.
+​ reference_id string | null ID of the reference model to be used for the speech.
+​ prosody ProsodyControl · object Prosody to be used for the speech. Show properties ​ speed number default: 1 Speech speed control. ​ volume number default: 0 Speech volume control.
+​ chunk_length integer default: 200 Chunk length to be used for the speech. Required range: 100 <= x <= 300
+​ normalize boolean default: true Whether to normalize the speech, this will reduce the latency but may reduce performance on numbers and dates.
+​ format enum<string> default: "mp3" Format to be used for the speech. Available options: wav , pcm , mp3 , opus
+​ sample_rate integer | null Sample rate to be used for the speech.
+​ mp3_bitrate enum<integer> default: 128 MP3 Bitrate to be used for the speech. Available options: 64 , 128 , 192
+​ opus_bitrate enum<integer> default: 32 Opus Bitrate to be used for the speech. Available options: -1000 , 24 , 32 , 48 , 64
+​ latency enum<string> default: "normal" Latency to be used for the speech, balanced will reduce the latency but may lead to performance degradation. Available options: normal , balanced
+## ​Response
+The API will directly return the audio stream in the format specified by the format parameter (default: mp3). Was this page helpful? Yes No MiniMax Voice Cloning Fish Audio Voice Cloning ⌘ I

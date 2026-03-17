@@ -1,0 +1,125 @@
+Source: https://novita.ai/docs/guides/huggingface
+============================================================
+
+- Hugging Face - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationIntegrationsHugging FaceGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- IntegrationsClaude Code Integration Guide
+- OpenAI Agents SDK
+- AnythingLLM
+- Dify
+- Helicone
+- Hugging Face
+- Langflow
+- Continue
+- Cursor
+- LangChain
+- Skyvern
+- LobeChat
+- AI Gradio
+- Langfuse
+- MLflow
+- Verba
+- Portkey
+- DocsGPT
+- LlamaIndex
+- LoLLMS WebUI
+- CodeCompanion
+- Page Assist
+- DeepSearcher
+- Browser Use
+- OWL
+- LiteLLM
+- ChatBox
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Using Novita AI on Hugging Face in the Website UI
+- Step 1: Configure API Keys
+- Step 2: Choose Inference API Modes
+- Step 3: Explore Compatible Providers on Model Pages
+- Using Huggingface_hub from Python by the Client SDKs
+- Step 1: Install Huggingface_hub
+- Step 2: Call model API in Python
+- Using Huggingface_hub from JS by the Client SDKs
+Novita AI’s integration with Hugging Face Platform enables advanced serverless inference capabilities. This provides direct access to Hub model pages through optimized infrastructure, offering developers a streamlined setup experience. With full support for Hugging Face’s JavaScript and Python SDKs, Novita AI simplifies model deployment and scaling without infrastructure management.
+Our comprehensive guide walks you through Novita AI implementation on Hugging Face, covering both web interface and SDK integration methods.
+## ​Using Novita AI on Hugging Face in the Website UI
+### ​Step 1: Configure API Keys
+- Access your account settings dashboard to configure your API keys.
+- Input your Novita AI authentication credentials into the Hugging Face platform.
+### ​Step 2: Choose Inference API Modes
+- Custom Key Mode: Calls are sent directly to the inference provider, utilizing your own API key.
+- HF-Routed Mode: In this mode, no provider token is required. Charges are applied to your Hugging Face account instead of the provider’s account.
+### ​Step 3: Explore Compatible Providers on Model Pages
+- Model pages display third-party inference providers compatible with the selected model (the ones that are compatible with the current model, sorted by user preference).
+## ​Using Huggingface_hub from Python by the Client SDKs
+### ​Step 1: Install Huggingface_hub
+Copy
+```
+pip install huggingface_hub
+```
+### ​Step 2: Call model API in Python
+Copy
+```
+from huggingface_hub import InferenceClient
+client = InferenceClient(
+provider="novita",
+api_key="xxxxxxxxxxxxxxxxxxxxxxxx", # optional, required from 2nd calling, get from https://novita.ai/settings/key-management
+)
+# an example question
+messages = [
+dict(
+role="user",
+content='Sally (a girl) has 3 brothers. Each brother has 2 sisters. How many sisters does Sally have?',
+),
+]
+completion = client.chat.completions.create(
+model="deepseek-ai/DeepSeek-R1",
+messages=messages,
+max_tokens=512,
+)
+print(completion.choices[0].message)
+```
+## ​Using Huggingface_hub from JS by the Client SDKs
+Copy
+```
+import { HfInference } from "@huggingface/inference";
+const client = new HfInference("xxxxxxxxxxxxxxxxxxxxxxxx");
+const chatCompletion = await client.chatCompletion({
+model: "deepseek-ai/DeepSeek-R1",
+messages: [
+{
+role: "user",
+content: "What is the capital of France?"
+}
+],
+provider: "novita",
+max_tokens: 500
+});
+console.log(chatCompletion.choices[0].message)
+```
+Was this page helpful? Yes No Helicone Langflow ⌘ I

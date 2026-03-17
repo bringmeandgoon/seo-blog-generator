@@ -1,0 +1,181 @@
+Source: https://novita.ai/docs/api-reference/api-reference-overview
+============================================================
+
+- API Reference Overview - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationOverviewAPI Reference OverviewGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU Instance
+- Serverless GPUs
+On this page - Welcome to Novita AI API Reference
+- Base URLs
+- API Groups
+- Basic APIs
+- Model APIs
+- LLM APIs
+- Image, Audio and Video APIs
+- GPU APIs
+- GPU Instance
+- Serverless GPUs
+- Quick Start
+- 1. Get Your API Key
+- 2. Make Your First Request
+- 3. Explore SDKs
+- Authentication
+- Error Handling
+- Common Use Cases
+- Need Help?
+## ​Welcome to Novita AI API Reference
+This documentation provides comprehensive reference for all Novita AI APIs. Our APIs are organized into several categories:
+## ​Base URLs
+All API requests should be made to:
+Copy
+```
+https://api.novita.ai
+```
+OpenAI-Compatible Endpoints:
+Copy
+```
+https://api.novita.ai/openai
+```
+## ​API Groups
+### ​Basic APIs
+Fundamental APIs for authentication, billing, and account management.
+EndpointDescriptionFile Path
+AuthenticationAPI key authenticationapi-reference/basic-authentication.mdx
+Error CodesUnified error response formatapi-reference/basic-error-code.mdx
+Get User BalanceQuery account balanceapi-reference/basic-get-user-balance.mdx
+Query Monthly BillQuery monthly billingapi-reference/basic-query-monthly-bill.mdx
+Query Usage-Based BillingQuery usage-based billingapi-reference/basic-query-usage-based-billing.mdx
+Query Fixed-Term BillingQuery fixed-term billingapi-reference/basic-query-fixed-term-billing.mdx
+### ​Model APIs
+#### ​LLM APIs
+Large Language Model APIs with OpenAI compatibility.
+EndpointDescriptionFile Path
+Create Chat CompletionCreate a chat completionapi-reference/model-apis-llm-create-chat-completion.mdx
+Create CompletionCreate a completionapi-reference/model-apis-llm-create-completion.mdx
+Create EmbeddingsCreate embeddingsapi-reference/model-apis-llm-create-embeddings.mdx
+Create RerankRerank search resultsapi-reference/model-apis-llm-create-rerank.mdx
+List ModelsList available modelsapi-reference/model-apis-llm-list-models.mdx
+Retrieve ModelGet model detailsapi-reference/model-apis-llm-retrieve-model.mdx
+Batch Operations:
+EndpointDescriptionFile Path
+Create BatchCreate a batch jobapi-reference/model-apis-llm-create-batch.mdx
+Retrieve BatchGet batch job statusapi-reference/model-apis-llm-retrieve-batch.mdx
+Cancel BatchCancel a batch jobapi-reference/model-apis-llm-cancel-batch.mdx
+List BatchesList all batch jobsapi-reference/model-apis-llm-list-batches.mdx
+Upload Batch Input FileUpload file for batchapi-reference/model-apis-llm-upload-batch-input-file.mdx
+List FilesList uploaded filesapi-reference/model-apis-llm-list-files.mdx
+Query FileGet file metadataapi-reference/model-apis-llm-query-file.mdx
+Delete FileDelete a fileapi-reference/model-apis-llm-delete-file.mdx
+Retrieve File ContentGet file contentapi-reference/model-apis-llm-retrieve-file-content.mdx
+#### ​Image, Audio and Video APIs
+Multimodal AI APIs for content generation and editing.
+Core Endpoints:
+EndpointDescriptionFile Path
+WebhookWebhook configurationapi-reference/model-apis-webhook.mdx
+Get ModelQuery available modelsapi-reference/model-apis-get-model.mdx
+Task ResultGet async task resultsapi-reference/model-apis-task-result.mdx
+Image Generation:
+EndpointDescriptionFile Path
+Text to ImageGenerate images from textapi-reference/model-apis-txt2img.mdx
+Image to ImageTransform existing imagesapi-reference/model-apis-img2img.mdx
+ReimagineReimagine compositionsapi-reference/model-apis-reimagine.mdx
+FLUX.1 SchnellFast image generationapi-reference/model-apis-flux-1-schnell.mdx
+Seedream 3.0High-quality generationapi-reference/model-apis-seedream-3-0-t2i.mdx
+Seedream 4.0Advanced generationapi-reference/model-apis-seedream-4-0.mdx
+Qwen ImageQwen image generationapi-reference/model-apis-qwen-image-txt2img.mdx
+Image Editing:
+EndpointDescriptionFile Path
+UpscaleImage upscalingapi-reference/model-apis-upscale.mdx
+Remove BackgroundBackground removalapi-reference/model-apis-remove-background.mdx
+Replace BackgroundBackground replacementapi-reference/model-apis-replace-background.mdx
+InpaintingImage inpaintingapi-reference/model-apis-inpainting.mdx
+Image to PromptReverse engineeringapi-reference/model-apis-image-to-prompt.mdx
+Video Generation:
+EndpointDescriptionFile Path
+Text to VideoGenerate videos from textapi-reference/model-apis-txt2video.mdx
+Image to VideoAnimate imagesapi-reference/model-apis-img2video.mdx
+Hunyuan Video FastFast video generationapi-reference/model-apis-hunyuan-video-fast.mdx
+Wan 2.5 T2V PreviewWan 2.5 previewapi-reference/model-apis-wan-2.5-t2v-preview.mdx
+Kling V2.1 MasterKling V2.1 masterapi-reference/model-apis-kling-v2.1-t2v-master.mdx
+Minimax Hailuo 02Minimax Hailuoapi-reference/model-apis-minimax-hailuo-02.mdx
+Vidu Q1Vidu Q1 generationapi-reference/model-apis-vidu-q1-text2video.mdx
+Audio:
+EndpointDescriptionFile Path
+Minimax Speech 02Minimax TTS HDapi-reference/model-apis-minimax-speech-02-hd.mdx
+Minimax Speech 2.8Minimax 2.8 HDapi-reference/model-apis-minimax-speech-2.8-hd.mdx
+Fish Audio TTSFish Audio TTSapi-reference/model-apis-fish-audio-text-to-speech.mdx
+GLM TTSGLM text-to-speechapi-reference/model-apis-glm-tts.mdx
+GLM ASRGLM speech recognitionapi-reference/model-apis-glm-asr.mdx
+### ​GPU APIs
+GPU instance management and serverless GPU endpoints.
+#### ​GPU Instance
+EndpointDescriptionFile Path
+Create InstanceCreate GPU instanceapi-reference/gpu-instance-create-instance.mdx
+List InstancesList all instancesapi-reference/gpu-instance-list-instances.mdx
+Get InstanceGet instance detailsapi-reference/gpu-instance-get-instance.mdx
+Start InstanceStart instanceapi-reference/gpu-instance-start-instance.mdx
+Stop InstanceStop instanceapi-reference/gpu-instance-stop-instance.mdx
+Delete InstanceDelete instanceapi-reference/gpu-instance-delete-instance.mdx
+Template Management:
+EndpointDescriptionFile Path
+Create TemplateCreate templateapi-reference/gpu-instance-create-template.mdx
+List TemplatesList templatesapi-reference/gpu-instance-list-templates.mdx
+Get TemplateGet template detailsapi-reference/gpu-instance-get-template.mdx
+Product & Pricing:
+EndpointDescriptionFile Path
+List ProductsList GPU productsapi-reference/gpu-instance-list-products.mdx
+#### ​Serverless GPUs
+EndpointDescriptionFile Path
+Create EndpointCreate endpointapi-reference/serverless-create-endpoint.mdx
+List EndpointList endpointsapi-reference/serverless-list-endpoint.mdx
+Get EndpointGet endpoint detailsapi-reference/serverless-get-endpoint.mdx
+Update EndpointUpdate endpointapi-reference/serverless-update-endpoint.mdx
+Delete EndpointDelete endpointapi-reference/serverless-delete-endpoint.mdx
+## ​Quick Start
+### ​1. Get Your API Key
+Visit the settings page to create and manage your API keys.
+### ​2. Make Your First Request
+Copy
+```
+curl --location 'https://api.novita.ai/v1/models' \
+--header 'Authorization: Bearer {{API Key}}'
+```
+### ​3. Explore SDKs
+We provide official SDKs for popular languages:
+- Python SDK
+- JavaScript/TypeScript SDK
+## ​Authentication
+All API requests require authentication using Bearer tokens. Include your API key in the Authorization header:
+Copy
+```
+Authorization: Bearer {{API Key}}
+```
+See Authentication for details.
+## ​Error Handling
+Novita AI uses standard HTTP status codes and returns errors in a unified format. See Error Codes for complete error reference.
+## ​Common Use Cases
+User QueryGo To
+”How to get started?”Quick Start + Authentication
+”API not working, error 401”Error Codes
+”Generate images from text”Text to Image
+”Create chatbot with LLM”Chat Completion
+”Generate videos”Text to Video
+”Deploy GPU instance”Create Instance
+”Check my balance”Get User Balance
+”OpenAI compatible API”LLM API Guide
+## ​Need Help?
+- Discord Community
+- Email Support
+- Console
+Was this page helpful? Yes No Authentication ⌘ I

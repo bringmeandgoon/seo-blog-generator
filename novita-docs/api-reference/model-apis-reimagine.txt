@@ -1,0 +1,130 @@
+Source: https://novita.ai/docs/api-reference/model-apis-reimagine
+============================================================
+
+- Reimagine - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImage GeneratorReimagineGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image GeneratorPOSTText to Image
+- POSTImage to Image
+- POSTReimagine
+- POSTFLUX.1 [schnell] Text to Image
+- POSTFLUX.1 Kontext Dev
+- POSTFLUX.1 Kontext Pro
+- POSTFLUX.1 Kontext Max
+- POSTSeedream 3.0 Text to Image
+- POSTSeedream 4.0
+- POSTSeedream 4.5
+- POSTSeedream 5.0 lite
+- POSTQwen-Image Text to Image
+- POSTHunyuan Image 3
+- POSTFlux 2 Dev Image Gen
+- POSTFlux 2 Flex Image Gen
+- POSTFlux 2 Pro Image Gen
+- POSTZ Image Turbo LoRA
+- POSTZ Image Turbo
+- POSTGLM Image Generation
+- Image Editor
+- Video Generator
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Reimagine cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/reimagine \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"extra": {
+"response_image_type": " ",
+"enterprise_plan": {
+"enabled": true
+}
+},
+"image_file": " "
+}
+'
+```
+200 Copy
+```
+{
+"image_file": " ",
+"image_type": " "
+}
+```
+POST / v3 / reimagine Reimagine cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/reimagine \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"extra": {
+"response_image_type": " ",
+"enterprise_plan": {
+"enabled": true
+}
+},
+"image_file": " "
+}
+'
+```
+200 Copy
+```
+{
+"image_file": " ",
+"image_type": " "
+}
+```
+This feature allows you to automatically generate variations of a single image.
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ extra object Optional extra parameters for the request. Show properties ​ response_image_type string The returned image type. Default is png.Enum: png, webp, jpeg ​ enterprise_plan object Dedicated Endpoints settings, which only take effect for users who have already subscribed to the Dedicated Endpoints Documentation . Show properties ​ enabled boolean Set to true to schedule this task to use your Dedicated Endpoints’s dedicated resources. Default is false.
+​ image_file string required The base64 of original image, with a maximum resolution of 1024 x 1024 and a maximum file size of 30 Mb.
+## ​Response
+​ image_file string The Base64-encoded content of the returned image.
+​ image_type string The returned image type.
+Enum: png , webp , jpeg
+## ​Example
+This API allows you to automatically generate multiple variations of a single image.
+Try it in playground .
+Request:
+Copy
+```
+curl --location --request POST 'https://api.novita.ai/v3/reimagine' \
+--header 'Authorization: Bearer {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+"image_file":"{{Base64 encoded image}}"
+}'
+```
+HTTP status codes in the 2xx range indicate that the request has been successfully accepted. A code of 400 signifies a request parameter error, while status codes in the 5xx range indicate internal server errors.
+You can retrieve the image URL in the image_file field of the response in base64 format.
+Response:
+Copy
+```
+{
+"image_file": "{{Base64 encoded image}}",
+"image_type": "png"
+}
+```
+Was this page helpful? Yes No Image to Image FLUX.1 [schnell] Text to Image ⌘ I

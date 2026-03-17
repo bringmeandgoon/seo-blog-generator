@@ -1,0 +1,121 @@
+Source: https://novita.ai/docs/api-reference/model-apis-get-training-images-url
+============================================================
+
+- Get Images URL - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationTrainingGet Images URLGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video Generator
+- Audio
+- Face Editor
+- TrainingPOSTGet Images URL
+- LoRA for Style Training
+- GETList LoRA Training Task
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Get Images URL cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/assets/training_dataset \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"file_extension": " "
+}
+'
+```
+200 Copy
+```
+{
+"assets_id": 123,
+"upload_url": " ",
+"method": " ",
+"headers": {
+"Host": {
+"values": [
+" "
+]
+}
+}
+}
+```
+POST / v3 / assets / training_dataset Try it Get Images URL cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/assets/training_dataset \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"file_extension": " "
+}
+'
+```
+200 Copy
+```
+{
+"assets_id": 123,
+"upload_url": " ",
+"method": " ",
+"headers": {
+"Host": {
+"values": [
+" "
+]
+}
+}
+}
+```
+This API provides an S3 pre-signed uploading URL for training images.
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ file_extension string required Enum: png , webp , jpeg
+## ​Response
+​ assets_id integer The asset ID.
+​ upload_url string The S3 pre-signed uploading URL.
+​ method string The method for uploading.
+Enum: PUT
+​ headers object Show properties ​ Host object Show properties ​ values string[] The host value.
+## ​Example
+request
+Copy
+```
+curl --location 'https://api.novita.ai/v3/assets/training_dataset' \
+--header 'Authorization: Bearer {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data '{
+"file_extension": "png"
+}'
+```
+response
+Copy
+```
+{
+"assets_id": 100024,
+"upload_url": "https://faas-training-dataset.s3.ap-southeast-1.amazonaws.com/test/743567e210ff505ce5502cfb46659c8e.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIASVPYCN6LRCW3SOUV%2F20231102%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-Date=20231102T060519Z&X-Amz-Expires=120&X-Amz-SignedHeaders=host&x-id=PutObject&X-Amz-Signature=781d2156b707b7cfa87d94fb2836838e114c3afe4588368b9503c618ac125a67",
+"method": "PUT",
+"headers": {
+"Host": {
+"values": ["faas-training-dataset.s3.ap-southeast-1.amazonaws.com"]
+}
+}
+}
+```
+Was this page helpful? Yes No Video Merge Face LoRA for Style Training ⌘ I

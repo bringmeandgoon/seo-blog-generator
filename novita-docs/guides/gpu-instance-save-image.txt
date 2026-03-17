@@ -1,0 +1,48 @@
+Source: https://novita.ai/docs/guides/gpu-instance-save-image
+============================================================
+
+- Save Image - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationGuidesSave ImageGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU InstanceOverview
+- Quickstart
+- GuidesGPU Instance Pricing
+- Edit Instance
+- Upgrade Instance
+- Save Image
+- How to Choose a GPU?
+- Jupyter Lab
+- Image Prewarm
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+Novita AI GPU instance supports the “Save Image” feature, which allows you to export the current instance as a Docker image.
+For instance migration scenarios , you can first save the current instance as an image, and then specify the exported Docker image address when creating an instance in another region.
+- To ensure the integrity of the exported Docker image, please make sure the instance has been exited. You can also stop the instance by clicking “More Operations - Stop”.
+- For instances in the “exited” state, you can click the “More Operations - Save Image” button at the bottom right corner of the instance to save the image.
+- In the pop-up form, input the “Image Path”, for private repositories, include the “Container Registry Credentials”, and then click the “Save” button.
+- You can view the progress of the “Save Image” job on the Jobs page.
+Was this page helpful? Yes No Upgrade Instance How to Choose a GPU? ⌘ I

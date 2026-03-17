@@ -1,0 +1,54 @@
+Source: https://novita.ai/docs/api-reference/serverless-delete-endpoint
+============================================================
+
+- Delete Endpoint - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationServerless GPUsDelete EndpointGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU Instance
+- Serverless GPUsGETGet Endpoint Parameter Limit Ranges
+- POSTCreate Endpoint
+- GETList Endpoints
+- GETGet Endpoint
+- POSTUpdate Endpoint
+- POSTDelete Endpoint
+Delete Endpoint cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/endpoint/delete \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"name": " "
+}
+'
+```
+POST / gpu-instance / openapi / v1 / endpoint / delete Try it Delete Endpoint cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/endpoint/delete \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"name": " "
+}
+'
+```
+## ​Description
+After deleting an endpoint, all worker processes associated with this endpoint will be automatically removed. Please proceed with caution.
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ name string required The ID of the endpoint to delete. Was this page helpful? Yes No Update Endpoint ⌘ I

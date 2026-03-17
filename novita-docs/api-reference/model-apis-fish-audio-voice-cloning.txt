@@ -1,0 +1,225 @@
+Source: https://novita.ai/docs/api-reference/model-apis-fish-audio-voice-cloning
+============================================================
+
+- Create Voice Model API | Fish AudioSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationAudioFish Audio Voice CloningGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video Generator
+- AudioPOSTMiniMax Speech-02-hd Text to Speech
+- POSTMiniMax Speech-02-hd Async Long TTS
+- POSTMiniMax Speech-02-turbo Text to Speech
+- POSTMiniMax Speech-02-turbo Async Long TTS
+- POSTMiniMax Speech-2.5-hd-preview Text to Speech
+- POSTMiniMax Speech-2.5-hd-preview Async Long TTS
+- POSTMiniMax Speech-2.5-turbo-preview Text to Speech
+- POSTMiniMax Speech-2.5-turbo-preview Async Long TTS
+- POSTMiniMax Speech-2.6-hd Text to Speech
+- POSTMiniMax Speech-2.6-hd Async Long TTS
+- POSTMiniMax Speech-2.6-turbo Text to Speech
+- POSTMiniMax Speech-2.6-turbo Async Long TTS
+- POSTMiniMax Speech 2.8 Turbo Async Text-to-Speech
+- POSTMiniMax Speech 2.8 HD Async Text-to-Speech
+- POSTMiniMax Speech 2.8 Turbo Sync Text-to-Speech
+- POSTMiniMax Speech 2.8 HD Sync Text-to-Speech
+- POSTMiniMax Voice Cloning
+- POSTFish Audio Text to Speech
+- POSTFish Audio Voice Cloning
+- POSTText to Speech
+- POSTGLM Text to Speech
+- POSTGLM Audio to Text
+- POSTGLM Voice Clone
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Fish Audio Voice Cloning cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v4beta/model \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"type": {},
+"title": " ",
+"train_mode": {},
+"voices": [
+null
+],
+"visibility": {},
+"description": {},
+"cover_image": {},
+"texts": [
+" "
+],
+"tags": [
+" "
+],
+"enhance_audio_quality": true
+}
+'
+```
+200 Copy
+```
+{
+"_id": " ",
+"type": {},
+"title": " ",
+"description": " ",
+"cover_image": " ",
+"state": {},
+"tags": [
+" "
+],
+"created_at": {},
+"updated_at": {},
+"visibility": {},
+"like_count": 123,
+"mark_count": 123,
+"shared_count": 123,
+"task_count": 123,
+"author": {
+"_id": " ",
+"nickname": " ",
+"avatar": " "
+},
+"train_mode": {},
+"samples": [
+{
+"title": " ",
+"text": " ",
+"task_id": " ",
+"audio": " "
+}
+],
+"languages": [
+" "
+],
+"lock_visibility": true,
+"unliked": true,
+"liked": true,
+"marked": true
+}
+```
+POST / v4beta / model Try it Fish Audio Voice Cloning cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v4beta/model \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"type": {},
+"title": " ",
+"train_mode": {},
+"voices": [
+null
+],
+"visibility": {},
+"description": {},
+"cover_image": {},
+"texts": [
+" "
+],
+"tags": [
+" "
+],
+"enhance_audio_quality": true
+}
+'
+```
+200 Copy
+```
+{
+"_id": " ",
+"type": {},
+"title": " ",
+"description": " ",
+"cover_image": " ",
+"state": {},
+"tags": [
+" "
+],
+"created_at": {},
+"updated_at": {},
+"visibility": {},
+"like_count": 123,
+"mark_count": 123,
+"shared_count": 123,
+"task_count": 123,
+"author": {
+"_id": " ",
+"nickname": " ",
+"avatar": " "
+},
+"train_mode": {},
+"samples": [
+{
+"title": " ",
+"text": " ",
+"task_id": " ",
+"audio": " "
+}
+],
+"languages": [
+" "
+],
+"lock_visibility": true,
+"unliked": true,
+"liked": true,
+"marked": true
+}
+```
+Fish Audio API for creating a voice model (voice cloning).
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ type enum<string> required Model type, tts is for text to speech. Available options: tts Allowed value: "tts"
+​ title string required Model title or name.
+​ train_mode enum<string> required Model train mode, for TTS model, fast means model instantly available after creation. Available options: fast Allowed value: "fast"
+​ voices file[] required Upload voices files that will be used to tune the model.
+​ visibility enum<string> default: "public" Model visibility, public will be shown in the discovery page, unlist allows anyone with the link to access, private only be visible to the creator. Available options: public , unlist , private
+​ description string | null Model description.
+​ cover_image file | null Model cover image, this is required if the model is public.
+​ texts string[] Texts corresponding to the voices, if unspecified, ASR will be performed on the voices.
+​ tags string[] Model tags.
+​ enhance_audio_quality boolean default: false Enhance audio quality.
+## ​Response
+​ _id string required Unique identifier for the created model.
+​ type enum<string> required Model type. Available options: svc , tts
+​ title string required Model title or name.
+​ description string required Model description.
+​ cover_image string required URL of the model cover image.
+​ state enum<string> required Current state of the model. Available options: created , training , trained , failed
+​ tags string[] required Model tags.
+​ created_at string<date-time> required Timestamp when the model was created.
+​ updated_at string<date-time> required Timestamp when the model was last updated.
+​ visibility enum<string> required Model visibility setting. Available options: public , unlist , private
+​ like_count integer required Number of likes the model has received.
+​ mark_count integer required Number of marks/bookmarks the model has received.
+​ shared_count integer required Number of times the model has been shared.
+​ task_count integer required Number of tasks associated with the model.
+​ author AuthorEntity · object required Information about the model author. Show properties ​ _id string required Author’s unique identifier. ​ nickname string required Author’s nickname. ​ avatar string required URL of the author’s avatar image.
+​ train_mode enum<string> default: "full" Training mode used for the model. Available options: fast , full
+​ samples SampleEntity · object[] Sample data associated with the model. Show properties ​ title string required Sample title. ​ text string required Text content of the sample. ​ task_id string required Task identifier for the sample. ​ audio string required URL of the sample audio file.
+​ languages string[] Languages supported by the model.
+​ lock_visibility boolean default: false Whether the visibility setting is locked.
+​ unliked boolean default: false Whether the current user has unliked the model.
+​ liked boolean default: false Whether the current user has liked the model.
+​ marked boolean default: false Whether the current user has marked/bookmarked the model. Was this page helpful? Yes No Fish Audio Text to Speech Text to Speech ⌘ I

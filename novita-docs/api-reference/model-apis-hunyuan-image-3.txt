@@ -1,0 +1,96 @@
+Source: https://novita.ai/docs/api-reference/model-apis-hunyuan-image-3
+============================================================
+
+- Novita AI Hunyuan Image 3 | Generate imageSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImage GeneratorHunyuan Image 3GuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image GeneratorPOSTText to Image
+- POSTImage to Image
+- POSTReimagine
+- POSTFLUX.1 [schnell] Text to Image
+- POSTFLUX.1 Kontext Dev
+- POSTFLUX.1 Kontext Pro
+- POSTFLUX.1 Kontext Max
+- POSTSeedream 3.0 Text to Image
+- POSTSeedream 4.0
+- POSTSeedream 4.5
+- POSTSeedream 5.0 lite
+- POSTQwen-Image Text to Image
+- POSTHunyuan Image 3
+- POSTFlux 2 Dev Image Gen
+- POSTFlux 2 Flex Image Gen
+- POSTFlux 2 Pro Image Gen
+- POSTZ Image Turbo LoRA
+- POSTZ Image Turbo
+- POSTGLM Image Generation
+- Image Editor
+- Video Generator
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Hunyuan Image 3 cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/hunyuan-image-3 \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"prompt": " ",
+"size": " ",
+"seed": 123
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+POST / v3 / async / hunyuan-image-3 Try it Hunyuan Image 3 cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/hunyuan-image-3 \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"prompt": " ",
+"size": " ",
+"seed": 123
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+Hunyuan Image 3.0 is a state-of-the-art text-to-image generation model. By simply providing a written prompt, you can create high-quality images that capture the essence of your story, resonate emotionally, and elevate your creative output.
+This is an asynchronous API; only the task_id will be returned. You should use the task_id to request the Task Result API to retrieve the generation results.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ prompt string required The positive prompt for the generation.
+​ size string The size of the generated media in pixels (width*height). Range [256 ~ 1536 per dimension]. Default is 1024*1024 .
+​ seed integer The random seed to use for the generation. -1 means a random seed will be used. Range [-1 ~ 2147483647]. Default is -1 .
+## ​Response
+​ task_id string required Use the task_id to request the Task Result API to retrieve the generated outputs. Was this page helpful? Yes No Qwen-Image Text to Image Flux 2 Dev Image Gen ⌘ I

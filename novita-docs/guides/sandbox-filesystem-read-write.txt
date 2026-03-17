@@ -1,0 +1,78 @@
+Source: https://novita.ai/docs/guides/sandbox-filesystem-read-write
+============================================================
+
+- Read & write files - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationFilesystemRead & write filesGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- FilesystemOverview
+- Read & write files
+- Watch sandbox directory for changes
+- Upload data to sandbox
+- Download data from sandbox
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Reading files
+- Writing single files
+- Writing multiple files
+## ​Reading files
+You can read files from the sandbox filesystem using the files.read() method.
+JavaScript & TypeScript Python Copy
+```
+import { Sandbox } from 'novita-sandbox/code-interpreter'
+const sandbox = await Sandbox.create()
+// Create a file in the sandbox for testing
+const filePathInSandbox = '/tmp/test-file'
+await sandbox.files.write(filePathInSandbox, "test-file-content")
+const fileContent = await sandbox.files.read(filePathInSandbox)
+console.log(fileContent)
+await sandbox.kill()
+```
+## ​Writing single files
+You can write single files to the sandbox filesystem using the files.write() method.
+JavaScript & TypeScript Python Copy
+```
+import { Sandbox } from 'novita-sandbox/code-interpreter'
+const sandbox = await Sandbox.create()
+const filePathInSandbox = '/tmp/test-file'
+const result = await sandbox.files.write(filePathInSandbox, "test-file-content")
+console.log(result)
+await sandbox.kill()
+```
+## ​Writing multiple files
+You can also write multiple files to the sandbox filesystem using the files.write() method.
+JavaScript & TypeScript Python Copy
+```
+import { Sandbox } from 'novita-sandbox/code-interpreter'
+const sandbox = await Sandbox.create()
+const result = await sandbox.files.write([
+{ path: '/tmp/test-file-1', data: 'file content 1' },
+{ path: '/tmp/test-file-2', data: 'file content 2' }
+])
+console.log(result)
+await sandbox.kill()
+```
+Was this page helpful? Yes No Overview Watch sandbox directory for changes ⌘ I

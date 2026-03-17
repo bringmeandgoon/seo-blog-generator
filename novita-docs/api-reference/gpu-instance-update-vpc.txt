@@ -1,0 +1,62 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-update-vpc
+============================================================
+
+- Update VPC Network - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationNetworkUpdate VPC NetworkGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- Instance
+- Image
+- Template
+- Product
+- NetworkPOSTCreate VPC Network
+- GETList VPC Networks
+- GETGet VPC Network
+- POSTUpdate VPC Network
+- POSTDelete VPC Network
+- Image Registry
+- Storage
+- Jobs
+- Serverless GPUs
+Update VPC Network cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/network/update \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"networkId": " ",
+"name": " "
+}
+'
+```
+POST / gpu-instance / openapi / v1 / network / update Try it Update VPC Network cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/network/update \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"networkId": " ",
+"name": " "
+}
+'
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ networkId string required Cluster ID. String, length limit: 1-255 characters.
+​ name string Custom network name. String, length limit: 1-30 characters. Was this page helpful? Yes No Get VPC Network Delete VPC Network ⌘ I

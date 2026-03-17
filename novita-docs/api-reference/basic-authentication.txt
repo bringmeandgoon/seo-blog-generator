@@ -1,0 +1,26 @@
+Source: https://novita.ai/docs/api-reference/basic-authentication
+============================================================
+
+- Authentication - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationBasicAuthenticationGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU Instance
+- Serverless GPUs
+The Novita AI API uses API keys in the request headers to authenticate requests. You can view and manage your API keys in settings page .
+Copy
+```
+{
+"Authorization": "Bearer {{API Key}}"
+}
+```
+Was this page helpful? Yes No API Reference Overview API Error Codes ⌘ I

@@ -1,0 +1,37 @@
+Source: https://novita.ai/docs/guides/payment-methods
+============================================================
+
+- Payment Methods - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationResourcesPayment MethodsGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+Novita AI uses Stripe for all payment processing.
+All your payment information is securely stored by Stripe, and we do not store any payment information.
+You can manually top up a specified amount of credit, which must be greater than $10. Additionally, you can enable the Automatic Top-Up , which will automatically add credit if your balance falls below a specified threshold.
+Was this page helpful? Yes No LLM API Metrics Budgets ⌘ I

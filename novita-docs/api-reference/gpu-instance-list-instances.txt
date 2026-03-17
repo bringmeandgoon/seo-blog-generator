@@ -1,0 +1,203 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-list-instances
+============================================================
+
+- List Instances - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationInstanceList InstancesGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- InstancePOSTCreate GPU Instance
+- POSTCreate CPU Instance
+- GETList Instances
+- GETGet Instance
+- POSTEdit Instance
+- POSTStart Instance
+- POSTStop Instance
+- POSTRestart Instance
+- POSTUpgrade Instance
+- POSTMigrate Instance
+- GETMonitor Metrics
+- POSTRenew Subscription Instance
+- POSTConvert Pay-As-You-Go Instance to Subscription
+- POSTDelete Instance
+- POSTSet Auto Renew
+- POSTSet Auto Migrate Strategy
+- Image
+- Template
+- Product
+- Network
+- Image Registry
+- Storage
+- Jobs
+- Serverless GPUs
+List Instances cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/gpu/instances \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"instances": [
+{
+"id": " ",
+"name": " ",
+"clusterId": " ",
+"clusterName": " ",
+"status": " ",
+"imageUrl": " ",
+"imageAuthId": " ",
+"command": " ",
+"entrypoint": " ",
+"cpuNum": " ",
+"memory": " ",
+"gpuNum": " ",
+"portMappings": [
+{
+"port": 123,
+"type": " "
+}
+],
+"productId": " ",
+"productName": " ",
+"rootfsSize": 123,
+"volumeMounts": [
+{
+"type": " ",
+"size": " ",
+"id": " ",
+"mountPath": " "
+}
+],
+"statusError": {
+"state": " ",
+"message": " "
+},
+"envs": [
+{
+"key": " ",
+"value": " "
+}
+],
+"kind": " ",
+"billingMode": " ",
+"endTime": " ",
+"spotStatus": " ",
+"spotReclaimTime": " "
+}
+]
+}
+```
+GET / gpu-instance / openapi / v1 / gpu / instances Try it List Instances cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/gpu/instances \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"instances": [
+{
+"id": " ",
+"name": " ",
+"clusterId": " ",
+"clusterName": " ",
+"status": " ",
+"imageUrl": " ",
+"imageAuthId": " ",
+"command": " ",
+"entrypoint": " ",
+"cpuNum": " ",
+"memory": " ",
+"gpuNum": " ",
+"portMappings": [
+{
+"port": 123,
+"type": " "
+}
+],
+"productId": " ",
+"productName": " ",
+"rootfsSize": 123,
+"volumeMounts": [
+{
+"type": " ",
+"size": " ",
+"id": " ",
+"mountPath": " "
+}
+],
+"statusError": {
+"state": " ",
+"message": " "
+},
+"envs": [
+{
+"key": " ",
+"value": " "
+}
+],
+"kind": " ",
+"billingMode": " ",
+"endTime": " ",
+"spotStatus": " ",
+"spotReclaimTime": " "
+}
+]
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Query Parameters
+​ pageSize integer required Maximum number of items returned per page. Integer, value >= 0.
+​ pageNum integer required Page number to retrieve. Integer, value >= 0.
+​ name string Instance name (supports fuzzy search). String, length limit: 0-255 characters.
+​ productName string Product name (supports fuzzy search). String, length limit: 0-255 characters.
+​ status string Instance status. String, length limit: 0-63 characters. Possible values:
+- toCreate: Pending creation
+- creating: Creating
+- pulling: Pulling image
+- running: Running
+- toStart: Pending start
+- starting: Starting
+- toStop: Pending stop
+- stopping: Stopping
+- exited: Stopped
+- toRestart: Pending restart
+- restarting: Restarting
+- toRemove: Pending deletion
+- removing: Deleting
+- removed: Deleted
+- toReset: Pending reset (upgrade)
+- resetting: Resetting
+- migrating: Migrating
+- freezing: Freezing
+## ​Response
+​ instances object[] required Instance information. Hide properties ​ id string required Instance ID. ​ name string required Instance name. ​ clusterId string required Cluster ID. ​ clusterName string Cluster name. ​ status string required Instance status. ​ imageUrl string required Container image URL. ​ imageAuthId string Image repository authentication information. ​ command string Container startup command. ​ entrypoint string Container startup entrypoint. ​ cpuNum string required Number of CPU cores for the instance. ​ memory string required Memory size of the instance (GB). ​ gpuNum string required Number of GPUs for the instance. ​ portMappings object[] Instance port information. Show properties ​ port integer required Port value. ​ type string required Port type. ​ productId string required Product ID used to deploy the instance. ​ productName string required Product name used to deploy the instance. ​ rootfsSize integer required Root filesystem size (GB). ​ volumeMounts object[] Instance storage configuration. Show properties ​ type string Storage type. Values:
+- network: Cloud storage.
+- local: Local storage.
+​ size string Storage capacity. ​ id string Cloud storage ID. Returned when type = network. ​ mountPath string Storage mount path. ​ statusError object Error information when instance creation fails or the instance is unavailable. Show properties ​ state string Abnormal instance status. ​ message string Error message. ​ envs object[] Instance environment variable information. Show properties ​ key string Environment variable name. ​ value string Environment variable value. ​ kind string Instance type. ​ billingMode string required Billing mode for the instance. Values:
+- onDemand: Pay-as-you-go billing.
+- monthly: Subscription (monthly or yearly) billing.
+- spot: Spot instance billing.
+​ endTime string Expiration time for subscription instances. For pay-as-you-go instances, returns -1. ​ spotStatus string Spot instance status. Values:
+- running: Running
+- notified: Notified for reclaim
+- reclaiming: Being reclaimed
+- terminated: Terminated
+​ spotReclaimTime string Spot instance reclaim time. Value “0” means reclaim has not started.
+Was this page helpful? Yes No Create CPU Instance Get Instance ⌘ I

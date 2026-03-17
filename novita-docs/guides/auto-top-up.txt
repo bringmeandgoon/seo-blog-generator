@@ -1,0 +1,43 @@
+Source: https://novita.ai/docs/guides/auto-top-up
+============================================================
+
+- Automatic Top-Up - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationResourcesAutomatic Top-UpGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - 1. Enable Automatic Top-Up
+- 2. Automatic Top-Up Settings
+When you enable “Automatic Top-Up” , your account will automatically add credit if the balance falls below a specified threshold. Please follow the steps below to set up this feature:
+### ​1. Enable Automatic Top-Up
+Go to Payment Methods in the console.
+If you don’t have a payment method, click “Add payment method” . You’ll be redirected to Stripe’s secure page to add one, and we do not store any payment information.
+### ​2. Automatic Top-Up Settings
+After you turn on the “Automatic Payments” switch, a configuration popup will appear automatically.
+Set valid values for “When credit goes below” and “Bring credit back up to” , then click “Save settings” to complete the process.
+Was this page helpful? Yes No Budgets Low Balance Alert ⌘ I

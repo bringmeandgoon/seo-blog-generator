@@ -1,0 +1,69 @@
+Source: https://novita.ai/docs/guides/budgets
+============================================================
+
+- Budgets - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationResourcesBudgetsGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Permissions
+- Budget Control Modes
+- 1. Budget Type Description
+- 2. Budget Type Switching
+- Adjusting Member Budget Limits
+- Budget Usage & Service Invocation Rules
+The Team Member Budgets feature allows you to set flexible spending limits for each member,helping you effectively control overall costs.
+Note : This feature is only available for team accounts. Personal accounts or accounts not part of a team will see the menu but cannot access budget management functionalities. You can convert your personal account into a team account or join an existing team to collaborate with others.
+## ​Permissions
+- Only the Team Owner, Admin, and Billing Roles can check and manage team budgets.
+- Developer and Basic Roles can only view their own budget type and budget limit, and cannot make changes.
+## ​Budget Control Modes
+For all team members, the system enforces budget execution and reset logic based on each member’s Budget Type .
+### ​1. Budget Type Description
+Budget TypeDescriptionExample
+UnlimitedNo limitUnlimited usage
+One-timeOne-time budgetbudget frozen once consumed
+### ​2. Budget Type Switching
+When an administrator changes a member’s budget type, the system applies the following transition rules:
+Switch PathProcessing Logic
+Unlimited → One-timeThe new budget will take effect immediately, with current spending reset to zero and tracked under the new budget cycle.
+One-time → UnlimitedCurrent quota and restrictions are immediately discarded, and unlimited quota begins.
+## ​Adjusting Member Budget Limits
+Please follow the steps below to adjust a member’s budget:
+- Go to the Team Member Budgets page.
+- Find the relevant member in the list, or use the search box to quickly locate them. Budgets can be configured for both current team members and invited members who are pending acceptance.
+- Click the “Edit” button and select the desired budget type.
+New members are set to Unlimited by default, and this can be changed at any time.
+- The One-time budget type allows you to set a specific budget limit.
+- Click the “Refresh” button to get the latest budget and consumption data.
+Note : Budget changes take effect immediately. Once a member’s quota is exhausted, they will be unable to initiate new service calls.
+## ​Budget Usage & Service Invocation Rules
+- All API Keys created by a member share the same budget pool.
+- Before any service is started, the system will automatically check both the wallet balance and the member’s remaining quota. If either is insufficient, the request will be denied.
+- Upon reaching the budget limit, all related tasks will be automatically stopped.
+Was this page helpful? Yes No Payment Methods Automatic Top-Up ⌘ I

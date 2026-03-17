@@ -1,0 +1,92 @@
+Source: https://novita.ai/docs/api-reference/model-apis-llm-retrieve-model
+============================================================
+
+- Retrieve model - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationLLM APIRetrieve modelGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM APIPOSTCreate chat completion
+- POSTCreate completion
+- POSTCreate embeddings
+- POSTCreate rerank
+- GETList models
+- GETRetrieve model
+- Batch
+- Image, Audio and Video
+GPUs - GPU Instance
+- Serverless GPUs
+Retrieve model cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/openai/v1/models/{model} \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+Copy
+```
+{
+"created": 1733560109,
+"id": "meta-llama/llama-3.3-70b-instruct",
+"object": "model",
+"input_token_price_per_m": 3900,
+"output_token_price_per_m": 3900,
+"title": "meta-llama/llama-3.3-70b-instruct",
+"description": "The Meta Llama 3.3 multilingual large language model (LLM) is a pretrained and instruction tuned generative model in 70B (text in/text out). The Llama 3.3 instruction tuned text only model is optimized for multilingual dialogue use cases and outperforms many of the available open source and closed chat models on common industry benchmarks.\n\nSupported languages: English, German, French, Italian, Portuguese, Hindi, Spanish, and Thai.",
+"context_size": 131072,
+}
+```
+GET / openai / v1 / models / {model} Try it Retrieve model cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/openai/v1/models/{model} \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+Copy
+```
+{
+"created": 1733560109,
+"id": "meta-llama/llama-3.3-70b-instruct",
+"object": "model",
+"input_token_price_per_m": 3900,
+"output_token_price_per_m": 3900,
+"title": "meta-llama/llama-3.3-70b-instruct",
+"description": "The Meta Llama 3.3 multilingual large language model (LLM) is a pretrained and instruction tuned generative model in 70B (text in/text out). The Llama 3.3 instruction tuned text only model is optimized for multilingual dialogue use cases and outperforms many of the available open source and closed chat models on common industry benchmarks.\n\nSupported languages: English, German, French, Italian, Portuguese, Hindi, Spanish, and Thai.",
+"context_size": 131072,
+}
+```
+Retrieves a model instance, providing basic information about the model. This endpoint is compatible with OpenAI API.
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Path Parameters
+​ model string required The ID of the model to use for this request.
+## ​Response
+Copy
+```
+{
+"created": 1733560109,
+"id": "meta-llama/llama-3.3-70b-instruct",
+"object": "model",
+"input_token_price_per_m": 3900,
+"output_token_price_per_m": 3900,
+"title": "meta-llama/llama-3.3-70b-instruct",
+"description": "The Meta Llama 3.3 multilingual large language model (LLM) is a pretrained and instruction tuned generative model in 70B (text in/text out). The Llama 3.3 instruction tuned text only model is optimized for multilingual dialogue use cases and outperforms many of the available open source and closed chat models on common industry benchmarks.\n\nSupported languages: English, German, French, Italian, Portuguese, Hindi, Spanish, and Thai.",
+"context_size": 131072,
+}
+```
+​ id string required The model identifier, which can be referenced in the API endpoints.
+​ created integer required The Unix timestamp (in seconds) when the model was created.
+​ object string required The object type, which is always “model”.
+​ input_token_price_per_m integer required The price per million input tokens.
+​ output_token_price_per_m integer required The price per million output tokens.
+​ title string required The title of the model.
+​ description string required The description of the model.
+​ context_size integer required The maximum context size of the model. Was this page helpful? Yes No List models Create batch ⌘ I

@@ -1,0 +1,91 @@
+Source: https://novita.ai/docs/api-reference/model-apis-image-eraser
+============================================================
+
+- Image Eraser - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImage EditorImage EraserGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image EditorPOSTUpscale
+- POSTRemove Background
+- POSTReplace Background
+- POSTInpainting
+- POSTRemove Text
+- POSTCleanup
+- POSTImage to Prompt
+- POSTQwen-Image Edit
+- POSTImage Eraser
+- POSTImage Upscaling
+- POSTImage Remove Background
+- Video Generator
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Image Eraser cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/image-eraser \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"mask": " ",
+"image": " ",
+"prompt": " ",
+"output_format": " "
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+POST / v3 / async / image-eraser Image Eraser cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/image-eraser \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"mask": " ",
+"image": " ",
+"prompt": " ",
+"output_format": " "
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+AI-powered image erasing service. Supports object removal from images via mask and text prompts. Offers high-quality image processing: out-of-the-box REST inference API, top performance, no cold start, affordable pricing.
+This is an asynchronous API; only the task_id will be returned. You should use the task_id to request the Task Result API to retrieve the video generation results.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ mask string Mask image indicating the area to be erased. Areas to erase should be white; areas to keep should be black.
+​ image string required The original image to be processed.
+​ prompt string Text prompt specifying the object or region to remove from the image, e.g., ‘dog’ or ‘hat’.
+​ output_format string default: "jpeg" Output image format. Optional values: jpeg , png , webp
+## ​Response
+​ task_id string required Use the task_id to request the Task Result API to retrieve the generated outputs. Was this page helpful? Yes No Qwen-Image Edit Image Upscaling ⌘ I

@@ -1,0 +1,307 @@
+Source: https://novita.ai/docs/guides/llm-batch-api
+============================================================
+
+- Batch Inference - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationLLMBatch InferenceGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLMLarge Language Models
+- Vision Language Models
+- Recommended Models
+- Reasoning Models
+- DeepSeek-OCR Usage
+- Function Calling
+- Structured Outputs
+- Prompt Cache
+- Dedicated Endpoint User Manual
+- Batch Inference
+- Rate limits
+- LLM Monitoring
+- Interactive Playground
+- Anthropic SDK Compatibility
+- Interleaved Thinking Supporty
+- Common Error Codes
+- LLM FAQs
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Quick Start
+- 1. Preparing Batch Files
+- 2. Upload Batch Input File
+- 3. Creating a Batch
+- 4. Check the Status of a Batch
+- 5. Retrieve the Results
+- Instructions
+- Limitations
+- Error Handling
+- Batch Expiration
+- All Batch API
+The Batch API for Large Language Models enables asynchronous processing of numerous inference requests and is fully compatible with the OpenAI API standard.
+The Batch API is a cost-effective solution when immediate inference results are unnecessary. It provides a higher rate limits than online calls, ensuring results are delivered within a reasonable timeframe of 48 hours.
+This API is ideal for:
+- Conducting evaluations and data analysis.
+- Classifying extensive datasets.
+- Generating document summaries in an offline mode.
+Supported Models:
+## ​Quick Start
+### ​1. Preparing Batch Files
+The Batch API uses .jsonl format files as input, with each line representing the details of an API inference request. Available endpoints include /v1/chat/completions and /v1/completions .
+Set the endpoint parameter to /v1/chat/completions or /v1/completions for OpenAI API compatibility.
+Each request must include a unique custom_id to locate inference results in the output file after batch completion. Parameters in the body field of each line are sent as actual inference request parameters to the endpoint.
+All requests within a single batch JSONL file must target the same model. Do not mix requests for different models in one batch.
+Below is an example input file containing 2 requests:
+Copy
+```
+{"custom_id": "request-1", "body": {"model": "deepseek/deepseek-v3-0324", "messages": [{"role": "user", "content": "Hello, world!"}], "max_tokens": 400}}
+{"custom_id": "request-2", "body": {"model": "deepseek/deepseek-v3-0324", "messages": [{"role": "system", "content": "You are a helpful assistant."},{"role": "user", "content": "Hello world!"}],"max_tokens": 1000}}
+```
+### ​2. Upload Batch Input File
+Upload the batch input file to ensure it can be accurately referenced when creating a batch. Use the Files API to upload your .jsonl file and set the purpose to batch . Note that the file will be retained for 15 days.
+For how to get API key, refer to the API Key Management .
+Code Example
+Python
+Copy
+```
+from openai import OpenAI
+client = OpenAI(
+base_url="https://api.novita.ai/openai/v1",
+api_key=" ",
+)
+batch_input_file = client.files.create(
+file=open("batch_input.jsonl", "rb"),
+purpose="batch",
+)
+print(batch_input_file)
+```
+Curl
+Copy
+```
+export API_KEY=" "
+curl --request POST \
+--url https://api.novita.ai/openai/v1/files \
+--header 'Authorization: Bearer ${API_KEY}' \
+--form 'file=@"/your/batch_input.jsonl"' \
+--form 'purpose="batch"'
+```
+Sample response upon successful file upload:
+Copy
+```
+{
+"id": "file_d2co***as73c0cjd0",
+"object": "file",
+"bytes": 238,
+"filename": "batch_input.jsonl",
+"created_at": 1754894162,
+"purpose": "batch",
+"metadata": {
+"total_requests": 2
+}
+}
+```
+### ​3. Creating a Batch
+Once the input file is successfully uploaded, you can initiate a batch using the ID of the uploaded File object. The completion window is fixed at 48h and is currently non-adjustable.
+Code Example
+Python
+Copy
+```
+from openai import OpenAI
+client = OpenAI(
+base_url="https://api.novita.ai/openai/v1",
+api_key=" ",
+)
+batch = client.batches.create(
+input_file_id="file_d2cor0es1cas73c0cj60",
+endpoint="/v1/chat/completions",
+completion_window="48h"
+)
+print(batch)
+```
+Curl
+Copy
+```
+export API_KEY=" "
+curl --request POST \
+--url https://api.novita.ai/openai/v1/batches \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer ${API_KEY}' \
+--data '{
+"input_file_id": "file_d2co***as73c0cjd0",
+"endpoint": "/v1/chat/completions",
+"completion_window": "48h"
+}'
+```
+This request will yield a Batch object that includes metadata about your batch, as illustrated in the example below:
+Copy
+```
+{
+"id": "batch_d2cq***73a68lu0",
+"object": "batch",
+"endpoint": "/v1/chat/completions",
+"input_file_id": "file_d2co***as73c0cjd0",
+"output_file_id": "",
+"error_file_id": "",
+"completion_window": "48h",
+"in_progress_at": null,
+"expires_at": null,
+"finalizing_at": null,
+"completed_at": null,
+"failed_at": null,
+"expired_at": null,
+"cancelling_at": null,
+"cancelled_at": null,
+"status": "validating",
+"errors": "",
+"version": 0,
+"created_at": "2025-08-11T16:31:52.949816948+08:00",
+"updated_at": null,
+"created_by": "8f242aa1-f725-4a67-8***9-cb68025e0976",
+"created_by_key_id": "key_cc19f96c***e7390644a37da21",
+"remark": "",
+"total": 0,
+"completed": 0,
+"failed": 0,
+"metadata": null,
+"request_counts": {
+"total": 0,
+"completed": 0,
+"failed": 0
+}
+}
+```
+### ​4. Check the Status of a Batch
+You can check a batch’s status at any time to receive the latest batch information.
+The status enumeration values of the Batch object are as follows:
+StatusDescription
+VALIDATINGThe input file is being validated before the batch can begin
+PROGRESSBatch is in progress
+COMPLETEDBatch processing completed successfully
+FAILEDBatch processing failed
+EXPIREDBatch exceeded deadline
+CANCELLINGBatch is being cancelled
+CANCELLEDBatch was cancelled
+Code Example
+Python
+Copy
+```
+from openai import OpenAI
+client = OpenAI(
+base_url="https://api.novita.ai/openai/v1",
+api_key=" ",
+)
+batch = client.batches.retrieve("batch_d2cq***73a68lu0")
+print(batch)
+```
+Curl
+Copy
+```
+export API_KEY=" "
+curl --request GET \
+--url https://api.novita.ai/openai/v1/batches/{batch_id} \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer ${API_KEY}'
+```
+### ​5. Retrieve the Results
+Once the batch inference is complete, you can download the result output file using the output_file_id field from the Batch object.
+The result output file will be deleted 30 days after the batch inference concludes, so please retrieve it promptly via the interface.
+Code Example
+Python
+Copy
+```
+from openai import OpenAI
+client = OpenAI(
+base_url="https://api.novita.ai/openai/v1",
+api_key=" ",
+)
+content = client.files.content("example-250811-1")
+print(content.read())
+```
+Curl
+Copy
+```
+export API_KEY=" "
+curl --request GET \
+--url https://api.novita.ai/openai/v1/files/{file_id}/content \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer ${API_KEY}'
+```
+The response returns the raw file content. For batch output files, each line contains a response like this:
+Copy
+```
+{
+"custom_id": "request-2589",
+"error": null,
+"id": "batch_req_task_d2c",
+"response": {
+"body": {
+"id": "29e1432c-edfb-44a4-b531-c23c600abfae",
+"object": "chat.completion",
+"created": 1754902266,
+"model": "deepseek-test",
+"choices": [
+{
+"index": 0,
+"message": {
+"role": "assistant",
+"content": "Hello! 👋 How can I assist you today? 😊"
+},
+"finish_reason": "stop"
+}
+],
+"usage": {
+"prompt_tokens": 5,
+"completion_tokens": 13,
+"total_tokens": 18
+}
+},
+"request_id": "request-2589",
+"status_code": 200
+}
+}
+```
+## ​Instructions
+### ​Limitations
+- Each batch can contain up to 50,000 requests.
+- The maximum input file size per batch is 100MB.
+### ​Error Handling
+Errors encountered during batch processing are recorded in a separate error file, accessible via the error_file_id field. Common error codes include:
+Error CodeDescriptionSolution
+400Invalid request formatCheck JSONL syntax and required fields
+401Authentication failedVerify API key
+404Batch not foundCheck batch ID
+429Rate limit exceededReduce request frequency
+500Server errorContact us
+### ​Batch Expiration
+Batches not completed within 48 hours will transition to an EXPIRED state. Unfinished requests will be canceled, while completed requests will be provided through an output file. You only pay for tokens consumed by completed requests. The batch makes every effort to complete within 48 hours.
+## ​All Batch API
+- Create batch
+- Retrieve batch
+- Cancel batch
+- List batch
+- Upload file
+- List files
+- Retrieve file
+- Delete file
+- Retrieve file content
+Was this page helpful? Yes No Dedicated Endpoint User Manual Rate limits ⌘ I

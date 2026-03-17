@@ -1,0 +1,54 @@
+Source: https://novita.ai/docs/guides/sandbox-overview
+============================================================
+
+- Overview - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationAgent SandboxOverviewGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Features
+- Scenarios
+- Pricing
+- Getting Started
+Agent Sandbox is a next-generation runtime infrastructure specifically designed for AI Agents, providing a secure and isolated cloud sandbox environment for executing AI-generated code.
+## ​Features
+- Secure. Sandboxes have system-level isolation capabilities, ensuring the security of data and execution environment within the sandbox.
+- Fast startup. Startup time is less than 200ms, with support for large-scale concurrent creation, suitable for AI application scenarios with high concurrency requirements.
+- Multi-language execution support. Supports running code in multiple programming languages including Python, JavaScript, TypeScript, C++, and more.
+- Quick pause and resume. Pause the sandbox at any time and resume when needed, with filesystem and process state fully restored.
+- Background execution. Supports background task execution and suitable for scenarios that require waiting for results.
+- Easy integration. Seamlessly integrates with popular AI Agent frameworks and tools.
+## ​Scenarios
+- AI data analysis and visualization;
+- Code execution environment for Code Agents;
+- Computer Use Agent.
+Contact our solution engineers to learn how to integrate Agent Sandbox into your business.
+## ​Pricing
+Agent Sandbox provides per-second billing for CPU and RAM. Storage — encompassing templates, sandbox snapshots, and template snapshots — is now subject to daily charges. See the pricing page for more details.
+## ​Getting Started
+You can start and manage your Agent Sandboxes through SDK or CLI. For details, please refer to quick start page . Was this page helpful? Yes No ChatBox Installing SDKs & CLI ⌘ I

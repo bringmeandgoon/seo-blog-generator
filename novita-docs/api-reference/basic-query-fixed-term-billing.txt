@@ -1,0 +1,107 @@
+Source: https://novita.ai/docs/api-reference/basic-query-fixed-term-billing
+============================================================
+
+- Query Fixed-Term Billing - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationBasicQuery Fixed-Term BillingGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU Instance
+- Serverless GPUs
+Query Fixed-Term Billing cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/openapi/v1/billing/bill/monthly/list \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"bills": [
+{
+"userId": " ",
+"startTime": " ",
+"endTime": " ",
+"memberId": " ",
+"productName": " ",
+"productCategory": " ",
+"ownerID": " ",
+"tradeMode": " ",
+"tradeType": " ",
+"basePrice": " ",
+"billNum": " ",
+"amount": " ",
+"voucherAmount": " ",
+"payAmount": " ",
+"payAmountDisplay": " ",
+"pricePrecision": " ",
+"createTime": " ",
+"cycle": " ",
+"storageDays": " "
+}
+]
+}
+```
+GET / openapi / v1 / billing / bill / monthly / list Try it Query Fixed-Term Billing cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/openapi/v1/billing/bill/monthly/list \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"bills": [
+{
+"userId": " ",
+"startTime": " ",
+"endTime": " ",
+"memberId": " ",
+"productName": " ",
+"productCategory": " ",
+"ownerID": " ",
+"tradeMode": " ",
+"tradeType": " ",
+"basePrice": " ",
+"billNum": " ",
+"amount": " ",
+"voucherAmount": " ",
+"payAmount": " ",
+"payAmountDisplay": " ",
+"pricePrecision": " ",
+"createTime": " ",
+"cycle": " ",
+"storageDays": " "
+}
+]
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Query Parameters
+​ category string Product type. default: summary , Options:
+- summary (Summary bill)
+- gpu (GPU instance)
+- local_storage (Storage resources)
+- image (Image dedicated endpoint)
+​ productName string Product name. Supports fuzzy matching.
+​ startTime string The start time of the bill to query, timestamp in seconds, default: 0.
+​ endTime string The end time of the bill to query, timestamp in seconds, default: 0.
+​ ownerId string Specify the instance ID to query.
+## ​Response Parameters
+​ bills object[] required Billing information for fixed-term instances. Hide properties ​ userId string required User ID to which the instance belongs. ​ startTime string required The start time of the bill, timestamp in seconds. ​ endTime string required The end time of the bill, timestamp in seconds. ​ memberId string required Sub-user ID within the team. ​ productName string required Product name. ​ productCategory string required Product type. ​ ownerID string required Instance ID. ​ tradeMode string required Billing method. The value is monthly , indicating fixed-term. ​ tradeType string required Type of fixed-term. Possible values:
+- monthly_new_buy (New purchase).
+- monthly_re_buy (Renewal).
+- monthly_re_config (Expansion).
+​ basePrice string required Monthly unit price. ​ billNum string required Usage. ​ amount string required Total price. ​ voucherAmount string required Voucher deduction amount. ​ payAmount string required Cash payment amount. ​ payAmountDisplay string required ​ pricePrecision string required Price Precision. ​ createTime string required Bill creation time. ​ cycle string required Billing Cycle. ​ storageDays string required Storage service duration (days). Was this page helpful? Yes No Query Usage-based Billing Introduction ⌘ I

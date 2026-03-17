@@ -1,0 +1,107 @@
+Source: https://novita.ai/docs/guides/LLM-FAQ
+============================================================
+
+- LLM FAQs - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationLLMLLM FAQsGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLMLarge Language Models
+- Vision Language Models
+- Recommended Models
+- Reasoning Models
+- DeepSeek-OCR Usage
+- Function Calling
+- Structured Outputs
+- Prompt Cache
+- Dedicated Endpoint User Manual
+- Batch Inference
+- Rate limits
+- LLM Monitoring
+- Interactive Playground
+- Anthropic SDK Compatibility
+- Interleaved Thinking Supporty
+- Common Error Codes
+- LLM FAQs
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Voucher Usage Guide
+- What types of voucher does Novita provide?
+- Rate Limits for Model Usage
+- What are the RPM limits for different users?
+- RPM Adjustment and Upgrade Policy
+- Can users apply for increased RPM limits?
+- Application process:
+- What happens if actual usage falls short of the committed RPM?
+- Is self-service RPM upgrade supported?
+- How to control thinking function of Zai-org/GLM-4.5 when calling its API?
+## ​Voucher Usage Guide
+### ​What types of voucher does Novita provide?
+Novita currently offers the following types of vouchers to help users experience the platform’s services:
+- New User Voucher: Available to first-time registered users for trying out services of various types of models.
+- Referral Voucher: Earned by inviting others to register and complete tasks on the platform.
+## ​Rate Limits for Model Usage
+### ​What are the RPM limits for different users?
+RPM (Requests Per Minute) limits vary based on a user’s verification level and account status. For detailed limits, please refer to the official documentation:
+👉 For further assistance, please book a call with our sales team
+## ​RPM Adjustment and Upgrade Policy
+### ​Can users apply for increased RPM limits?
+Yes. Novita allows flexible RPM upgrades based on usage needs. Rules are listed as below:
+- DeepSeek models: The platform will strive to accommodate reasonable scaling needs.
+- Other models: RPM increases are evaluated based on model cost and actual user behavior, subject to capacity availability.
+### ​Application process:
+User → Customer Manager / Tech Support → Product Team Review & Approval
+### ​What happens if actual usage falls short of the committed RPM?
+If the user’s actual RPM remains below the committed level for one consecutive week, the platform will adjust the rate limits policy as:
+- Reduce the limit to the peak RPM in the past week, or
+- Revert to the model’s default rate limit (whichever is lower).
+### ​Is self-service RPM upgrade supported?
+Yes. Novita plans to launch an RPM Upgrade Package , allowing users to manage and increase RPM limits independently, without manual approval.
+For further assistance, please book a call with our sales team .
+### ​How to control thinking function of Zai-org/GLM-4.5 when calling its API?
+When calling API zai-org/glm-4.5, there always exists some situations where thinking function is not needed. In these cases, if you want to turn thinking function off, you can simply add one fixed sentence called:
+Copy
+```
+"enable_thinking": false
+```
+at the bottom, for example:
+Copy
+```
+{
+"model": "zai-org/glm-4.5",
+"messages": [
+{
+"role": "user",
+"content": "How is the weather in New York?"
+}
+],
+"temperature": 0.7,
+"stream": false,
+"max_tokens": 500,
+"tool_choice": "auto",
+"enable_thinking": false
+}
+```
+Was this page helpful? Yes No Common Error Codes SDKs for Model APIs ⌘ I

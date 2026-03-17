@@ -1,0 +1,87 @@
+Source: https://novita.ai/docs/guides/verba
+============================================================
+
+- Verba - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationIntegrationsVerbaGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- IntegrationsClaude Code Integration Guide
+- OpenAI Agents SDK
+- AnythingLLM
+- Dify
+- Helicone
+- Hugging Face
+- Langflow
+- Continue
+- Cursor
+- LangChain
+- Skyvern
+- LobeChat
+- AI Gradio
+- Langfuse
+- MLflow
+- Verba
+- Portkey
+- DocsGPT
+- LlamaIndex
+- LoLLMS WebUI
+- CodeCompanion
+- Page Assist
+- DeepSearcher
+- Browser Use
+- OWL
+- LiteLLM
+- ChatBox
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Integration Steps
+- Step 1: Visit the Verba Website
+- Step 2: Choose Deployment Option
+- Step 3: Configure Settings
+- Step 4: Import Data
+- Step 5: Start Chatting
+Novita AI has redefined LLM application development through its seamless integration with Verba. By merging Novita AI’s innovative platform with Verba’s advanced NLP framework, developers gain access to superior performance, enhanced customizability, and a user-friendly experience.
+This guide will walk you through how to integrate Novita AI API with Verba.
+## ​Integration Steps
+### ​Step 1: Visit the Verba Website
+- Open your browser and navigate to https://verba.weaviate.io/.
+### ​Step 2: Choose Deployment Option
+- Select your preferred deployment method on the homepage to proceed.
+### ​Step 3: Configure Settings
+- Click the “Start” button at the bottom-right corner.
+- On the left-hand side, click Config.
+- Under Generator, select Novita.
+- Enter your Novita API Key in the API Key field.
+- Finally, click the Save Config button to apply your settings.
+## ​Step 4: Import Data
+- Click the Import Data button in the top-right corner to open the file import page.
+- Select the Files button at the bottom to open the file selection window.
+- Choose the files you want to import and click the Import Selected button at the bottom-left corner.
+- A successfully imported file will display on the right-hand side of the page.
+### ​Step 5: Start Chatting
+- Click the Chat button at the top to return to the chat page.
+- Enter your questions based on the imported file to receive accurate results instantly.
+Was this page helpful? Yes No MLflow Portkey ⌘ I

@@ -1,0 +1,127 @@
+Source: https://novita.ai/docs/guides/sandbox-integrations-browser-use
+============================================================
+
+- BrowserUse Integration with Novita Agent Sandbox - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationIntegrationsBrowserUse Integration with Novita Agent SandboxGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- IntegrationsComputer use with E2B Desktop
+- BrowserUse
+- OpenClaw CLI
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - 1. Get Novita API Key
+- 2. Configure Environment Variables
+- 3. Install Dependencies
+- 4. Example Code
+- 5. Run the Agent
+BrowserUse is a powerful AI browser agent. Combined with the secure isolated environment provided by Novita Agent Sandbox, you can build high-concurrency, multi-task browser AI agents.
+This document provides detailed instructions on how to run BrowserUse projects based on Novita Agent Sandbox service.
+The document uses the browser-chromium sandbox template released by Novita. If you want to create your own template based on this or view more complete example code, please refer to here .
+### ​1. Get Novita API Key
+### ​2. Configure Environment Variables
+Before getting started, you need to configure the necessary environment variables:
+Bash Copy
+```
+export E2B_DOMAIN=sandbox.novita.ai
+export NOVITA_API_KEY=" "
+export LLM_API_KEY=" "
+export LLM_BASE_URL=https://api.novita.ai/openai
+export LLM_MODEL=" "
+```
+### ​3. Install Dependencies
+Install the required Python packages:
+Python Copy
+```
+pip install browser-use
+pip install e2b-code-interpreter
+```
+### ​4. Example Code
+agent.py Copy
+```
+import asyncio
+import os
+import time
+from browser_use import Agent, BrowserSession
+from browser_use.llm import ChatOpenAI
+from novita_sandbox.code_interpreter import Sandbox
+async def screenshot(agent: Agent):
+# Screenshot function
+print("Taking screenshot...")
+page = await agent.browser_session.get_current_page()
+screenshot_bytes = await page.screenshot(full_page=True, type='png')
+# screenshot method returns the binary data of the image, we should save it as a PNG file
+screenshots_dir = os.path.join(".", "screenshots")
+os.makedirs(screenshots_dir, exist_ok=True)
+screenshot_path = os.path.join(screenshots_dir, f"{time.time()}.png")
+with open(screenshot_path, "wb") as f:
+f.write(screenshot_bytes)
+print(f"Screenshot saved to {screenshot_path}")
+async def main():
+# Create E2B sandbox instance
+sandbox = Sandbox(
+timeout=600, # Timeout in seconds
+template="browser-chromium", # This template contains chromium browser and exposes port 9223 for remote connection
+)
+try:
+# Get Chrome debug port address from sandbox
+host = sandbox.get_host(9223) # Get sandbox port 9223 address
+cdp_url = f"https://{host}"
+print(f"Chrome Debug Protocol URL: {cdp_url}")
+# Create BrowserUse session
+browser_session = BrowserSession(cdp_url=cdp_url)
+await browser_session.start()
+print("BrowserUse session created successfully")
+# Create AI Agent
+agent = Agent(
+task="Go to hackernews and find the top 3 stories",
+llm=ChatOpenAI(
+api_key=os.getenv("LLM_API_KEY"),
+base_url=os.getenv("LLM_BASE_URL"),
+model=os.getenv("LLM_MODEL"),
+temperature=1
+),
+browser_session=browser_session,
+)
+# Run Agent task
+print("Starting Agent task execution...")
+await agent.run(
+on_step_end=screenshot, # Take screenshot after each step
+)
+# Close browser session
+await browser_session.close()
+print("Task execution completed")
+finally:
+# Clean up sandbox resources
+sandbox.kill()
+print("Sandbox resources cleaned up")
+if __name__ == "__main__":
+asyncio.run(main())
+```
+### ​5. Run the Agent
+After Installing the dependencies and setting up the environment variables, you can run the example code. You can see the output in the terminal as below if everything goes well. Browser-use is running tasks in the remote browser inside your sandbox.
+It will generate screenshots like below:
+To run a more complete demo, please refer to here . Was this page helpful? Yes No Computer use with E2B Desktop OpenClaw CLI ⌘ I

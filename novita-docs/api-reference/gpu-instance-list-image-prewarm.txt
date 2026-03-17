@@ -1,0 +1,117 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-list-image-prewarm
+============================================================
+
+- List Image Prewarm Tasks - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImageList Image Prewarm TasksGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- Instance
+- ImagePOSTSave Instance Image
+- GETGet Image Prewarm Quota
+- POSTCreate Image Prewarm Task
+- GETList Image Prewarm Tasks
+- POSTUpdate Image Prewarm Task
+- POSTDelete Image Prewarm Tasks
+- Template
+- Product
+- Network
+- Image Registry
+- Storage
+- Jobs
+- Serverless GPUs
+List Image Prewarm Tasks cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/image/prewarm \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"data": [
+{
+"id": " ",
+"imageName": " ",
+"imageUrl": " ",
+"repositoryAuth": " ",
+"clusterId": " ",
+"clusterName": " ",
+"products": [
+{
+"productId": " ",
+"productName": " "
+}
+],
+"imageSize": " ",
+"createTime": " ",
+"state": " ",
+"completeTime": " ",
+"note": " ",
+"reason": [
+" "
+]
+}
+],
+"total": 123
+}
+```
+GET / gpu-instance / openapi / v1 / image / prewarm Try it List Image Prewarm Tasks cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/image/prewarm \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"data": [
+{
+"id": " ",
+"imageName": " ",
+"imageUrl": " ",
+"repositoryAuth": " ",
+"clusterId": " ",
+"clusterName": " ",
+"products": [
+{
+"productId": " ",
+"productName": " "
+}
+],
+"imageSize": " ",
+"createTime": " ",
+"state": " ",
+"completeTime": " ",
+"note": " ",
+"reason": [
+" "
+]
+}
+],
+"total": 123
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Query Parameters
+​ page integer Page number. Default: 1.
+​ pageSize integer Page size. Default: 10.
+​ state string Prewarm task state. Valid values: Pending , Running , Succeeded , Failed .
+​ clusterId string Cluster ID.
+​ name string Image name or task note for fuzzy matching.
+## ​Response
+​ data object[] required List of prewarm tasks. Hide properties ​ id string required Prewarm task ID. ​ imageName string required Image name (the last segment of the image URL without the tag). ​ imageUrl string required Image URL. ​ repositoryAuth string Image registry authentication ID. ​ clusterId string required Cluster ID. ​ clusterName string required Cluster name. ​ products object[] required Products to prewarm. Show properties ​ productId string required Product ID. ​ productName string required Product name. ​ imageSize string Image size in bytes. ​ createTime string required Task creation time (Unix timestamp in seconds). ​ state string required Task state. Valid values: Pending , Running , Succeeded , Failed . ​ completeTime string Task completion time (Unix timestamp in seconds). ​ note string Task note. ​ reason string[] Reason messages.
+​ total integer required Total number of tasks. Was this page helpful? Yes No Create Image Prewarm Task Update Image Prewarm Task ⌘ I

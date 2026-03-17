@@ -1,0 +1,90 @@
+Source: https://novita.ai/docs/api-reference/model-apis-llm-retrieve-file-content
+============================================================
+
+- Retrieve file content - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationBatchRetrieve file contentGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM APIPOSTCreate chat completion
+- POSTCreate completion
+- POSTCreate embeddings
+- POSTCreate rerank
+- GETList models
+- GETRetrieve model
+- BatchPOSTCreate batch
+- GETRetrieve batch
+- POSTCancel batch
+- GETList batch
+- POSTUpload file
+- GETList files
+- GETRetrieve file
+- DELDelete file
+- GETRetrieve file content
+- Image, Audio and Video
+GPUs - GPU Instance
+- Serverless GPUs
+Retrieve file content cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/openai/v1/files/{file_id}/content \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+GET / openai / v1 / files / {file_id} / content Try it Retrieve file content cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/openai/v1/files/{file_id}/content \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+Retrieves the content of a specific file using its file ID. This is commonly used to download batch output files or error files.
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Path Parameters
+​ file_id string required The unique identifier of the file to retrieve content for.
+## ​Response
+The response returns the raw file content. For batch output files, this will be in JSONL format where each line contains a batch request result.
+Example Response
+For batch output files, each line contains a response like this:
+Copy
+```
+{
+"custom_id": "request-2589",
+"error": null,
+"id": "batch_req_task_d2c",
+"response": {
+"body": {
+"id": "29e1432c-edfb-44a4-b531-c23c600abfae",
+"object": "chat.completion",
+"created": 1754902266,
+"model": "deepseek-test",
+"choices": [
+{
+"index": 0,
+"message": {
+"role": "assistant",
+"content": "Hello! 👋 How can I assist you today? 😊"
+},
+"finish_reason": "stop"
+}
+],
+"usage": {
+"prompt_tokens": 5,
+"completion_tokens": 13,
+"total_tokens": 18
+}
+},
+"request_id": "request-2589",
+"status_code": 200
+}
+}
+```
+Was this page helpful? Yes No Delete file Webhook ⌘ I

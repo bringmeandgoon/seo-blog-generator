@@ -1,0 +1,105 @@
+Source: https://novita.ai/docs/api-reference/model-apis-image-to-prompt
+============================================================
+
+- Image to Prompt - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImage EditorImage to PromptGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image EditorPOSTUpscale
+- POSTRemove Background
+- POSTReplace Background
+- POSTInpainting
+- POSTRemove Text
+- POSTCleanup
+- POSTImage to Prompt
+- POSTQwen-Image Edit
+- POSTImage Eraser
+- POSTImage Upscaling
+- POSTImage Remove Background
+- Video Generator
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Image to Prompt cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/img2prompt \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"image_file": " "
+}
+'
+```
+200 Copy
+```
+{
+"prompt": " "
+}
+```
+POST / v3 / img2prompt Try it Image to Prompt cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/img2prompt \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"image_file": " "
+}
+'
+```
+200 Copy
+```
+{
+"prompt": " "
+}
+```
+This API extracts prompts from images.
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ image_file string required The base64-encoded original image, with a maximum resolution of 2048 x 2048 pixels and a maximum file size of 30 MB.
+## ​Response
+​ prompt string The prompt generated from the input image.
+## ​Example
+This API retrieves prompts from images.
+Please set the Content-Type header to application/json in your HTTP request to indicate that you are sending JSON data. Currently, only JSON format is supported .
+Request:
+Copy
+```
+curl --location 'https://api.novita.ai/v3/img2prompt' \
+--header 'Authorization: Bearer {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data '{
+"image_file": "{{Base64 encoded image}}"
+}'
+```
+HTTP status codes in the 2xx range indicate that the request has been successfully accepted. A status code of 400 means there is an error with the request parameters, while status codes in the 5xx range indicate internal server errors.
+You can find the generated prompt in the prompt field of the response.
+Image :
+Response:
+Copy
+```
+{
+"prompt": "a man standing on a rock near the ocean, Alejandro Iñárritu, Nadav Kander, Ignacio Fernández Ríos, Ignacio Fernández Ríos, Ignacio Ríos, Navid Negahban, Reza Afshar, Steven Klein, Ignacio Fernández Ríos, Lorenzo Lanfranconi, Peter Palombi, Alberto Mielgo"
+}
+```
+Was this page helpful? Yes No Cleanup Qwen-Image Edit ⌘ I

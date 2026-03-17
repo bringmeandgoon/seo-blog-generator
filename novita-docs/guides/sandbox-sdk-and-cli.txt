@@ -1,0 +1,60 @@
+Source: https://novita.ai/docs/guides/sandbox-sdk-and-cli
+============================================================
+
+- Installing SDKs & CLI - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationAgent SandboxInstalling SDKs & CLIGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Install Stable SDK
+- Install Stable CLI
+- Install Beta SDK
+- Install Beta CLI
+Novita Agent Sandbox provides official stable SDKs (currently supporting Python and JavaScript & TypeScript) as well as accompanying command-line tools to help you easily integrate sandbox capabilities into your business. Below are the installation methods for these components.
+## ​Install Stable SDK
+JavaScript & TypeScript Python Copy
+```
+npm i novita-sandbox
+```
+## ​Install Stable CLI
+Bash Copy
+```
+npm i -g novita-sandbox-cli
+```
+Additionally, some new advanced features will be first released in the Beta versions of the SDK and CLI tools, which you can install using the following methods. After thorough validation, the Beta versions of the SDK and CLI tools will be regularly synchronized and updated to the stable version. If you encounter any issues during use, please feel free to contact us .
+## ​Install Beta SDK
+JavaScript & TypeScript Python Copy
+```
+npm i novita-sandbox@beta
+```
+## ​Install Beta CLI
+Bash Copy
+```
+npm i -g novita-sandbox-cli@beta
+```
+Was this page helpful? Yes No Overview Create Your First Agent Sandbox ⌘ I

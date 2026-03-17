@@ -1,0 +1,146 @@
+Source: https://novita.ai/docs/guides/lollmswebui
+============================================================
+
+- LoLLMS WebUI - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationIntegrationsLoLLMS WebUIGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- IntegrationsClaude Code Integration Guide
+- OpenAI Agents SDK
+- AnythingLLM
+- Dify
+- Helicone
+- Hugging Face
+- Langflow
+- Continue
+- Cursor
+- LangChain
+- Skyvern
+- LobeChat
+- AI Gradio
+- Langfuse
+- MLflow
+- Verba
+- Portkey
+- DocsGPT
+- LlamaIndex
+- LoLLMS WebUI
+- CodeCompanion
+- Page Assist
+- DeepSearcher
+- Browser Use
+- OWL
+- LiteLLM
+- ChatBox
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - How to Leverage Novita AI with LoLLMS WebUI
+- Obtain Your Novita AI API Key
+- Install LoLLMS WebUI
+- Configure Novita AI in LoLLMS WebUI
+LoLLMS WebUI, a centralized platform designed for effortless interaction with Large Language Models (LLMs) and multimodal AI systems, offers an intuitive interface to unlock the full potential of AI. The integration between Novita AI and LoLLMS WebUI will unleash transformative power,enabling you to simplify complex tasks, find answers, and explore new possibilities effortlessly.
+By combining Novita AI with LoLLMS, you’ll gain access to cutting-edge AI capabilities, making it your ultimate assistant for enhanced productivity. This guide provides a step-by-step walkthrough to help you maximize the benefits of this powerful integration.
+## ​How to Leverage Novita AI with LoLLMS WebUI
+You can find the GitHub repository of LoLLMS WebUI here: ParisNeo/lollms-webui .
+### ​Obtain Your Novita AI API Key
+- Log in to your Novita AI account.
+- Navigate to the Key Management page.
+- Generate a new API Key and copy it.
+### ​Install LoLLMS WebUI
+- Automatic Installation:
+Download the installation script from the scripts folder and run it:
+lollms_installer.bat for Windows.
+- lollms_installer.sh for Linux.
+- lollms_installer_macos.sh for Mac.
+- Manual Installation:
+Ensure Python 3.11 is installed. Check your version with python --version.
+- If needed, download Python 3.11 from Python.org.
+Step 1: Clone the Repository
+Copy
+```
+git clone --recursive https://github.com/ParisNeo/lollms-webui.git
+cd lollms-webui
+git submodule update --init --recursive
+```
+Step 2: Create and Activate a Virtual Environment
+- Create a Virtual Environment:
+Copy
+```
+python -m venv venv
+```
+- Activate the Virtual Environment:
+On Windows:
+Copy
+```
+.\venv\Scripts\activate
+```
+- On Linux/Mac:
+Copy
+```
+source venv/bin/activate
+```
+Step 3: Install Requirements
+Copy
+```
+pip install -r requirements.txt
+pip install -e ./lollms_core
+```
+Step 4: Create global_paths_cfg.yaml
+Copy
+```
+mkdir -p $HOME/.lollms_personal_data
+cat > global_paths_cfg.yaml
+### ​Configure Novita AI in LoLLMS WebUI
+- Install Novita AI Binding
+- Set environment variables for Novita AI binding. For example:
+On Windows:
+Copy
+```
+set NOVITA_AI_API_KEY="your_api_key_here"
+set NOVITA_AI_MODEL_NAME="your_model_name_here"
+```
+- On Linux/Mac:
+Copy
+```
+export NOVITA_AI_API_KEY="your_api_key_here"
+export NOVITA_AI_MODEL_NAME="your_model_name_here"
+```
+- Run the script to finalize the setup:
+Copy
+```
+python zoos/bindings_zoo/novita_ai/__init__.py
+```
+- Run the Server
+Copy
+```
+python app.py
+```
+- Use Novita AI in LoLLMS WebUI
+- Open your browser and navigate to http://localhost:9600 (or the port shown in the terminal).
+- Select Novita AI from the available bindings.
+- Enter your Novita AI API key.
+- Select your desired Novita AI model.
+Here is an application: Vibe Coding Using Novita AI Bindings and Services on LoLLMS WebUI. Was this page helpful? Yes No LlamaIndex CodeCompanion ⌘ I

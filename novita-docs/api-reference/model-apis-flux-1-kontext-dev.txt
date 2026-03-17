@@ -1,0 +1,118 @@
+Source: https://novita.ai/docs/api-reference/model-apis-flux-1-kontext-dev
+============================================================
+
+- FLUX.1 Kontext Dev - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImage GeneratorFLUX.1 Kontext DevGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image GeneratorPOSTText to Image
+- POSTImage to Image
+- POSTReimagine
+- POSTFLUX.1 [schnell] Text to Image
+- POSTFLUX.1 Kontext Dev
+- POSTFLUX.1 Kontext Pro
+- POSTFLUX.1 Kontext Max
+- POSTSeedream 3.0 Text to Image
+- POSTSeedream 4.0
+- POSTSeedream 4.5
+- POSTSeedream 5.0 lite
+- POSTQwen-Image Text to Image
+- POSTHunyuan Image 3
+- POSTFlux 2 Dev Image Gen
+- POSTFlux 2 Flex Image Gen
+- POSTFlux 2 Pro Image Gen
+- POSTZ Image Turbo LoRA
+- POSTZ Image Turbo
+- POSTGLM Image Generation
+- Image Editor
+- Video Generator
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+FLUX.1 Kontext Dev cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/flux-1-kontext-dev \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"prompt": " ",
+"images": [
+" "
+],
+"fast_mode": true,
+"size": " ",
+"num_inference_steps": 123,
+"guidance_scale": 123,
+"num_images": 123,
+"seed": 123,
+"output_format": " "
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+POST / v3 / async / flux-1-kontext-dev Try it FLUX.1 Kontext Dev cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/flux-1-kontext-dev \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"prompt": " ",
+"images": [
+" "
+],
+"fast_mode": true,
+"size": " ",
+"num_inference_steps": 123,
+"guidance_scale": 123,
+"num_images": 123,
+"seed": 123,
+"output_format": " "
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+FLUX.1 Kontext dev is a model with greatly improved prompt adherence and typography generation meet premium consistency for editing without compromise on speed.
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ prompt string required The prompt to generate an image from.
+​ images string[] The images to generate an image from. Limit to a maximum of 4 images.
+​ fast_mode boolean Whether to enable fast mode, which will generate videos more quickly but may reduce quality and lower the price. Default: false .
+​ size string The size of the generated media in pixels (width*height). Range [256 ~ 1536 per dimension].
+​ num_inference_steps integer The number of inference steps to perform. Default is 28. Range [1 ~ 50].
+​ guidance_scale number The guidance scale to use for the generation. Default is 2.5. Range [1.0 ~ 20.0].
+​ num_images integer The number of images to generate. Default is 1. Range [1 ~ 4].
+​ seed integer The random seed to use for the generation. Default is -1. -1 means a random seed will be used. Range [-1 ~ 2147483647].
+​ output_format string The format of the output image. Default is jpeg.
+Enum: jpeg , png , webp
+## ​Response
+​ task_id string required Use the task_id to request the Task Result API to retrieve the generated outputs. Was this page helpful? Yes No FLUX.1 [schnell] Text to Image FLUX.1 Kontext Pro ⌘ I

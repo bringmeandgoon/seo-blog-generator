@@ -1,0 +1,161 @@
+Source: https://novita.ai/docs/api-reference/model-apis-llm-cancel-batch
+============================================================
+
+- Cancel batch - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationBatchCancel batchGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM APIPOSTCreate chat completion
+- POSTCreate completion
+- POSTCreate embeddings
+- POSTCreate rerank
+- GETList models
+- GETRetrieve model
+- BatchPOSTCreate batch
+- GETRetrieve batch
+- POSTCancel batch
+- GETList batch
+- POSTUpload file
+- GETList files
+- GETRetrieve file
+- DELDelete file
+- GETRetrieve file content
+- Image, Audio and Video
+GPUs - GPU Instance
+- Serverless GPUs
+Cancel batch cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/openai/v1/batches/{batch_id}/cancel \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"id": " ",
+"object": " ",
+"endpoint": " ",
+"input_file_id": " ",
+"output_file_id": " ",
+"error_file_id": " ",
+"completion_window": " ",
+"in_progress_at": {},
+"expires_at": {},
+"finalizing_at": {},
+"completed_at": {},
+"failed_at": {},
+"expired_at": {},
+"cancelling_at": {},
+"cancelled_at": {},
+"status": " ",
+"errors": " ",
+"version": 123,
+"created_at": " ",
+"updated_at": {},
+"created_by": " ",
+"created_by_key_id": " ",
+"remark": " ",
+"total": 123,
+"completed": 123,
+"failed": 123,
+"metadata": {},
+"request_counts": {
+"total": 123,
+"completed": 123,
+"failed": 123
+}
+}
+```
+POST / openai / v1 / batches / {batch_id} / cancel Try it Cancel batch cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/openai/v1/batches/{batch_id}/cancel \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"id": " ",
+"object": " ",
+"endpoint": " ",
+"input_file_id": " ",
+"output_file_id": " ",
+"error_file_id": " ",
+"completion_window": " ",
+"in_progress_at": {},
+"expires_at": {},
+"finalizing_at": {},
+"completed_at": {},
+"failed_at": {},
+"expired_at": {},
+"cancelling_at": {},
+"cancelled_at": {},
+"status": " ",
+"errors": " ",
+"version": 123,
+"created_at": " ",
+"updated_at": {},
+"created_by": " ",
+"created_by_key_id": " ",
+"remark": " ",
+"total": 123,
+"completed": 123,
+"failed": 123,
+"metadata": {},
+"request_counts": {
+"total": 123,
+"completed": 123,
+"failed": 123
+}
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Path Parameters
+​ batch_id string required The unique identifier of the batch job to check.
+## ​Response
+​ id string required A unique identifier for the batch job.
+​ object string required The object type, which is always batch .
+​ endpoint string required The API endpoint that the batch job is using for processing requests.
+​ input_file_id string required The ID of the input file containing the batch requests.
+​ output_file_id string required The ID of the output file containing the batch results. Empty until the batch is completed.
+​ error_file_id string required The ID of the error file containing any errors that occurred during batch processing. Empty until errors occur.
+​ completion_window string required The time window for batch completion. Currently fixed at 48h .
+​ in_progress_at string | null The timestamp when the batch started processing. Null if not yet started.
+​ expires_at string | null The timestamp when the batch will expire. Null if not set.
+​ finalizing_at string | null The timestamp when the batch started finalizing. Null if not yet finalizing.
+​ completed_at string | null The timestamp when the batch was completed. Null if not yet completed.
+​ failed_at string | null The timestamp when the batch failed. Null if not failed.
+​ expired_at string | null The timestamp when the batch expired. Null if not expired.
+​ cancelling_at string | null The timestamp when the batch started cancelling. Null if not cancelling.
+​ cancelled_at string | null The timestamp when the batch was cancelled. Null if not cancelled.
+​ status string required The current status of the batch job. Available statuses:
+- VALIDATING - The input file is being validated before the batch can begin
+- PROGRESS - Batch is in progress
+- COMPLETED - Batch processing completed successfully
+- FAILED - Batch processing failed
+- EXPIRED - Batch exceeded deadline
+- CANCELLING - Batch is being cancelled
+- CANCELLED - Batch was cancelled
+​ errors string Error messages if any errors occurred during batch processing.
+​ version integer required The version number of the batch job.
+​ created_at string required The timestamp when the batch job was created.
+​ updated_at string | null The timestamp when the batch job was last updated. Null if never updated.
+​ created_by string required The unique identifier of the user who created the batch job.
+​ created_by_key_id string required The API key ID used to create the batch job.
+​ remark string Optional remark or note for the batch job.
+​ total integer required The total number of requests in the batch.
+​ completed integer required The number of completed requests in the batch.
+​ failed integer required The number of failed requests in the batch.
+​ metadata object | null Additional metadata associated with the batch job. Null if no metadata is provided.
+​ request_counts object required Detailed request count information. Show properties ​ total integer required The total number of requests in the batch. ​ completed integer required The number of successfully completed requests. ​ failed integer required The number of failed requests. Was this page helpful? Yes No Retrieve batch List batch ⌘ I

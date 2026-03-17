@@ -1,0 +1,54 @@
+Source: https://novita.ai/docs/guides/sandbox-filesystem-download
+============================================================
+
+- Download data from sandbox - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationFilesystemDownload data from sandboxGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- FilesystemOverview
+- Read & write files
+- Watch sandbox directory for changes
+- Upload data to sandbox
+- Download data from sandbox
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+You can download data from the sandbox using the files.read() method.
+JavaScript & TypeScript Python Copy
+```
+import fs from 'fs'
+import { Sandbox } from 'novita-sandbox/code-interpreter'
+const sandbox = await Sandbox.create()
+// Create a file in the sandbox for testing
+const filePathInSandbox = '/tmp/test-file'
+await sandbox.files.write(filePathInSandbox, "test-file-content")
+// Read file from sandbox
+const content = await sandbox.files.read(filePathInSandbox)
+// Write file to local filesystem
+const localFilePath = './local-test-file'
+fs.writeFileSync(localFilePath, content)
+await sandbox.kill()
+```
+Was this page helpful? Yes No Upload data to sandbox Running commands in sandbox ⌘ I

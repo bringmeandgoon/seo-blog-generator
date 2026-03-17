@@ -1,0 +1,117 @@
+Source: https://novita.ai/docs/api-reference/basic-query-usage-based-billing
+============================================================
+
+- Query Usage-based Billing - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationBasicQuery Usage-based BillingGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU Instance
+- Serverless GPUs
+Query Usage-based Billing cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/openapi/v1/billing/bill/list \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"bills": [
+{
+"userId": " ",
+"startTime": " ",
+"endTime": " ",
+"billingMethod": " ",
+"productName": " ",
+"category": " ",
+"ownerID": " ",
+"billNum0": " ",
+"billNum1": " ",
+"basePrice0": " ",
+"basePrice1": " ",
+"discountPrice0": " ",
+"discountPrice1": " ",
+"amount": " ",
+"voucherAmount": " ",
+"payAmount": " ",
+"payAmountDisplay": " ",
+"pricePrecision": " ",
+"productId": " "
+}
+]
+}
+```
+GET / openapi / v1 / billing / bill / list Try it Query Usage-based Billing cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/openapi/v1/billing/bill/list \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"bills": [
+{
+"userId": " ",
+"startTime": " ",
+"endTime": " ",
+"billingMethod": " ",
+"productName": " ",
+"category": " ",
+"ownerID": " ",
+"billNum0": " ",
+"billNum1": " ",
+"basePrice0": " ",
+"basePrice1": " ",
+"discountPrice0": " ",
+"discountPrice1": " ",
+"amount": " ",
+"voucherAmount": " ",
+"payAmount": " ",
+"payAmountDisplay": " ",
+"pricePrecision": " ",
+"productId": " "
+}
+]
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Query Parameters
+​ cycleType string required Billing cycle granularity. Options: Hour , Day , Week , Month
+​ productCategory string required Product type. Options:
+- summary (Summary bill)
+- gpu (GPU instance)
+- llm (llm api)
+- serverless (Serverless Endpoint)
+- cloud_storage (Storage resources)
+- gen_api (Image/Video/Audio generation)
+​ productName string Product name. Supports fuzzy matching.
+​ startTime string Start time of the billing period to query, timestamp in seconds, default: 0.
+​ endTime string End time of the billing period to query, timestamp in seconds, default: 0.
+​ ownerId string Specify instance ID to query.
+## ​Response Parameters
+​ bills object[] required Pay-as-you-go instance billing information. Hide properties ​ userId string required User ID to which the instance belongs. ​ startTime string required Start time of the bill. Format is Unix timestamp. ​ endTime string required End time of the bill. Format is Unix timestamp. ​ billingMethod string required Billing method of the instance. A value of 1 indicates pay-as-you-go. ​ productName string required Product name. ​ category string required Product category. ​ ownerID string required Instance ID. ​ billNum0 string required
+- llm: input token
+- gpu: number of cards * billing time
+- storage: storage size * billing time
+​ billNum1 string required
+- llm: output token
+​ basePrice0 string required Original Price ​ basePrice1 string required No significance ​ discountPrice0 string required
+- llm: input token unit price
+- others: unit price
+​ discountPrice1 string required
+- llm: output token unit price
+​ amount string required Total price. ​ voucherAmount string required Voucher deduction amount. ​ payAmount string required Cash payment amount. ​ payAmountDisplay string required ​ pricePrecision string required Price Precision. ​ productId string required Product ID. Was this page helpful? Yes No Query Monthly Bill Query Fixed-Term Billing ⌘ I

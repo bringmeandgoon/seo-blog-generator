@@ -1,0 +1,163 @@
+Source: https://novita.ai/docs/api-reference/model-apis-wan2.6-t2v
+============================================================
+
+- Wan 2.6 Text to Video - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationVideo GeneratorWan 2.6 Text to VideoGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video GeneratorPOSTUnified Video Generation API
+- POSTText to Video
+- POSTImage to Video
+- POSTHunyuan Video Fast
+- POSTWan 2.1 Text to Video
+- POSTWan 2.1 Image to Video
+- POSTWan 2.2 Text to Video
+- POSTWan 2.2 Image to Video
+- POSTWan 2.5 Preview Text to Video
+- POSTWan 2.5 Preview Image to Video
+- POSTWan 2.6 Text to Video
+- POSTWan 2.6 Image to Video
+- POSTWan 2.6 Reference Video
+- POSTKLING V1.6 Text to Video
+- POSTKLING V1.6 Image to Video
+- POSTKling V2.1 Master Text to Video
+- POSTKling V2.1 Image to Video
+- POSTKling V2.1 Master Image to Video
+- POSTKling V2.5 Turbo Text to Video
+- POSTKling V2.5 Turbo Image to Video
+- POSTKling V2.6 Pro Motion Control
+- POSTKling V2.6 Pro Text-to-Video
+- POSTKling V2.6 Pro Image-to-Video
+- POSTKling-o1 Image to Video
+- POSTKling-o1 Reference Video Generation
+- POSTKling-o1 Text to Video
+- POSTKling-o1 Video Editing
+- POSTKling v3.0 Standard Image-to-Video
+- POSTKling v3.0 Standard Text-to-Video
+- POSTKling v3.0 Pro Image-to-Video
+- POSTKling v3.0 Pro Text-to-Video
+- POSTMinimax Video-01
+- POSTMinimax Hailuo-02
+- POSTMinimax Hailuo 2.3 Text to Video
+- POSTMinimax Hailuo 2.3 Image to Video
+- POSTMinimax Hailuo 2.3 Fast Image to Video
+- POSTVidu Q1 Text to Video
+- POSTVidu Q1 Image to Video
+- POSTVidu Q1 Start End to Video
+- POSTVidu Q1 Reference to Video
+- POSTVidu 2.0 Image to Video
+- POSTVidu 2.0 Start End to Video
+- POSTVidu 2.0 Reference to Video
+- POSTPixVerse V4.5 Text to Video
+- POSTPixVerse V4.5 Image to Video
+- POSTSeedance V1 Lite Text to Video
+- POSTSeedance V1 Lite Image to Video
+- POSTSeedance V1 Pro Text to Video
+- POSTSeedance V1 Pro Image to Video
+- POSTSeedance 1.5 Pro Text To Video
+- POSTSeedance 1.5 Pro Image To Video
+- POSTVIDU Q2 Turbo Start-End Frame to Video
+- POSTVIDU Q2 Turbo Multi-frame to Video
+- POSTVIDU Q2 Turbo Image to Video
+- POSTVIDU Q2 Text to Video
+- POSTVIDU Q2 Reference Image to Video
+- POSTVIDU Q2 Pro Start-End Frame to Video
+- POSTVIDU Q2 Pro Multi-frame to Video
+- POSTVIDU Q2 Pro Image to Video
+- POSTVIDU Q2 Pro Fast Start-End Frame to Video
+- POSTVIDU Q2 Pro Fast Image to Video
+- POSTVIDU Q2 Template to Video
+- POSTVidu Q3 Pro Text-to-Video
+- POSTVidu Q3 Pro Image-to-Video
+- POSTHeygen Video-translate
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Wan 2.6 Text to Video cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/wan2.6-t2v \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"input": {
+"prompt": " ",
+"audio_url": " ",
+"negative_prompt": " "
+},
+"parameters": {
+"seed": 123,
+"size": " ",
+"audio": true,
+"duration": 123,
+"shot_type": " ",
+"watermark": true,
+"prompt_extend": true
+}
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+POST / v3 / async / wan2.6-t2v Wan 2.6 Text to Video cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/wan2.6-t2v \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"input": {
+"prompt": " ",
+"audio_url": " ",
+"negative_prompt": " "
+},
+"parameters": {
+"seed": 123,
+"size": " ",
+"audio": true,
+"duration": 123,
+"shot_type": " ",
+"watermark": true,
+"prompt_extend": true
+}
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+AI-powered text-to-video service. Generate high-quality video content from text prompts, offering professional video generation capabilities: ready-to-use REST inference API, best-in-class performance, no cold start, and affordable pricing.
+This is an asynchronous API; only the task_id will be returned. You should use the task_id to request the Task Result API to retrieve the video generation results.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ input object required Hide properties ​ prompt string required Text prompt describing the desired elements and visual features in the generated video. Supported in both Chinese and English, each Chinese character/letter counts as one character; excess will be automatically truncated. Length limit: 0 - 2000 ​ audio_url string Audio file URL to be used by the model to generate video. Supports HTTP or HTTPS. Audio limits: wav/mp3 format; duration 3~30s; file size ≤ 15MB. Exceeding duration: if audio length exceeds duration value (5s or 10s), only the first 5s or 10s are kept, rest is discarded. If audio is shorter than video duration, the excess part of the video is silent. For example, if audio is 3s and video duration is 5s, the first 3s of the output video has sound, the last 2s is silent. ​ negative_prompt string Negative prompt, describing content that should not appear in the video. Allows limiting the video content. Supported in Chinese and English, no more than 500 characters; excess will be automatically truncated. Length limit: 0 - 500
+​ parameters object Hide properties ​ seed integer Random seed. Range: [0, 2147483647]. If not specified, the system generates a random seed. For better reproducibility, it is recommended to specify a seed value. Note: Due to probabilistic nature of the model, results might not be exactly identical even with the same seed. Value range: [0, 2147483647] ​ size string default: "1920*1080" Specify the resolution of the generated video in format width height. Supports 720P options (1280 720/720 1280/960 960/1088 832/832 1088) and 1080P options (1920 1080/1080 1920/1440 1440/1632 1248/1248*1632). Optional values: 1280*720 , 720*1280 , 960*960 , 1088*832 , 832*1088 , 1920*1080 , 1080*1920 , 1440*1440 , 1632*1248 , 1248*1632 ​ audio boolean default: true Whether to add audio. Parameter priority: audio_url > audio. This parameter only works when audio_url is empty. true: (default) automatically add audio to video; false: no audio, resulting in a silent video. ​ duration integer default: 5 Duration of the generated video in seconds. Options: 5, 10, 15; default is 5. Duration directly influences cost: cost = unit price (based on resolution) x duration (seconds). Please confirm model pricing before calling. Optional values: 5 , 10 , 15 ​ shot_type string default: "multi" Video generation mode. ‘single’ for single-shot generation; ‘multi’ for multi-shot generation. Optional values: single , multi ​ watermark boolean default: false Whether to add a watermark. The watermark will be at the bottom right of the video, labeled as “AI Generated”. false: (default) no watermark; true: add watermark. ​ prompt_extend boolean default: true Whether to enable prompt intelligent rewriting. If enabled, a large model is used to smartly rewrite the input prompt, which can significantly improve results for short prompts but may increase processing time. true: (default) enable smart rewriting; false: do not enable.
+## ​Response
+​ task_id string required Use the task_id to request the Task Result API to retrieve the generated outputs. Was this page helpful? Yes No Wan 2.5 Preview Image to Video Wan 2.6 Image to Video ⌘ I

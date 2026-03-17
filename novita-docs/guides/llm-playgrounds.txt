@@ -1,0 +1,75 @@
+Source: https://novita.ai/docs/guides/llm-playgrounds
+============================================================
+
+- Interactive Playground - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationLLMInteractive PlaygroundGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLMLarge Language Models
+- Vision Language Models
+- Recommended Models
+- Reasoning Models
+- DeepSeek-OCR Usage
+- Function Calling
+- Structured Outputs
+- Prompt Cache
+- Dedicated Endpoint User Manual
+- Batch Inference
+- Rate limits
+- LLM Monitoring
+- Interactive Playground
+- Anthropic SDK Compatibility
+- Interleaved Thinking Supporty
+- Common Error Codes
+- LLM FAQs
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Response Format
+- System Prompt
+- Parameter Configuration
+- Usage Recommendations
+To help users better understand and test the behavior of large language models, Novita provides a flexible interactive playground. Users can fine-tune a series of parameters to precisely control the model’s generation logic, content style, and response structure, enabling more targeted output.
+## ​Response Format
+Users can choose between two modes:
+- Custom JSON Output Structure: Define a JSON Schema to guide the model in generating output that follows a predefined format, ideal for structured tasks or API integration scenarios.
+- Free-form Generation: Allow the model to freely organize answers based on context, suitable for open-ended Q&A and creative writing applications.
+## ​System Prompt
+By setting a system prompt, users can define the model’s “persona” and behavioral context. For example, if you set the prompt as “You are a professional travel planner,” the model will respond from that perspective, enhancing consistency and contextual coherence.
+## ​Parameter Configuration
+The playground supports the adjustment of the following core parameters:
+- max_tokens: Sets the maximum number of tokens the model can generate. Lower values improve response speed, while higher values are suitable for complex, lengthy outputs.
+- temperature: Controls the creativity and randomness of the output. Higher values lead to more diverse and imaginative responses, while lower values yield more conservative and deterministic outputs, ideal for precise tasks.
+- top_p (nucleus sampling): Dynamically adjusts the token sampling range per step to improve diversity and fluency. Recommended to use alongside temperature.
+- top_k: Limits the model to select from the top K highest probability tokens at each step, which enhances efficiency and reduces noise.
+- min_p: An alternative to top_p and top_k, used to filter out tokens with probabilities below a certain threshold, suitable for accuracy-critical tasks.
+- presence_penalty: Encourages the model to introduce new topics in its output. Positive values increase the likelihood of expanding to new content.
+- frequency_penalty: Suppresses the generation of repeated tokens. Positive values reduce repetition and help maintain originality.
+- repetition_penalty: Further reduces the risk of loops or repetitive prompts, enhancing output robustness.
+## ​Usage Recommendations
+- For Creative Writing: Increase temperature, top_p, and presence_penalty to encourage diverse and imaginative outputs.
+- For Structured Tasks and Tool Invocation: Use a fixed JSON schema with lower temperature and top_k to ensure consistent and reliable outputs.
+- For Testing Interactions: Compare different parameter combinations to observe changes in generation style, information density, and contextual understanding, aiding in faster prompt iteration.
+To replicate the behavior from the playground in API calls, refer to the corresponding parameter documentation in the platform guide. Was this page helpful? Yes No LLM Monitoring Anthropic SDK Compatibility ⌘ I

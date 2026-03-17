@@ -1,0 +1,45 @@
+Source: https://novita.ai/docs/guides/serverless-gpus-quickstart-manage-endpoint
+============================================================
+
+- Manage Serverless Endpoint - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationQuickstartManage Serverless EndpointGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUsOverview
+- QuickstartPreparations
+- Create Serverless Endpoint
+- Create Async Serverless Endpoint
+- Manage Serverless Endpoint
+- Guides
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Check Serverless Endpoint
+- Modify Serverless Endpoint
+## ​Check Serverless Endpoint
+Go to the Serverless Console to check all the Serverless Endpoints you have created.
+Click the “Dropdown” button at the bottom right corner of the target serverless endpoint to view the number of running Workers, Worker logs, and advanced operation options for the serverless endpoint.
+## ​Modify Serverless Endpoint
+Click the “Modify” button to modify the configuration of the target serverless endpoint in the subsequent pop-up window. Except for the “App Name”, all other configurations can be modified. For details, refer to: Configure Serverless Endpoint . Was this page helpful? Yes No Create Async Serverless Endpoint Serverless Pricing ⌘ I

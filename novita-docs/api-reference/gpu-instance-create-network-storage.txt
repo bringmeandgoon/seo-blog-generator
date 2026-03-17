@@ -1,0 +1,84 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-create-network-storage
+============================================================
+
+- Create Network Storage - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationStorageCreate Network StorageGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- Instance
+- Image
+- Template
+- Product
+- Network
+- Image Registry
+- StoragePOSTCreate Network Storage
+- POSTDelete Network Storage
+- POSTEdit Network Storage
+- GETList Network Storage
+- Jobs
+- Serverless GPUs
+Create Network Storage cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/networkstorage/create \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"clusterId": " ",
+"storageName": " ",
+"storageSize": 123
+}
+'
+```
+POST / gpu-instance / openapi / v1 / networkstorage / create Try it Create Network Storage cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/networkstorage/create \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"clusterId": " ",
+"storageName": " ",
+"storageSize": 123
+}
+'
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ clusterId string required
+​ storageName string required
+​ storageSize integer required
+## ​Example
+Request
+Copy
+```
+curl --request POST \
+--url 'https://api.novita.ai/gpu-instance/openapi/v1/networkstorage/create' \
+--header 'Authorization: Bearer {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data '{
+"clusterId": "string",
+"storageName": "string",
+"storageSize": 0
+}'
+```
+Response
+Copy
+```
+" "
+```
+Was this page helpful? Yes No List Container Registry Auth Delete Network Storage ⌘ I

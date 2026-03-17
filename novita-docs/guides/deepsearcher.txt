@@ -1,0 +1,73 @@
+Source: https://novita.ai/docs/guides/deepsearcher
+============================================================
+
+- DeepSearcher - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationIntegrationsDeepSearcherGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- IntegrationsClaude Code Integration Guide
+- OpenAI Agents SDK
+- AnythingLLM
+- Dify
+- Helicone
+- Hugging Face
+- Langflow
+- Continue
+- Cursor
+- LangChain
+- Skyvern
+- LobeChat
+- AI Gradio
+- Langfuse
+- MLflow
+- Verba
+- Portkey
+- DocsGPT
+- LlamaIndex
+- LoLLMS WebUI
+- CodeCompanion
+- Page Assist
+- DeepSearcher
+- Browser Use
+- OWL
+- LiteLLM
+- ChatBox
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - How to use DeepSearcher with Novita
+DeepSearcher is an open-source solution designed to transform private data search and reasoning by integrating cutting-edge large language models (LLMs) with vector databases such as Milvus. With support for LLMs and embedding models from Novita AI, this powerful configuration delivers unmatched accuracy and efficiency in private data search.
+This step-by-step guide will walk you through how to quickly and easily configure Novita AI with DeepSearcher.
+## ​How to use DeepSearcher with Novita
+Step 1: Follow the example in examples/basic_example.py .
+Step 2: Add the following code below the line config = Configuration() :
+Copy
+```
+config.set_provider_config("llm", "NOVITA", {"model": "deepseek/deepseek-r1-turbo"})
+config.set_provider_config("embedding", "NovitaEmbedding", {"model": "baai/bge-m3"})
+```
+Step 3: Run examples/basic_example.py to execute the integration.
+You’ll get the following results:
+Was this page helpful? Yes No Page Assist Browser Use ⌘ I

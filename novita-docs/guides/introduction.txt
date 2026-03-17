@@ -1,0 +1,51 @@
+Source: https://novita.ai/docs/guides/introduction
+============================================================
+
+- Introduction - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationGet startedIntroductionGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+Use Novita Docs with your AI agent Quick start — paste into your agent chat (no install needed): Copy
+```
+Read https://novita.ai/docs/skill.md and follow the instructions to integrate Novita AI.
+```
+Optional install — if your agent runner supports skills (recommended for frequent use): Copy
+```
+npx skills add novitalabs/novita-skills --skill novita-docs
+```
+If your agent can run shell commands, you can ask it to run the install command for you. View on GitHub →
+Novita provides simple, reliable, and cost-effective cloud infrastructure for running AI models. We empower developers with scalable, production-ready model inference so they can focus on building AI applications.
+## Quickstart
+Set up your account and get started.
+## Model APIs
+Ship top AI models with a simple API.
+## GPUs
+Need help running your own models? Get dedicated GPUs.
+## Agent Sandbox
+Securely run AI-generated code with full isolation and seamless agent integration. Was this page helpful? Yes No Quickstart ⌘ I

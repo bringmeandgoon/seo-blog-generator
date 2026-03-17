@@ -1,0 +1,54 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Environment variables
+.env
+seo-monitor/.env
+
+# Job artifacts
+jobs/logs/
+jobs/done/*.json
+jobs/pending/*.json
+jobs/pending/*.processing
+
+# Claude Code local settings
+.claude/
+
+# Build output
+dist/
+
+# Backups
+*.bak
+backups/
+
+# SEO monitor credentials
+seo-monitor/credentials/
+seo-monitor/src/__pycache__/
+
+# Novita docs embeddings (large, regeneratable)
+novita-docs/_embeddings.json
+
+# Temp files
+/tmp/

@@ -1,0 +1,167 @@
+Source: https://novita.ai/docs/api-reference/model-apis-wan2.6-i2v
+============================================================
+
+- Wan 2.6 Image to Video - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationVideo GeneratorWan 2.6 Image to VideoGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video GeneratorPOSTUnified Video Generation API
+- POSTText to Video
+- POSTImage to Video
+- POSTHunyuan Video Fast
+- POSTWan 2.1 Text to Video
+- POSTWan 2.1 Image to Video
+- POSTWan 2.2 Text to Video
+- POSTWan 2.2 Image to Video
+- POSTWan 2.5 Preview Text to Video
+- POSTWan 2.5 Preview Image to Video
+- POSTWan 2.6 Text to Video
+- POSTWan 2.6 Image to Video
+- POSTWan 2.6 Reference Video
+- POSTKLING V1.6 Text to Video
+- POSTKLING V1.6 Image to Video
+- POSTKling V2.1 Master Text to Video
+- POSTKling V2.1 Image to Video
+- POSTKling V2.1 Master Image to Video
+- POSTKling V2.5 Turbo Text to Video
+- POSTKling V2.5 Turbo Image to Video
+- POSTKling V2.6 Pro Motion Control
+- POSTKling V2.6 Pro Text-to-Video
+- POSTKling V2.6 Pro Image-to-Video
+- POSTKling-o1 Image to Video
+- POSTKling-o1 Reference Video Generation
+- POSTKling-o1 Text to Video
+- POSTKling-o1 Video Editing
+- POSTKling v3.0 Standard Image-to-Video
+- POSTKling v3.0 Standard Text-to-Video
+- POSTKling v3.0 Pro Image-to-Video
+- POSTKling v3.0 Pro Text-to-Video
+- POSTMinimax Video-01
+- POSTMinimax Hailuo-02
+- POSTMinimax Hailuo 2.3 Text to Video
+- POSTMinimax Hailuo 2.3 Image to Video
+- POSTMinimax Hailuo 2.3 Fast Image to Video
+- POSTVidu Q1 Text to Video
+- POSTVidu Q1 Image to Video
+- POSTVidu Q1 Start End to Video
+- POSTVidu Q1 Reference to Video
+- POSTVidu 2.0 Image to Video
+- POSTVidu 2.0 Start End to Video
+- POSTVidu 2.0 Reference to Video
+- POSTPixVerse V4.5 Text to Video
+- POSTPixVerse V4.5 Image to Video
+- POSTSeedance V1 Lite Text to Video
+- POSTSeedance V1 Lite Image to Video
+- POSTSeedance V1 Pro Text to Video
+- POSTSeedance V1 Pro Image to Video
+- POSTSeedance 1.5 Pro Text To Video
+- POSTSeedance 1.5 Pro Image To Video
+- POSTVIDU Q2 Turbo Start-End Frame to Video
+- POSTVIDU Q2 Turbo Multi-frame to Video
+- POSTVIDU Q2 Turbo Image to Video
+- POSTVIDU Q2 Text to Video
+- POSTVIDU Q2 Reference Image to Video
+- POSTVIDU Q2 Pro Start-End Frame to Video
+- POSTVIDU Q2 Pro Multi-frame to Video
+- POSTVIDU Q2 Pro Image to Video
+- POSTVIDU Q2 Pro Fast Start-End Frame to Video
+- POSTVIDU Q2 Pro Fast Image to Video
+- POSTVIDU Q2 Template to Video
+- POSTVidu Q3 Pro Text-to-Video
+- POSTVidu Q3 Pro Image-to-Video
+- POSTHeygen Video-translate
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Wan 2.6 Image to Video cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/wan2.6-i2v \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"input": {
+"prompt": " ",
+"img_url": " ",
+"template": " ",
+"audio_url": " ",
+"negative_prompt": " "
+},
+"parameters": {
+"seed": 123,
+"audio": true,
+"duration": 123,
+"shot_type": " ",
+"watermark": true,
+"resolution": " ",
+"prompt_extend": true
+}
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+POST / v3 / async / wan2.6-i2v Wan 2.6 Image to Video cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/wan2.6-i2v \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"input": {
+"prompt": " ",
+"img_url": " ",
+"template": " ",
+"audio_url": " ",
+"negative_prompt": " "
+},
+"parameters": {
+"seed": 123,
+"audio": true,
+"duration": 123,
+"shot_type": " ",
+"watermark": true,
+"resolution": " ",
+"prompt_extend": true
+}
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+AI-based image-to-video service. Generate high-quality video content from input images and text prompts, providing professional video generation capabilities: ready-to-use REST inference API, best performance, zero cold start, and affordable pricing.
+This is an asynchronous API; only the task_id will be returned. You should use the task_id to request the Task Result API to retrieve the video generation results.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ input object required Hide properties ​ prompt string Text prompt that describes the expected elements and visual characteristics in the generated video. Supports both Chinese and English. Each Chinese character/letter counts as one character. The excess part will be automatically truncated. Length limit: 0 - 2000 ​ img_url string required URL of the input image or Base64-encoded data. Supports HTTP or HTTPS protocol. For local files, you can upload to obtain a temporary URL. Image limitations: formats: JPEG, JPG, PNG (transparent channels not supported), BMP, WEBP; resolution: width and height range [360, 2000] (pixels); file size: no more than 10MB. Input image notes: 1. Use a public URL - HTTP or HTTPS supported; for local files, upload to obtain a temporary URL, e.g. https://cdn.translate.alibaba.com/r/wanx-demo-1.png . 2. Provide the Base64-encoded image string - format: data: ;base64, ; e.g. data:image/png;base64,GDU7MtCZEbTbmRZ… (string truncated for display). See documentation for more. ​ template string Name of video effect template. If not filled, no effects are used. Different templates support different special effects. Please query the template list before calling to avoid failure. ​ audio_url string Audio file URL, which the model will use to generate the video. Supports HTTP or HTTPS protocol. Audio limitations: format wav/mp3; duration 3–30s; file size up to 15MB. If the audio is longer than duration (5s or 10s), only the first 5 or 10 seconds are used, the rest is discarded. If the audio is shorter than the video, the excess part of the video will be silent. For example, for a 3s audio and a 5s video, the first 3 seconds have sound, the last 2 seconds are silent. ​ negative_prompt string Negative prompt: describes what content should NOT appear in the video. Supports both Chinese and English, up to 500 characters. Excess content is truncated. Length limit: 0 - 500
+​ parameters object Hide properties ​ seed integer Random seed. Range is [0, 2147483647]. If not specified, the system generates a random seed. To improve reproducibility, it is recommended to set a fixed seed. Note: since generation is probabilistic, even with the same seed, results may differ. Value range: [0, 2147483647] ​ audio boolean default: true Controls whether to add audio. Priority: audio_url > audio. Only works when audio_url is empty, see audio settings. true: (default) add audio automatically; false: no audio track in the video. ​ duration integer default: 5 Duration (in seconds) of the generated video. Duration affects cost; please check model pricing before use. Optional values: 5 , 10 , 15 ​ shot_type string default: "multi" Video generation mode. single: single shot; multi: multi-shot. Optional values: single , multi ​ watermark boolean default: false Add watermark at lower-right corner of the video (text fixed as “AI Generated”). false: (default) no watermark; true: watermark added. ​ resolution string default: "1080P" Target resolution for the generated video. Supports 720P and 1080P. Optional values: 720P , 1080P ​ prompt_extend boolean default: true Whether to enable intelligent prompt rewriting. If enabled, a large language model rewrites the prompt for improved results (especially effective for short prompts, at the cost of additional time). true: (default) enabled; false: not enabled.
+## ​Response
+​ task_id string required Use the task_id to request the Task Result API to retrieve the generated outputs. Was this page helpful? Yes No Wan 2.6 Text to Video Wan 2.6 Reference Video ⌘ I

@@ -1,0 +1,192 @@
+Source: https://novita.ai/docs/api-reference/model-apis-llm-create-completion
+============================================================
+
+- Create completion - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationLLM APICreate completionGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM APIPOSTCreate chat completion
+- POSTCreate completion
+- POSTCreate embeddings
+- POSTCreate rerank
+- GETList models
+- GETRetrieve model
+- Batch
+- Image, Audio and Video
+GPUs - GPU Instance
+- Serverless GPUs
+Create completion cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/openai/v1/completions \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"model": " ",
+"prompt": " ",
+"max_tokens": 123,
+"stream": {},
+"stream_options": {
+"include_usage": true
+},
+"n": {},
+"seed": {},
+"frequency_penalty": {},
+"presence_penalty": {},
+"repetition_penalty": {},
+"stop": {},
+"temperature": {},
+"top_p": {},
+"top_k": {},
+"min_p": {},
+"logit_bias": {},
+"logprobs": {},
+"best_of": 123
+}
+'
+```
+200 Copy
+```
+{
+"choices": [
+{
+"finish_reason": " ",
+"index": 123,
+"logprobs": {
+"text_offset": [
+{}
+],
+"token_logprobs": [
+{}
+],
+"tokens": [
+{}
+],
+"top_logprobs": [
+{
+"{key}": 123
+}
+]
+},
+"text": " "
+}
+],
+"created": 123,
+"id": " ",
+"model": " ",
+"object": " ",
+"usage": {
+"completion_tokens": 123,
+"prompt_tokens": 123,
+"total_tokens": 123
+}
+}
+```
+POST / openai / v1 / completions Try it Create completion cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/openai/v1/completions \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"model": " ",
+"prompt": " ",
+"max_tokens": 123,
+"stream": {},
+"stream_options": {
+"include_usage": true
+},
+"n": {},
+"seed": {},
+"frequency_penalty": {},
+"presence_penalty": {},
+"repetition_penalty": {},
+"stop": {},
+"temperature": {},
+"top_p": {},
+"top_k": {},
+"min_p": {},
+"logit_bias": {},
+"logprobs": {},
+"best_of": 123
+}
+'
+```
+200 Copy
+```
+{
+"choices": [
+{
+"finish_reason": " ",
+"index": 123,
+"logprobs": {
+"text_offset": [
+{}
+],
+"token_logprobs": [
+{}
+],
+"tokens": [
+{}
+],
+"top_logprobs": [
+{
+"{key}": 123
+}
+]
+},
+"text": " "
+}
+],
+"created": 123,
+"id": " ",
+"model": " ",
+"object": " ",
+"usage": {
+"completion_tokens": 123,
+"prompt_tokens": 123,
+"total_tokens": 123
+}
+}
+```
+Creates a completion for the provided prompt and parameters.
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ model string required The name of the model to use.
+​ prompt string required The prompt(s) to generate completions for, encoded as a string, array of strings, array of tokens, or array of token arrays.
+​ max_tokens integer The maximum number of tokens that can be generated in the completion. The token count of your prompt plus max_tokens cannot exceed the model’s context length.
+​ stream boolean | null default: false Whether to stream back partial progress. If set, tokens will be sent as data-only server-sent events (SSE) as they become available, with the stream terminated by a data: [DONE] message.
+​ stream_options object | null Options for streaming response. Only set this when you set stream: true. Show properties ​ include_usage boolean If set, an additional chunk will be streamed before the data: [DONE] message. The usage field on this chunk shows the token usage statistics for the entire request, and the choices field will always be an empty array. All other chunks will also include a usage field, but with a null value.
+​ n integer | null default: 1 How many completions to generate for each prompt. Note: Because this parameter generates many completions, it can quickly consume your token quota. Use carefully and ensure that you have reasonable settings for max_tokens and stop. Required range: 1 < x < 128
+​ seed integer | null If specified, our system will make a best effort to sample deterministically, such that repeated requests with the same seed and parameters should return the same result.
+​ frequency_penalty number | null default: 0 Positive values penalize new tokens based on their existing frequency in the text so far, decreasing the model’s likelihood to repeat the same line verbatim. Reasonable value is around 0.1 to 1 if the aim is to just reduce repetitive samples somewhat. If the aim is to strongly suppress repetition, then one can increase the coefficients up to 2, but this can noticeably degrade the quality of samples. Negative values can be used to increase the likelihood of repetition. See also presence_penalty for penalizing tokens that have at least one appearance at a fixed rate. Required range: -2 < x < 2
+​ presence_penalty number | null default: 0 Positive values penalize new tokens based on whether they appear in the text so far, increasing the model’s likelihood to talk about new topics. Reasonable value is around 0.1 to 1 if the aim is to just reduce repetitive samples somewhat. If the aim is to strongly suppress repetition, then one can increase the coefficients up to 2, but this can noticeably degrade the quality of samples. Negative values can be used to increase the likelihood of repetition. See also frequency_penalty for penalizing tokens at an increasing rate depending on how often they appear. Required range: -2 < x < 2
+​ repetition_penalty number | null Applies a penalty to repeated tokens to discourage or encourage repetition. A value of 1.0 means no penalty, allowing free repetition. Values above 1.0 penalize repetition, reducing the likelihood of repeating tokens. Values between 0.0 and 1.0 reward repetition, increasing the chance of repeated tokens. For a good balance, a value of 1.2 is often recommended. Note that the penalty is applied to both the generated output and the prompt in decoder-only models. Required range: 0 < x < 2
+​ stop string | null Up to 4 sequences where the API will stop generating further tokens. The returned text will contain the stop sequence.
+​ temperature number | null default: 1 What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. We generally recommend altering this or top_p but not both. Required range: 0 < x < 2
+​ top_p number | null An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising the top 10% probability mass are considered. We generally recommend altering this or temperature but not both. Required range: 0 < x <= 1
+​ top_k integer | null Top-k sampling is another sampling method where the k most probable next tokens are filtered and the probability mass is redistributed among only those k next tokens. The value of k controls the number of candidates for the next token at each step during text generation. Required range: 1 < x < 128
+​ min_p number | null float that represents the minimum probability for a token to be considered, relative to the probability of the most likely token. Required range: 0 <= x <= 1
+​ logit_bias map[string, integer] | null Modify the likelihood of specified tokens appearing in the completion. Accepts a JSON object that maps tokens to an associated bias value from -100 to 100.
+Mathematically, the bias is added to the logits generated by the model prior to
+sampling. The exact effect will vary per model. For example, by setting "logit_bias":{"1639": 6} will increase the likelihood of the token with token ID 1639.
+​ logprobs integer | null Include the log probabilities on the logprobs most likely output tokens, as well the chosen tokens. For example, if logprobs is 5, the API will return a list of the 5 most likely tokens. The maximum value for logprobs is 5.
+​ best_of integer Defaults to 1. Generates best_of completions server-side and returns the “best” (the one with the highest log probability per token). Results cannot be streamed. When used with n, best_of controls the number of candidate completions and n specifies how many to return – best_of must be greater than n. Note: Because this parameter generates many completions, it can quickly consume your token quota. Use carefully and ensure that you have reasonable settings for max_tokens and stop.
+## ​Response
+​ choices array required The list of generated completion choices. Show properties ​ finish_reason string required The reason the model stopped generating tokens. This will be “stop” if the model hit a natural stop point or a provided stop sequence, or “length” if the maximum number of tokens specified in the request was reached. Enum: stop , length ​ index integer required The index of the completion choice. ​ logprobs object required The log probabilities of the most likely tokens. Show properties ​ text_offset array Array of integers representing text offsets. ​ token_logprobs array Array of numbers representing token log probabilities. ​ tokens array Array of strings representing tokens. ​ top_logprobs array Array of objects containing top log probabilities. Show properties ​ {key} integer required Log probability value for the given key. ​ text string required The completion response.
+​ created integer required The Unix time in seconds when the response was generated.
+​ id string required A unique identifier of the response.
+​ model string required The model used for the completion.
+​ object string required The object type, which is always text_completion .
+​ usage object required Usage statistics. For streaming responses, usage field is included in the very last response chunk returned. Show properties ​ completion_tokens integer required The number of tokens in the generated completion. ​ prompt_tokens integer required The number of tokens in the prompt. ​ total_tokens integer required The total number of tokens used in the request (prompt + completion). Was this page helpful? Yes No Create chat completion Create embeddings ⌘ I

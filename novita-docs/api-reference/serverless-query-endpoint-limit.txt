@@ -1,0 +1,112 @@
+Source: https://novita.ai/docs/api-reference/serverless-query-endpoint-limit
+============================================================
+
+- Get Endpoint Parameter Limit Ranges - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationServerless GPUsGet Endpoint Parameter Limit RangesGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU Instance
+- Serverless GPUsGETGet Endpoint Parameter Limit Ranges
+- POSTCreate Endpoint
+- GETList Endpoints
+- GETGet Endpoint
+- POSTUpdate Endpoint
+- POSTDelete Endpoint
+Get Endpoint Parameter Limit Ranges cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/endpoint/limit \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"minRootfsSize": 123,
+"maxRootfsSize": 123,
+"freeRootfsSize": 123,
+"minLocalVolumeSize": 123,
+"maxLocalVolumeSize": 123,
+"freeLocalVolumeSize": 123,
+"minWorkerNum": 123,
+"maxWorkerNum": 123,
+"minFreeTimeout": 123,
+"maxFreeTimeout": 123,
+"minConcurrencyNum": 123,
+"maxConcurrencyNum": 123,
+"minQueueWaitTime": 123,
+"maxQueueWaitTime": 123,
+"minRequestNum": 123,
+"maxRequestNum": 123,
+"minGPUNum": 123,
+"maxGPUNum": 123,
+"cudaVersionList": [
+" "
+]
+}
+```
+GET / gpu-instance / openapi / v1 / endpoint / limit Try it Get Endpoint Parameter Limit Ranges cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/endpoint/limit \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"minRootfsSize": 123,
+"maxRootfsSize": 123,
+"freeRootfsSize": 123,
+"minLocalVolumeSize": 123,
+"maxLocalVolumeSize": 123,
+"freeLocalVolumeSize": 123,
+"minWorkerNum": 123,
+"maxWorkerNum": 123,
+"minFreeTimeout": 123,
+"maxFreeTimeout": 123,
+"minConcurrencyNum": 123,
+"maxConcurrencyNum": 123,
+"minQueueWaitTime": 123,
+"maxQueueWaitTime": 123,
+"minRequestNum": 123,
+"maxRequestNum": 123,
+"minGPUNum": 123,
+"maxGPUNum": 123,
+"cudaVersionList": [
+" "
+]
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Response
+​ minRootfsSize integer required Minimum root filesystem size (GB).
+​ maxRootfsSize integer required Maximum root filesystem size (GB).
+​ freeRootfsSize integer required Free root filesystem size (GB).
+​ minLocalVolumeSize integer required Minimum local volume size (GB).
+​ maxLocalVolumeSize integer required Maximum local volume size (GB).
+​ freeLocalVolumeSize integer required Free local volume size (GB).
+​ minWorkerNum integer required Minimum number of worker nodes.
+​ maxWorkerNum integer required Maximum number of worker nodes.
+​ minFreeTimeout integer required Minimum idle timeout (seconds).
+​ maxFreeTimeout integer required Maximum idle timeout (seconds).
+​ minConcurrencyNum integer required Minimum concurrency.
+​ maxConcurrencyNum integer required Maximum concurrency.
+​ minQueueWaitTime integer required Minimum queue wait time (seconds).
+​ maxQueueWaitTime integer required Maximum queue wait time (seconds).
+​ minRequestNum integer required Minimum number of requests.
+​ maxRequestNum integer required Maximum number of requests.
+​ minGPUNum integer required Minimum number of GPUs.
+​ maxGPUNum integer required Maximum number of GPUs.
+​ cudaVersionList string[] required Supported CUDA version list. Was this page helpful? Yes No Break Job Create Endpoint ⌘ I

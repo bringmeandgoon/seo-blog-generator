@@ -1,0 +1,57 @@
+Source: https://novita.ai/docs/guides/gpu-instance-quickstart-manage-network-volume
+============================================================
+
+- Manage Network Volume - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationQuickstartManage Network VolumeGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU InstanceOverview
+- QuickstartPreparations
+- Create Instances
+- Manage Instances
+- Manage Network Volume
+- Connect to Instance
+- Guides
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Create Network Volume
+- Edit Network Volume
+- Delete Network Volume
+“Network Volume” can provide multi-instance shared storage space for GPU container instances, with the characteristics of large capacity and multi-instance sharing. Network volumes are billed on a per-second basis. Please note that if your account is in arrears and no instances are running, your Network Volume will be released 3 days later . Network Volume is provided in the pursuit of running tasks using its GPUs and is not meant to be a long-term backup solution . It is highly advisable to continually back up anything you want to save offsite locally or to a cloud provider.
+## ​Create Network Volume
+- Go to the Console - Storage page and click on ”+ New Network Volume”.
+- Select the “Data Center” where the Network Volume will reside. The “Data Center” is tightly bound to your instance and currently does not support cross-Data Center mounting of Network Volumes to instances.
+- Enter the “Volume Name” and capacity in GB for the Network Volume partition, and click “Save” after verifying that the details are correct.
+## ​Edit Network Volume
+You can edit your Network Volume through the console as follows:
+- Go to the Console - Storage page, locate the Network Volume you plan to expand, and click the ”…” button in the upper right corner.
+- Click the “Edit” button to modify the Network Volume configuration.
+Please note that we currently only support the expansion of the Network Volume capacity, and the storage capacity cannot be less than the size before modification.
+## ​Delete Network Volume
+You can delete your Network Volume through the console as follows:
+- Go to the Console - Storage page, locate the Network Volume you plan to delete, and click the ”…” button in the upper right corner.
+- Click the “Delete” button to delete the Network Volume.
+Please note that deletion of a Network Volume is irreversible. Once deleted, all data stored on it will be permanently lost , please proceed with caution. Was this page helpful? Yes No Manage Instances Connect to Instance ⌘ I

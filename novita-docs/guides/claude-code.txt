@@ -1,0 +1,172 @@
+Source: https://novita.ai/docs/guides/claude-code
+============================================================
+
+- Claude Code - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationIntegrationsClaude CodeGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- IntegrationsClaude Code Integration Guide
+- OpenAI Agents SDK
+- AnythingLLM
+- Dify
+- Helicone
+- Hugging Face
+- Langflow
+- Continue
+- Cursor
+- LangChain
+- Skyvern
+- LobeChat
+- AI Gradio
+- Langfuse
+- MLflow
+- Verba
+- Portkey
+- DocsGPT
+- LlamaIndex
+- LoLLMS WebUI
+- CodeCompanion
+- Page Assist
+- DeepSearcher
+- Browser Use
+- OWL
+- LiteLLM
+- ChatBox
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Quick Start
+- 1. Install Claude Code
+- 2. Start your first session
+- 3. Build a web game from scratch
+- 4. Task Results and Preview
+- 5. Use Git with Claude Code
+- 6. Improve the game
+- Try More Workflows
+- Common Commands
+Claude Code is an AI-powered coding assistance published by Anthropic that provides a terminal interface, allowing developers to delegate complex programming tasks directly from the terminal to Claude Code for completion.
+Now, Novita provides Anthropic SDK compatible LLM API services , enabling you to easily use Novita LLM models in Claude Code to complete tasks. Please refer to the guide below to complete the integration process.
+## ​Quick Start
+### ​1. Install Claude Code
+Before installing Claude Code, please ensure your local environment has Node.js 18 or higher installed.
+To install Claude Code, run the following command:
+Bash Copy
+```
+npm install -g @anthropic-ai/claude-code
+```
+### ​2. Start your first session
+import from ‘/snippets/setup-api-key-guide.mdx’;
+Please find the list of models currently available for use in Claude Code here .
+Open the terminal and set up environment variables as follows:
+Bash Copy
+```
+# Set the Anthropic SDK compatible API endpoint provided by Novita.
+export ANTHROPIC_BASE_URL="https://api.novita.ai/anthropic"
+export ANTHROPIC_AUTH_TOKEN=" "
+# Set the model provided by Novita.
+export ANTHROPIC_MODEL="moonshotai/kimi-k2-instruct"
+export ANTHROPIC_SMALL_FAST_MODEL="moonshotai/kimi-k2-instruct"
+```
+Next, navigate to your project directory and start Claude Code. You will see the Claude Code prompt inside a new interactive session:
+Bash Copy
+```
+cd
+claude .
+```
+### ​3. Build a web game from scratch
+Input your task description, then press Enter to start this task.
+Bash Copy
+```
+> Create a ping-pong web game. Use only HTML, CSS, and JavaScript, try to create some novel content, and the final output should be a single HTML file.
+```
+Claude Code will analyze your requirements, create a multi-step plan, and automatically begin executing the tasks.
+After completing each task, Claude Code will mark it as complete and proceed to plan and explain the details of the next task.
+### ​4. Task Results and Preview
+After all tasks are completed, you will see the following messages in the terminal:
+At this point, you can open the gravity-pong.html file in your browser to view and play the game.
+### ​5. Use Git with Claude Code
+Claude Code makes Git operations conversational:
+Bash Copy
+```
+> what files have I changed?
+```
+Bash Copy
+```
+> commit my changes with a descriptive message
+```
+You can also prompt for more complex Git operations:
+Bash Copy
+```
+> create a new branch called feature/quickstart
+```
+Bash Copy
+```
+> show me the last 5 commits
+```
+Bash Copy
+```
+> help me resolve merge conflicts
+```
+### ​6. Improve the game
+As we can see, this game needs improvement: the orbs’ position overlaps with the paddle’s position, which affects the gaming experience. Next, we will reposition the orbs to the top-right corner and add game restart functionality.
+Bash Copy
+```
+> Position the orbs in the top-right corner and support game restart functionality.
+```
+This is the game preview after the improvement:
+## ​Try More Workflows
+For reference, the following provides some prompt examples for different workflows:
+- Code Refactoring
+Bash Copy
+```
+> Please refactor the current project using Next.js framework.
+```
+- Write Unit Tests
+Bash Copy
+```
+> Please write some unit tests for the pricing policy in the project.
+```
+- Update Documentation
+Bash Copy
+```
+> Please update the installation dependencies section in the README.
+```
+- Code Review
+Bash Copy
+```
+> Please review the changes and provide optimization suggestions.
+```
+## ​Common Commands
+CommandDescriptionExample
+claudeStart interactive modeclaude
+claude "task description"Run a one-time taskclaude "fix the build error"
+claude -p "query"Run one-off query, then exitclaude -p "explain this function"
+claude -cContinue most recent conversationclaude -c
+claude -rResume a previous conversationclaude -r
+claude commitCreate a Git commitclaude commit
+/clearClear conversation history> /clear
+/helpView available commands> /help
+exit or Ctrl+CExit Claude Code> exit
+Was this page helpful? Yes No Rate limits OpenAI Agents SDK ⌘ I

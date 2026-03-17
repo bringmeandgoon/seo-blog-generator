@@ -1,0 +1,4 @@
+Source: https://novita.ai/docs/guides/langchain
+============================================================
+
+Integrate Novita AI with LangChain to build intelligent, language model-driven applications. Learn setup, API usage, and function calling workflows.

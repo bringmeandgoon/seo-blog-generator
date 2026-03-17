@@ -1,0 +1,106 @@
+Source: https://novita.ai/docs/guides/sandbox-template
+============================================================
+
+- Sandbox Templates - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationTemplateSandbox TemplatesGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- TemplateSandbox Templates
+- Start Command
+- Customize sandbox CPU & RAM
+- Version Management
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - How to create custom sandbox
+- 1. Install CLI
+- 2. Initialize sandbox template
+- 3. Customize novita.Dockerfile
+- 4. Build your sandbox template
+- 5. Start your custom sandbox
+- How it works
+Sandbox templates allow you to customize the sandbox environment to your needs.
+Novita Agent Sandbox service has built-in public templates for out-of-the-box use. You can find these public templates in the console .
+To create a sandbox template, you specify the novita.Dockerfile . We then take this Dockerfile and create a new sandbox template from it and give you back a template ID.
+You can then use this template ID to create a new sandbox with the SDK based on the template you created.
+## ​How to create custom sandbox
+Steps
+- Install CLI
+- Initialize sandbox template
+- Customize novita.Dockerfile
+- Build your sandbox template
+- Start your custom sandbox
+### ​1. Install CLI
+Please refer to the tutorial for installation and complete authentication .
+### ​2. Initialize sandbox template
+The following command will create a basic novita.Dockerfile in the current directory.
+Bash Copy
+```
+novita-sandbox-cli template init
+```
+### ​3. Customize novita.Dockerfile
+Now you can customize your sandbox template by editing the novita.Dockerfile file.
+novita.Dockerfile Copy
+```
+# Make sure to use this base image
+FROM novitalabs/code-interpreter:latest
+# Install some Python packages
+RUN pip install cowsay
+```
+### ​4. Build your sandbox template
+Now you can build your sandbox template. We’ll use Docker and the CLI.
+What is going to happen is that CLI will call Docker to build the image and then push it to the Novita cloud.
+Then we convert the Docker image to a micro VM that can be then launched as a sandbox with our SDK.
+Bash Copy
+```
+novita-sandbox-cli template build -c "/root/.jupyter/start-up.sh"
+```
+This process will take a moment. In the end, you’ll see your template ID that you’ll need to use to create a sandbox with the SDK.
+### ​5. Start your custom sandbox
+Now you can use the template ID to create a sandbox with the SDK.
+JavaScript & TypeScript Python Copy
+```
+import { Sandbox } from 'novita-sandbox/code-interpreter'
+// Your template ID from the previous step
+const templateID = 'id-of-your-template'
+// Pass the template ID to the `Sandbox.create` method
+const sandbox = await Sandbox.create(templateID)
+// The template installed cowsay, so we can use it
+const result = await sandbox.runCode(`
+import cowsay
+cowsay.say('Hello!')`)
+console.log(result)
+await sandbox.kill()
+```
+## ​How it works
+Every time you are building a sandbox template, we create a container based on the novita.Dockerfile file you create in the process.
+We extract the container’s filesystem, do provisioning and configuration (e.g. installing required dependencies), and start a sandbox.
+Then, these steps happen:
+- We take the running sandbox.
+- (Only if you specified the start command, otherwise this step is skipped) Execute the start command.
+- Wait for readiness (by default 20 seconds if start command is specified, otherwise immediately ready). Readiness check can be configured using ready command.
+- Snapshot the sandbox and make it ready for you to spawn it with the SDK.
+We call this sandbox snapshot a sandbox template .
+Snapshots are saved running sandboxes. We serialize and save the whole sandbox’s filesystem together with all the running processes in a way that can be loaded later. This allows us to load the sandbox in a few hundred milliseconds any time later with all the processes already running and the filesystem exactly as it was. Was this page helpful? Yes No Idle Timeout Start Command ⌘ I

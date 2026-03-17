@@ -1,0 +1,261 @@
+Source: https://novita.ai/docs/api-reference/model-apis-wan-i2v
+============================================================
+
+- Novita AI Wan 2.1 Image to Video API | Generate videos from images and textSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationVideo GeneratorWan 2.1 Image to VideoGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video GeneratorPOSTUnified Video Generation API
+- POSTText to Video
+- POSTImage to Video
+- POSTHunyuan Video Fast
+- POSTWan 2.1 Text to Video
+- POSTWan 2.1 Image to Video
+- POSTWan 2.2 Text to Video
+- POSTWan 2.2 Image to Video
+- POSTWan 2.5 Preview Text to Video
+- POSTWan 2.5 Preview Image to Video
+- POSTWan 2.6 Text to Video
+- POSTWan 2.6 Image to Video
+- POSTWan 2.6 Reference Video
+- POSTKLING V1.6 Text to Video
+- POSTKLING V1.6 Image to Video
+- POSTKling V2.1 Master Text to Video
+- POSTKling V2.1 Image to Video
+- POSTKling V2.1 Master Image to Video
+- POSTKling V2.5 Turbo Text to Video
+- POSTKling V2.5 Turbo Image to Video
+- POSTKling V2.6 Pro Motion Control
+- POSTKling V2.6 Pro Text-to-Video
+- POSTKling V2.6 Pro Image-to-Video
+- POSTKling-o1 Image to Video
+- POSTKling-o1 Reference Video Generation
+- POSTKling-o1 Text to Video
+- POSTKling-o1 Video Editing
+- POSTKling v3.0 Standard Image-to-Video
+- POSTKling v3.0 Standard Text-to-Video
+- POSTKling v3.0 Pro Image-to-Video
+- POSTKling v3.0 Pro Text-to-Video
+- POSTMinimax Video-01
+- POSTMinimax Hailuo-02
+- POSTMinimax Hailuo 2.3 Text to Video
+- POSTMinimax Hailuo 2.3 Image to Video
+- POSTMinimax Hailuo 2.3 Fast Image to Video
+- POSTVidu Q1 Text to Video
+- POSTVidu Q1 Image to Video
+- POSTVidu Q1 Start End to Video
+- POSTVidu Q1 Reference to Video
+- POSTVidu 2.0 Image to Video
+- POSTVidu 2.0 Start End to Video
+- POSTVidu 2.0 Reference to Video
+- POSTPixVerse V4.5 Text to Video
+- POSTPixVerse V4.5 Image to Video
+- POSTSeedance V1 Lite Text to Video
+- POSTSeedance V1 Lite Image to Video
+- POSTSeedance V1 Pro Text to Video
+- POSTSeedance V1 Pro Image to Video
+- POSTSeedance 1.5 Pro Text To Video
+- POSTSeedance 1.5 Pro Image To Video
+- POSTVIDU Q2 Turbo Start-End Frame to Video
+- POSTVIDU Q2 Turbo Multi-frame to Video
+- POSTVIDU Q2 Turbo Image to Video
+- POSTVIDU Q2 Text to Video
+- POSTVIDU Q2 Reference Image to Video
+- POSTVIDU Q2 Pro Start-End Frame to Video
+- POSTVIDU Q2 Pro Multi-frame to Video
+- POSTVIDU Q2 Pro Image to Video
+- POSTVIDU Q2 Pro Fast Start-End Frame to Video
+- POSTVIDU Q2 Pro Fast Image to Video
+- POSTVIDU Q2 Template to Video
+- POSTVidu Q3 Pro Text-to-Video
+- POSTVidu Q3 Pro Image-to-Video
+- POSTHeygen Video-translate
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Wan 2.1 Image to Video cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/wan-i2v \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"extra": {
+"webhook": {
+"url": " ",
+"test_mode": {
+"enabled": true,
+"return_task_status": " "
+}
+}
+},
+"prompt": " ",
+"image_url": " ",
+"negative_prompt": " ",
+"width": 123,
+"height": 123,
+"loras": [
+{
+"path": " ",
+"scale": 123
+}
+],
+"seed": 123,
+"steps": 123,
+"guidance_scale": 123,
+"flow_shift": 123,
+"enable_safety_checker": true,
+"fast_mode": true
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+POST / v3 / async / wan-i2v Try it Wan 2.1 Image to Video cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/wan-i2v \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"extra": {
+"webhook": {
+"url": " ",
+"test_mode": {
+"enabled": true,
+"return_task_status": " "
+}
+}
+},
+"prompt": " ",
+"image_url": " ",
+"negative_prompt": " ",
+"width": 123,
+"height": 123,
+"loras": [
+{
+"path": " ",
+"scale": 123
+}
+],
+"seed": 123,
+"steps": 123,
+"guidance_scale": 123,
+"flow_shift": 123,
+"enable_safety_checker": true,
+"fast_mode": true
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+Accelerated inference for Wan 2.1 14B Image-to-Video, a comprehensive and open suite of video foundation models that pushes the boundaries of video generation. By default, the API will generate a video with 5 seconds.
+This is an asynchronous API; only the task_id will be returned. You should use the task_id to request the Task Result API to retrieve the video generation results.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ extra object Optional extra parameters for the request. Show properties ​ webhook object Webhook settings. More details can be found at Webhook Documentation . Show properties ​ url string required The URL of the webhook endpoint. Novita AI will send the task generated outputs to your specified webhook endpoint. ​ test_mode object By specifying Test Mode, a mock event will be sent to the webhook endpoint. Show properties ​ enabled boolean required Set to true to enable Test Mode, or false to disable it. The default is false . ​ return_task_status string required Control the data content of the mock event. When set to TASK_STATUS_SUCCEED, you’ll receive a normal response; when set to TASK_STATUS_FAILED, you’ll receive an error response. Supports: TASK_STATUS_SUCCEED , TASK_STATUS_FAILED .
+​ prompt string required Prompt text required to guide the generation. Range: 1 <= x <= 2000 .
+​ image_url string required The URL of the image to be used for video generation.
+​ negative_prompt string Negative prompts instruct the model on what elements to avoid generating. Range: 0 <= x <= 2000 .
+​ width integer Width of the output video. Supports: 480 , 720 , 832 , 1280 . Default: 832 . If the width or height is not specified, the width and the height will be forced to 832 and 480 respectively.
+​ height integer Height of the output video. Supports:
+- (480p) 832 for width of 480
+- (480p) 480 for width of 832
+- (720p) 1280 for width of 720
+- (720p) 720 for width of 1280
+Default: 480 . If the width or height is not specified, the width and the height will be forced to 832 and 480 respectively. The output video will maintain the input image’s aspect ratio, and the width x height setting only determines the output video’s clarity. For example, a 720p video will be clearer than a 480p video.
+​ loras object[] LoRA models to be applied to the video generation. Currently supports up to 3 LoRAs . Show properties ​ path string required The path to the LoRA model. You can specify either a LoRA model name from Hugging Face, for example: Remade-AI/Painting ; or a model download URL from Civitai, for example: https://civitai.com/api/download/models/1513385?type=Model&format=SafeTensor . The LoRA model must be compatible with Wan2.1 14B I2V, otherwise it will not work. Please check compatibility before using it. ​ scale number required The scale value of lora. The larger the value, the more biased the effect is towards lora. Range: 0 <= x <= 4.0 .
+​ seed integer A seed is a number generates noise, which, makes generation deterministic. Using the same seed and set of parameters will produce identical content each time. Range: -1 <= x <= 9999999999 . Default: -1 .
+​ steps integer The number of inference steps. Range: 1 <= x <= 40 . Default: 30 .
+​ guidance_scale float Guidance scale parameter controls how closely the generated content follows the prompt. Range: 0 <= x <= 10 . Default: 5.0 .
+​ flow_shift float The flow_shift parameter primarily affects the speed and magnitude of object movement in the video. Higher values produce more pronounced and faster movement, while lower values make the motion slower and more subtle. Range: 1 <= x <= 10 . Default: 5.0 .
+​ enable_safety_checker boolean The enable_safety_checker parameter controls whether the safety filter is applied to the generated content. When enabled, it helps filter out potentially harmful or inappropriate content from the video output. Default: true .
+​ fast_mode boolean Whether to enable fast mode, which will generate videos more quickly but may reduce quality and lower the price. Default: false .
+## ​Response
+​ task_id string required Use the task_id to request the Task Result API to retrieve the generated outputs.
+## ​Example
+Here is an example of how to use the Wan 2.1 Image to Video API.
+- Generate a task_id by sending a POST request to the Wan 2.1 Image to Video API.
+Request:
+Copy
+```
+curl --location 'https://api.novita.ai/v3/async/wan-i2v' \
+--header 'Authorization: Bearer {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data '{
+"image_url": "https://pub-f964a1c641c04024bce400ad128c8cd6.r2.dev/wan-i2v-input-image.jpg",
+"height": 1280,
+"width": 720,
+"steps": 25,
+"seed": -1,
+"prompt": "A cute panda is walking in the grassland slowly."
+}'
+```
+Response:
+Copy
+```
+{
+"task_id": "{Returned Task ID}"
+}
+```
+- Use task_id to get output videos.
+HTTP status codes in the 2xx range indicate that the request has been successfully accepted, while status codes in the 5xx range indicate internal server errors.
+You can get videos url in videos of response.
+Request:
+Copy
+```
+curl --location --request GET 'https://api.novita.ai/v3/async/task-result?task_id={Returned Task ID}' \
+--header 'Authorization: Bearer {{API Key}}'
+```
+Response:
+Copy
+```
+{
+"task": {
+"task_id": "{Returned Task ID}",
+"task_type": "WAN_IMG_TO_VIDEO",
+"status": "TASK_STATUS_SUCCEED",
+"reason": "",
+"eta": 0,
+"progress_percent": 100
+},
+"images": [],
+"videos": [
+{
+"video_url": "{The URL of the generated video}",
+"video_url_ttl": "3600",
+"video_type": "mp4"
+}
+]
+}
+```
+Video files:
+Was this page helpful? Yes No Wan 2.1 Text to Video Wan 2.2 Text to Video ⌘ I

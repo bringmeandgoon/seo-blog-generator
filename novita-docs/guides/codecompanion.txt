@@ -1,0 +1,110 @@
+Source: https://novita.ai/docs/guides/codecompanion
+============================================================
+
+- CodeCompanion - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationIntegrationsCodeCompanionGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- IntegrationsClaude Code Integration Guide
+- OpenAI Agents SDK
+- AnythingLLM
+- Dify
+- Helicone
+- Hugging Face
+- Langflow
+- Continue
+- Cursor
+- LangChain
+- Skyvern
+- LobeChat
+- AI Gradio
+- Langfuse
+- MLflow
+- Verba
+- Portkey
+- DocsGPT
+- LlamaIndex
+- LoLLMS WebUI
+- CodeCompanion
+- Page Assist
+- DeepSearcher
+- Browser Use
+- OWL
+- LiteLLM
+- ChatBox
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - How to Leverage Novita AI with CodeCompanion.nvim
+- Step 1: Generate Your Novita AI API Key
+- Step 2: Select a Model
+- Step 3: Configure CodeCompanion
+- Step 4: Verify Integration
+- Step 5: Test Novita AI Features
+CodeCompanion.nvim is a lightweight yet powerful Neovim plugin that connects advanced language models (LLMs) directly to your editor, enabling developers to work smarter and faster. With built-in support for Novita AI’s state-of-the-art models, this integration transforms your workflow by offering intelligent code suggestions, automated debugging, and streamlined refactoring tools.
+In this comprehensive guide, we’ll walk you through the step-by-step process of setting up Novita AI with CodeCompanion.nvim. Learn how to optimize your Neovim setup and unlock the full power of AI-assisted coding for faster, smarter development.
+## ​How to Leverage Novita AI with CodeCompanion.nvim
+You can find the GitHub repository of CodeCompanion.nvim here: olimorris/codecompanion.nvim .
+### ​Step 1: Generate Your Novita AI API Key
+- Log in to your Novita AI account.
+- Access the Key Management Page.
+- Create a new API key and copy it for later use.
+### ​Step 2: Select a Model
+- Visit the Novita AI Model Library.
+- Choose a model that suits your needs (e.g., meta-llama/llama-3.1-8b-instruct).
+- Note down the model name.
+### ​Step 3: Configure CodeCompanion
+We assume you have already installed the Neovim, and if not, you can install it by referring to the Neovim Installation Guide .
+- Open your Neovim configuration file (init.lua or equivalent).
+The Neovim configuration file is typically located at: ~/.config/nvim/init.lua (for macOS or Linux). And you can create this directory and file if they don’t exist yet.
+- Install the CodeCompanion plugin.
+You can install the plugin by referring to the CodeCompanion.nvim Installation Guide .
+- Add the following setup for CodeCompanion in your Neovim configuration file:
+Copy
+```
+require("codecompanion").setup({
+adapters = {
+novita = {
+base_url = "https://api.novita.ai/openai",
+api_key = " ", -- Replace with your actual API key
+model = "meta-llama/llama-3.1-8b-instruct" -- Replace with your chosen model
+}
+}
+})
+```
+- Save and reload Neovim.
+### ​Step 4: Verify Integration
+- Run the following command in Neovim:
+Copy
+```
+:checkhealth codecompanion
+```
+- Ensure all dependencies are installed and configured correctly.
+### ​Step 5: Test Novita AI Features
+- Open a code file in Neovim and start using CodeCompanion.nvim features such as inline suggestions or chat-based assistance.
+- For example:
+Use shortcuts to trigger intelligent code completions.
+- Start a chat session by invoking :CodeCompanionChat for interactive problem-solving.
+Was this page helpful? Yes No LoLLMS WebUI Page Assist ⌘ I

@@ -1,0 +1,104 @@
+Source: https://novita.ai/docs/guides/sandbox-environment-variables
+============================================================
+
+- Environment variables - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationSandboxEnvironment variablesGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- SandboxSandbox Lifecycle
+- Sandbox Persistence
+- Sandbox Metrics
+- Sandbox Metadata
+- Environment variables
+- List sandboxes
+- Connect to running sandbox
+- Internet access
+- Mount object storage bucket
+- Auto Pause and Resume
+- Sandbox Clone
+- Sandbox Snapshot Template
+- Idle Timeout
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Setting environment variables
+- 1. Global environment variables
+- 2. Setting environment variables when running code
+- 3. Setting environment variables when running commands
+This page covers how to set and use environment variables in a sandbox, and default environment variables inside the sandbox.
+## ​Setting environment variables
+There are 3 ways to set environment variables in a sandbox:
+- Global environment variables when creating the sandbox.
+- When running code in the sandbox.
+- When running commands in the sandbox.
+### ​1. Global environment variables
+You can set global environment variables when creating a sandbox.
+JavaScript & TypeScript Python Copy
+```
+import { Sandbox } from 'novita-sandbox/code-interpreter'
+const sandbox = await Sandbox.create({
+envs: {
+MY_VAR: 'my_value',
+},
+})
+const result = await sandbox.commands.run("echo $MY_VAR")
+console.log(result)
+// Output example:
+// { exitCode: 0, error: undefined, stdout: 'my_value\n', stderr: '' }
+await sandbox.kill()
+```
+### ​2. Setting environment variables when running code
+You can set environment variables for specific code execution call in the sandbox.
+If you had a global environment variable with the same name, it will be overridden.
+JavaScript & TypeScript Python Copy
+```
+import { Sandbox } from 'novita-sandbox/code-interpreter'
+const sandbox = await Sandbox.create()
+const result = await sandbox.runCode('import os; print(os.environ.get("MY_VAR"))', {
+envs: {
+MY_VAR: 'my_value',
+},
+})
+console.log(result.logs)
+await sandbox.kill()
+```
+### ​3. Setting environment variables when running commands
+You can set environment variables for specific command execution in the sandbox.
+If you had a global environment variable with the same name, it will be overridden.
+JavaScript & TypeScript Python Copy
+```
+import { Sandbox } from 'novita-sandbox/code-interpreter'
+const sandbox = await Sandbox.create()
+const result = await sandbox.commands.run('echo $MY_VAR', {
+envs: {
+MY_VAR: '123',
+},
+})
+console.log(result)
+// Output example:
+// { exitCode: 0, error: undefined, stdout: '123\n', stderr: '' }
+await sandbox.kill()
+```
+Was this page helpful? Yes No Sandbox Metadata List sandboxes ⌘ I

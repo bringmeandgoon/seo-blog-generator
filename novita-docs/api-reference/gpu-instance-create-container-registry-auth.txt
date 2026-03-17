@@ -1,0 +1,83 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-create-container-registry-auth
+============================================================
+
+- Create Container Registry Authentication - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImage RegistryCreate Container Registry AuthenticationGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- Instance
+- Image
+- Template
+- Product
+- Network
+- Image RegistryPOSTCreate Container Registry Authentication
+- POSTDelete Container Registry Auth
+- GETList Container Registry Auth
+- Storage
+- Jobs
+- Serverless GPUs
+Create Container Registry Authentication cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/repository/auth/save \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"name": " ",
+"username": " ",
+"password": " "
+}
+'
+```
+POST / gpu-instance / openapi / v1 / repository / auth / save Try it Create Container Registry Authentication cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/repository/auth/save \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"name": " ",
+"username": " ",
+"password": " "
+}
+'
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ name string required
+​ username string required
+​ password string required
+## ​Example
+Request
+Copy
+```
+curl --request POST \
+--url 'https://api.novita.ai/gpu-instance/openapi/v1/repository/auth/save' \
+--header 'Authorization: Bearer {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data '{
+"name": " ",
+"username": " ",
+"password": " "
+}'
+```
+Response
+Copy
+```
+{}
+```
+Was this page helpful? Yes No Delete VPC Network Delete Container Registry Auth ⌘ I

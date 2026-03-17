@@ -1,0 +1,171 @@
+Source: https://novita.ai/docs/api-reference/serverless-create-endpoint
+============================================================
+
+- Create Endpoint - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationServerless GPUsCreate EndpointGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU Instance
+- Serverless GPUsGETGet Endpoint Parameter Limit Ranges
+- POSTCreate Endpoint
+- GETList Endpoints
+- GETGet Endpoint
+- POSTUpdate Endpoint
+- POSTDelete Endpoint
+Create Endpoint cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/endpoint/create \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"endpoint": {
+"name": " ",
+"appName": " ",
+"workerConfig": {
+"minNum": 123,
+"maxNum": 123,
+"freeTimeout": 123,
+"maxConcurrent": 123,
+"gpuNum": 123
+},
+"ports": [
+{
+"port": " "
+}
+],
+"policy": {
+"type": " ",
+"value": 123
+},
+"image": {
+"image": " ",
+"authId": " ",
+"command": " "
+},
+"products": [
+{
+"id": " "
+}
+],
+"rootfsSize": 123,
+"volumeMounts": [
+{
+"type": " ",
+"size": 123,
+"id": " ",
+"mountPath": " "
+}
+],
+"clusterID": " ",
+"envs": [
+{
+"key": " ",
+"value": " "
+}
+],
+"healthy": {
+"path": " "
+}
+}
+}
+'
+```
+200 Copy
+```
+{
+"id": " "
+}
+```
+POST / gpu-instance / openapi / v1 / endpoint / create Try it Create Endpoint cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/endpoint/create \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"endpoint": {
+"name": " ",
+"appName": " ",
+"workerConfig": {
+"minNum": 123,
+"maxNum": 123,
+"freeTimeout": 123,
+"maxConcurrent": 123,
+"gpuNum": 123
+},
+"ports": [
+{
+"port": " "
+}
+],
+"policy": {
+"type": " ",
+"value": 123
+},
+"image": {
+"image": " ",
+"authId": " ",
+"command": " "
+},
+"products": [
+{
+"id": " "
+}
+],
+"rootfsSize": 123,
+"volumeMounts": [
+{
+"type": " ",
+"size": 123,
+"id": " ",
+"mountPath": " "
+}
+],
+"clusterID": " ",
+"envs": [
+{
+"key": " ",
+"value": " "
+}
+],
+"healthy": {
+"path": " "
+}
+}
+}
+'
+```
+200 Copy
+```
+{
+"id": " "
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ endpoint object required Endpoint configuration. Hide properties ​ name string Endpoint name. String with a length limit of 0-220 characters. ​ appName string Application name (reflected in the URL). The application name is part of the Endpoint URL, supports customization, and defaults to the Endpoint ID. ​ workerConfig object required Worker configuration. The valid range is dynamically retrieved through the parameter limits API. Show properties ​ minNum integer required Minimum number of workers. ​ maxNum integer required Maximum number of workers. ​ freeTimeout integer required Idle timeout in seconds. ​ maxConcurrent integer required Maximum concurrency. ​ gpuNum integer required Number of GPUs per worker. ​ ports object[] required HTTP ports. Only one port is supported. Supported port range: 1-65535, excluding internal ports 2222, 2223, and 2224. Show properties ​ port string required HTTP port. ​ policy object required Scaling policy. The valid range is dynamically retrieved through the parameter limits API. Show properties ​ type string required Scaling policy type. Available values:
+- queue: Queue latency policy, scales workers based on request wait time in the queue.
+- concurrency: Queue request policy, scales workers based on the number of requests in the queue.
+​ value integer required The meaning of value depends on the type:
+- When type = queue, value represents the queue wait time in seconds.
+- When type = concurrency, value represents the maximum number of requests in the queue.
+​ image object required Container image configuration. Show properties ​ image string required Image address. String with a length limit of 0-511 characters. ​ authId string Private image credential ID (not required for public images or platform user images). String with a length limit of 0-255 characters. ​ command string Container startup command. String with a length limit of 0-2047 characters. ​ products object[] required Product information. Show properties ​ id string required Product ID. ​ rootfsSize integer required Root filesystem size in GB. Currently fixed at 100. ​ volumeMounts object[] required Storage configuration in GB. Show properties ​ type string required Storage type. Available values:
+- local: Local storage.
+- network: Network storage.
+​ size integer Local storage size, currently fixed at 30. Not required for network storage. ​ id string Network storage ID. Not required for local storage. ​ mountPath string required Storage mount path. String with a length limit of 0-255 characters. ​ clusterID string Cluster information. Required when mounting cloud storage and must match the cluster ID where the cloud storage is located. String with a length limit of 0-255 characters. ​ envs object[] Environment variables. Show properties ​ key string required Environment variable name. ​ value string required Environment variable value. ​ healthy object required Health check endpoint configuration. Show properties ​ path string required The path to check when performing HTTP health checks.
+## ​Response
+​ id string The created Endpoint ID. Was this page helpful? Yes No Get Endpoint Parameter Limit Ranges List Endpoints ⌘ I

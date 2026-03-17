@@ -1,0 +1,188 @@
+Source: https://novita.ai/docs/api-reference/model-apis-wan-2.2-t2v
+============================================================
+
+- Novita AI Wan 2.2 Text to Video API | Generate videos from textSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationVideo GeneratorWan 2.2 Text to VideoGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image Generator
+- Image Editor
+- Video GeneratorPOSTUnified Video Generation API
+- POSTText to Video
+- POSTImage to Video
+- POSTHunyuan Video Fast
+- POSTWan 2.1 Text to Video
+- POSTWan 2.1 Image to Video
+- POSTWan 2.2 Text to Video
+- POSTWan 2.2 Image to Video
+- POSTWan 2.5 Preview Text to Video
+- POSTWan 2.5 Preview Image to Video
+- POSTWan 2.6 Text to Video
+- POSTWan 2.6 Image to Video
+- POSTWan 2.6 Reference Video
+- POSTKLING V1.6 Text to Video
+- POSTKLING V1.6 Image to Video
+- POSTKling V2.1 Master Text to Video
+- POSTKling V2.1 Image to Video
+- POSTKling V2.1 Master Image to Video
+- POSTKling V2.5 Turbo Text to Video
+- POSTKling V2.5 Turbo Image to Video
+- POSTKling V2.6 Pro Motion Control
+- POSTKling V2.6 Pro Text-to-Video
+- POSTKling V2.6 Pro Image-to-Video
+- POSTKling-o1 Image to Video
+- POSTKling-o1 Reference Video Generation
+- POSTKling-o1 Text to Video
+- POSTKling-o1 Video Editing
+- POSTKling v3.0 Standard Image-to-Video
+- POSTKling v3.0 Standard Text-to-Video
+- POSTKling v3.0 Pro Image-to-Video
+- POSTKling v3.0 Pro Text-to-Video
+- POSTMinimax Video-01
+- POSTMinimax Hailuo-02
+- POSTMinimax Hailuo 2.3 Text to Video
+- POSTMinimax Hailuo 2.3 Image to Video
+- POSTMinimax Hailuo 2.3 Fast Image to Video
+- POSTVidu Q1 Text to Video
+- POSTVidu Q1 Image to Video
+- POSTVidu Q1 Start End to Video
+- POSTVidu Q1 Reference to Video
+- POSTVidu 2.0 Image to Video
+- POSTVidu 2.0 Start End to Video
+- POSTVidu 2.0 Reference to Video
+- POSTPixVerse V4.5 Text to Video
+- POSTPixVerse V4.5 Image to Video
+- POSTSeedance V1 Lite Text to Video
+- POSTSeedance V1 Lite Image to Video
+- POSTSeedance V1 Pro Text to Video
+- POSTSeedance V1 Pro Image to Video
+- POSTSeedance 1.5 Pro Text To Video
+- POSTSeedance 1.5 Pro Image To Video
+- POSTVIDU Q2 Turbo Start-End Frame to Video
+- POSTVIDU Q2 Turbo Multi-frame to Video
+- POSTVIDU Q2 Turbo Image to Video
+- POSTVIDU Q2 Text to Video
+- POSTVIDU Q2 Reference Image to Video
+- POSTVIDU Q2 Pro Start-End Frame to Video
+- POSTVIDU Q2 Pro Multi-frame to Video
+- POSTVIDU Q2 Pro Image to Video
+- POSTVIDU Q2 Pro Fast Start-End Frame to Video
+- POSTVIDU Q2 Pro Fast Image to Video
+- POSTVIDU Q2 Template to Video
+- POSTVidu Q3 Pro Text-to-Video
+- POSTVidu Q3 Pro Image-to-Video
+- POSTHeygen Video-translate
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Wan 2.2 Text to Video cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/wan-2.2-t2v \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"input": {
+"prompt": " ",
+"negative_prompt": " "
+},
+"parameters": {
+"size": " ",
+"duration": 123,
+"prompt_extend": true,
+"seed": 123,
+"loras": [
+{
+"path": " ",
+"scale": 123
+}
+]
+}
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+POST / v3 / async / wan-2.2-t2v Try it Wan 2.2 Text to Video cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/wan-2.2-t2v \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"input": {
+"prompt": " ",
+"negative_prompt": " "
+},
+"parameters": {
+"size": " ",
+"duration": 123,
+"prompt_extend": true,
+"seed": 123,
+"loras": [
+{
+"path": " ",
+"scale": 123
+}
+]
+}
+}
+'
+```
+200 Copy
+```
+{
+"task_id": " "
+}
+```
+Wan 2.2 Professional Text-to-Video model can generate high-quality video content based on text descriptions. Compared to previous models, it offers significant improvements in visual detail and motion stability, and can produce videos with durations of 5 seconds and 8 seconds.
+This is an asynchronous API; only the task_id will be returned. You should use the task_id to request the Task Result API to retrieve the video generation results.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ input object required Basic input information, such as prompts. Hide properties ​ prompt string required Text prompt. Supports both English and Chinese, with a maximum length of 800 characters, and any excess will be automatically truncated. Example value: A small cat running under the moonlight. ​ negative_prompt string Negative prompt, used to describe content that should be avoided in the video, allowing for restrictions on the video content. Supports both English and Chinese, with a maximum length of 500 characters. Any excess will be automatically truncated. Example value: Low resolution, errors, worst quality, low quality, incomplete, extra fingers, disproportionate, etc.
+​ parameters object required Video processing parameters. Hide properties ​ size string required Supports resolutions for 480P, 720P, and 1080P.
+Used to specify the video resolution in the format of width*height. The supported resolutions for different models are as follows: 480P tier : Available video resolutions and their corresponding aspect ratios are:
+- 832*480: 16:9.
+- 480*832: 9:16.
+- 624*624: 1:1.
+720P tier : Available video resolutions and their corresponding aspect ratios are:
+- 1280*720: 16:9.
+- 720*1280: 9:16.
+1080P tier : Available video resolutions and their corresponding aspect ratios are:
+- 1920*1080: 16:9.
+- 1080*1920: 9:16.
+- 1440*1440: 1:1.
+- 1632*1248: 4:3.
+- 1248*1632: 3:4.
+Common misconceptions about the size parameter : The size must be set to the specific values of the target resolution (e.g., 1280*720 ), not the aspect ratio (e.g., 1:1 ) or resolution tier name (e.g., 480P or 720P ). ​ duration integer The duration of the generated video.
+- 480P and 720P resolutions, the duration can be either 5 or 8 seconds.
+- 1080P resolution, the duration is fixed at 5 seconds.
+Default value: 5 . ​ prompt_extend bool Whether to enable intelligent prompt rewriting. When enabled, a large model is used to intelligently rewrite the input prompt. This significantly improves the generation effect for shorter prompts but increases processing time.
+- true: Default value, enable intelligent rewriting.
+- false: Do not enable intelligent rewriting.
+​ seed integer Random seed, used to control the randomness of the model’s generated content. The value range is [0, 2147483647] . If not provided, the algorithm automatically generates a random number as the seed. To maintain relatively stable generated content, you can use the same seed parameter value. ​ loras array 1080P is not supported. List of LoRAs to apply (max 3). Show properties ​ path string required Path to the LoRA model.
+Example: Cseti/wan2.2-14B-Kinestasis_concept-lora-v1 . ​ scale float required Scale of the LoRA model Value range: 0.0 ~ 4.0
+## ​Response
+​ task_id string required Use the task_id to request the Task Result API to retrieve the generated outputs. Was this page helpful? Yes No Wan 2.1 Image to Video Wan 2.2 Image to Video ⌘ I

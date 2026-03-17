@@ -1,0 +1,133 @@
+Source: https://novita.ai/docs/guides/sandbox-persistence
+============================================================
+
+- Sandbox Persistence - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationSandboxSandbox PersistenceGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- SandboxSandbox Lifecycle
+- Sandbox Persistence
+- Sandbox Metrics
+- Sandbox Metadata
+- Environment variables
+- List sandboxes
+- Connect to running sandbox
+- Internet access
+- Mount object storage bucket
+- Auto Pause and Resume
+- Sandbox Clone
+- Sandbox Snapshot Template
+- Idle Timeout
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Pausing sandbox
+- Resuming sandbox
+- Listing paused sandboxes
+- Removing paused sandboxes
+- Sandbox’s timeout
+- Network
+The sandbox persistence allows you to pause your sandbox and resume it later from the same state it was in when you paused it.
+This includes not only state of the sandbox’s filesystem but also the sandbox’s memory. This means all running processes, loaded variables, data, etc.
+Please note:
+- It takes about 4 seconds per 1 GB RAM to pause the sandbox.
+- It takes about 1 second to resume the sandbox.
+- The data of a paused sandbox is retained permanently until you explicitly call the kill method to destroy it. Attempting to resume a sandbox that has been destroyed or does not exist will result in the NotFoundError in the JavaScript SDK or the NotFoundException in the Python SDK.
+## ​Pausing sandbox
+When you pause a sandbox, both the sandbox’s filesystem and memory state will be saved. This includes all the files in the sandbox’s filesystem and all the running processes, loaded variables, data, etc.
+JavaScript & TypeScript Python Copy
+```
+import { Sandbox } from 'novita-sandbox/code-interpreter'
+const sandbox = await Sandbox.create()
+console.log('Sandbox created', sandbox.sandboxId)
+// Pause the sandbox.
+// You can save the sandbox ID in your database
+// to resume the sandbox later
+const result = await sandbox.betaPause()
+console.log('Sandbox paused', sandbox.sandboxId, result)
+await sandbox.kill()
+```
+## ​Resuming sandbox
+When you resume a sandbox, it will be in the same state it was in when you paused it.
+This means that all the files in the sandbox’s filesystem will be restored and all the running processes, loaded variables, data, etc. will be restored.
+JavaScript & TypeScript Python Copy
+```
+import { Sandbox } from 'novita-sandbox/code-interpreter'
+const sandbox = await Sandbox.create()
+console.log('Sandbox created', sandbox.sandboxId)
+// Pause the sandbox.
+// You can save the sandbox ID in your database
+// to resume the sandbox later
+const result = await sandbox.betaPause()
+console.log('Sandbox paused', sandbox.sandboxId, result)
+// Resume the sandbox from the same state.
+const resumedSandbox = await sandbox.connect()
+console.log('Sandbox resumed', resumedSandbox.sandboxId)
+await sandbox.kill()
+```
+## ​Listing paused sandboxes
+You can list all paused sandboxes by calling the Sandbox.list method and supplying the state query parameter.
+More information about using the method can be found in List Sandboxes .
+JavaScript & TypeScript Python Copy
+```
+import { Sandbox, SandboxInfo } from 'novita-sandbox/code-interpreter'
+const sandbox = await Sandbox.create()
+// List all paused sandboxes.
+const paginator = Sandbox.list({ query: { state: ['paused'] } })
+// Get all paused sandboxes.
+const sandboxes: SandboxInfo[] = []
+while (paginator.hasNext) {
+const items = await paginator.nextItems()
+sandboxes.push(...items)
+}
+console.log('all paused sandboxes', sandboxes)
+await sandbox.kill()
+```
+## ​Removing paused sandboxes
+You can remove paused sandboxes by calling the kill method on the sandbox instance.
+JavaScript & TypeScript Python Copy
+```
+import { Sandbox } from 'novita-sandbox/code-interpreter'
+const sandbox = await Sandbox.create()
+console.log('Sandbox created', sandbox.sandboxId)
+// Pause the sandbox.
+await sandbox.betaPause()
+// Kill the paused sandbox.
+await sandbox.kill()
+```
+## ​Sandbox’s timeout
+When you resume a sandbox, the sandbox’s timeout is reset to the default timeout of a sandbox - 5 minutes.
+You can pass a custom timeout to the Sandbox.connect() method like this:
+JavaScript & TypeScript Python Copy
+```
+import { Sandbox } from 'novita-sandbox/code-interpreter'
+const sandbox = await Sandbox.create()
+const connectedSandbox = await Sandbox.connect(sandbox.sandboxId, { timeoutMs: 60 * 1000 })
+console.log('Sandbox connected', connectedSandbox.sandboxId)
+await sandbox.kill()
+```
+## ​Network
+If you have a service (for example a server) running inside your sandbox and you pause the sandbox, the service won’t be accessible from the outside and all the clients will be disconnected.
+If you resume the sandbox, the service will be accessible again but you need to connect clients again. Was this page helpful? Yes No Sandbox Lifecycle Sandbox Metrics ⌘ I

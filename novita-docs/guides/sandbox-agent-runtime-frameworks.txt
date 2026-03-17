@@ -1,0 +1,359 @@
+Source: https://novita.ai/docs/guides/sandbox-agent-runtime-frameworks
+============================================================
+
+- Agent Framework Integration Guide - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationAgent RuntimeAgent Framework Integration GuideGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent RuntimeOverview
+- Installation
+- Quick Start
+- Advanced Features
+- Agent Framework Integration Guide
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Core Integration Pattern
+- LangGraph
+- Example Code
+- OpenAI Agents SDK
+- Example Code
+- Microsoft AutoGen
+- Example Code
+- Google ADK
+- Complete Example
+This document shows you how to integrate agents built with various AI frameworks into Novita Agent Runtime.
+We provide integration examples for popular AI Agent frameworks:
+- LangGraph - Build complex multi-step Agent workflows
+- OpenAI Agents SDK - OpenAI’s official Agent framework
+- Microsoft AutoGen - Microsoft’s multi-Agent conversation framework
+- Google ADK - Google Agent Development Kit
+## ​Core Integration Pattern
+All framework integrations follow this core pattern:
+Copy
+```
+from novita_sandbox.agent_runtime import AgentRuntimeApp
+# 1. Create Agent Runtime application instance
+app = AgentRuntimeApp()
+# 2. Initialize your Agent framework
+# 3. Define entry point with decorator
+@app.entrypoint
+def agent_invocation(request: dict) -> dict:
+"""
+Args:
+request: Request data, typically contains fields like prompt
+Returns:
+Response data dictionary
+"""
+prompt = request.get("prompt", "")
+# Call your Agent framework
+result = your_agent.run(prompt)
+return {"result": result}
+# 4. Run the application
+if __name__ == "__main__":
+app.run()
+```
+## ​LangGraph
+LangGraph is the official framework from LangChain for building stateful, multi-step Agent applications.
+### ​Example Code
+For the complete example project, see here
+Copy
+```
+from langchain_community.chat_models import ChatOpenAI
+from typing_extensions import TypedDict
+from typing import Annotated
+from langgraph.graph import StateGraph, START
+from langgraph.graph.message import add_messages
+from langgraph.prebuilt import ToolNode, tools_condition
+# Import Novita Agent Runtime
+from novita_sandbox.agent_runtime import AgentRuntimeApp
+app = AgentRuntimeApp()
+# Define state
+class State(TypedDict):
+messages: Annotated[list, add_messages]
+# Initialize LLM
+llm = ChatOpenAI(model="gpt-4")
+# Define tools
+def get_weather(location: str) -> str:
+"""Get weather information for a specified location"""
+return f"The weather in {location} is sunny, 23°C"
+tools = [get_weather]
+llm_with_tools = llm.bind_tools(tools)
+# Define node function
+def chatbot(state: State):
+return {"messages": [llm_with_tools.invoke(state["messages"])]}
+# Build graph
+graph_builder = StateGraph(State)
+graph_builder.add_node("chatbot", chatbot)
+graph_builder.add_node("tools", ToolNode(tools=tools))
+graph_builder.add_conditional_edges(
+"chatbot",
+tools_condition,
+)
+graph_builder.add_edge("tools", "chatbot")
+graph_builder.add_edge(START, "chatbot")
+graph = graph_builder.compile()
+# Define entry point
+@app.entrypoint
+def agent_invocation(request: dict) -> dict:
+"""LangGraph Agent entry point"""
+prompt = request.get("prompt", "Hello!")
+# Invoke LangGraph
+result = graph.invoke({
+"messages": [{"role": "user", "content": prompt}]
+})
+# Extract the last message
+final_message = result['messages'][-1].content
+return {"result": final_message}
+if __name__ == "__main__":
+app.run()
+```
+## ​OpenAI Agents SDK
+OpenAI Agents SDK is the official toolkit from OpenAI for building AI Agents.
+### ​Example Code
+For the complete example project, see here
+Copy
+```
+import os
+from novita_sandbox.agent_runtime import AgentRuntimeApp
+from openai import AsyncOpenAI
+# Create application
+app = AgentRuntimeApp()
+# Define tool function
+def get_weather(city: str) -> str:
+"""Get city weather (simulated)"""
+weather_data = {
+"Beijing": "Sunny, 15°C",
+"Shanghai": "Cloudy, 20°C",
+"Shenzhen": "Light rain, 25°C",
+}
+return weather_data.get(city, f"{city}: Sunny, 23°C")
+# Tool definition
+TOOLS = [
+{
+"type": "function",
+"function": {
+"name": "get_weather",
+"description": "Get weather information for a specified city",
+"parameters": {
+"type": "object",
+"properties": {
+"city": {
+"type": "string",
+"description": "City name, e.g. 'Beijing', 'Shanghai'"
+}
+},
+"required": ["city"]
+}
+}
+}
+]
+# Agent core logic
+async def run_agent(query: str) -> str:
+"""Run OpenAI Agent (supports function calling)"""
+client = AsyncOpenAI(
+base_url=os.getenv("OPENAI_API_BASE"),
+api_key=os.getenv("NOVITA_API_KEY"),
+)
+messages = [
+{"role": "system", "content": "You are a helpful AI assistant that can query weather."},
+{"role": "user", "content": query}
+]
+# First call
+response = await client.chat.completions.create(
+model=os.getenv("MODEL_NAME", "deepseek/deepseek-v3.1-terminus"),
+messages=messages,
+tools=TOOLS,
+tool_choice="auto"
+)
+response_message = response.choices[0].message
+# If tool call is needed
+if response_message.tool_calls:
+messages.append(response_message)
+for tool_call in response_message.tool_calls:
+function_args = eval(tool_call.function.arguments)
+function_response = get_weather(**function_args)
+messages.append({
+"tool_call_id": tool_call.id,
+"role": "tool",
+"name": "get_weather",
+"content": function_response
+})
+# Second call to get final response
+final_response = await client.chat.completions.create(
+model=os.getenv("MODEL_NAME", "deepseek/deepseek-v3.1-terminus"),
+messages=messages
+)
+return final_response.choices[0].message.content
+return response_message.content
+# Novita Agent Runtime entry point
+@app.entrypoint
+async def agent_invocation(request: dict) -> dict:
+"""Entry point function"""
+prompt = request.get("prompt", "Hello!")
+result = await run_agent(prompt)
+return {"result": result}
+# Start application
+if __name__ == "__main__":
+app.run()
+```
+## ​Microsoft AutoGen
+AutoGen is a multi-Agent conversation framework developed by Microsoft that supports multi-Agent collaboration and conversations, capable of working independently or with humans.
+### ​Example Code
+For the complete example project, see here
+Copy
+```
+import os
+from novita_sandbox.agent_runtime import AgentRuntimeApp
+from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.messages import TextMessage
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+from autogen_core.models import ModelFamily, ModelInfo
+# Create application
+app = AgentRuntimeApp()
+# Define tool function
+async def get_weather(city: str) -> str:
+"""Get weather for a specified city"""
+weather_data = {
+"Beijing": "Sunny, 15°C",
+"Shanghai": "Cloudy, 20°C",
+"Shenzhen": "Light rain, 25°C",
+}
+return weather_data.get(city, f"{city}: Sunny, 23°C")
+# Create AutoGen Agent
+def create_agent():
+"""Create AutoGen Agent"""
+model_client = OpenAIChatCompletionClient(
+base_url=os.getenv("OPENAI_BASE_URL", "https://api.novita.ai/v3/openai"),
+model=os.getenv("MODEL_NAME", "deepseek/deepseek-v3.1-terminus"),
+api_key=os.getenv("OPENAI_API_KEY"),
+model_info=ModelInfo(
+vision=False,
+function_calling=True,
+json_output=True,
+family=ModelFamily.UNKNOWN,
+),
+)
+agent = AssistantAgent(
+name="assistant",
+model_client=model_client,
+tools=[get_weather],
+system_message="You are a helpful AI assistant that can query weather information.",
+reflect_on_tool_use=True,
+)
+return agent
+# Run Agent
+async def run_agent(prompt: str) -> str:
+"""Run AutoGen Agent"""
+agent = create_agent()
+# Create user message
+message = TextMessage(content=prompt, source="user")
+# Run Agent
+response_message = await agent.on_messages([message])
+# Extract response content
+if response_message and hasattr(response_message, 'chat_message'):
+return response_message.chat_message.content
+return str(response_message)
+# Novita Agent Runtime entry point
+@app.entrypoint
+async def agent_invocation(request: dict):
+"""Entry point function"""
+prompt = request.get("prompt", "Hello!")
+result = await run_agent(prompt)
+return {"result": result}
+# Start application
+if __name__ == "__main__":
+app.run()
+```
+## ​Google ADK
+Google Agent Development Kit (ADK) is Google’s toolkit for Agent development.
+### ​Complete Example
+For the complete example project, see here
+Copy
+```
+import os
+import uuid
+import asyncio
+from google.adk.agents import LlmAgent
+from google.adk.runners import Runner
+from google.adk.sessions import InMemorySessionService
+from google.adk.tools import google_search
+from google.genai import types
+from novita_sandbox.agent_runtime import AgentRuntimeApp
+# Create application
+app = AgentRuntimeApp()
+APP_NAME = "google_search_agent"
+# Create Google ADK Agent
+root_agent = LlmAgent(
+model=os.getenv("GEMINI_MODEL", "gemini-2.0-flash"),
+name=APP_NAME,
+instruction="I can answer your questions by searching the internet. Ask me anything!",
+tools=[google_search]
+)
+# Create Session service and Runner
+session_service = InMemorySessionService()
+runner = Runner(
+agent=root_agent,
+app_name=APP_NAME,
+session_service=session_service
+)
+# Run Agent
+async def run_agent(query: str) -> str:
+"""Run Google ADK Agent"""
+user_id = "user_default"
+session_id = str(uuid.uuid4())
+# Create Session
+await session_service.create_session(
+app_name=APP_NAME,
+user_id=user_id,
+session_id=session_id
+)
+# Create user message
+user_content = types.Content(
+role='user',
+parts=[types.Part(text=query)]
+)
+# Run Agent
+result = ""
+async for event in runner.run_async(
+user_id=user_id,
+session_id=session_id,
+new_message=user_content
+):
+if event.is_final_response() and event.content and event.content.parts:
+result = event.content.parts[0].text
+return result
+# Novita Agent Runtime entry point
+@app.entrypoint
+def agent_invocation(request: dict):
+"""Entry point function"""
+prompt = request.get("prompt", "Hello!")
+result = asyncio.run(run_agent(prompt))
+return {"result": result}
+# Start application
+if __name__ == "__main__":
+app.run()
+```
+Was this page helpful? Yes No Advanced Features Overview ⌘ I

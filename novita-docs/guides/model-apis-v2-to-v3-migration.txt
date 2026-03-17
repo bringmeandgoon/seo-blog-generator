@@ -1,0 +1,360 @@
+Source: https://novita.ai/docs/guides/model-apis-v2-to-v3-migration
+============================================================
+
+- API V2 to V3 Migration Guide - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImage, Audio and VideoAPI V2 to V3 Migration GuideGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and VideoSDKs for Model APIs
+- How to subscribe to Dedicated Endpoints?
+- Configure Custom AWS S3 Bucket
+- Upload Custom LoRA Models
+- A Brief Introduction to Sampler
+- A Brief Introduction to Clip Skip
+- What's the Variational Autoencoder VAE?
+- Training Image Caption Guidance
+- API V2 to V3 Migration Guide
+- Rate limits
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Text to Image
+- Request Body Parameter Mapping
+- Response Parameter Mapping
+- Example
+- Image to Image
+- Request Body Parameter Mapping
+- Response Parameter Mapping
+- Example
+## ​Text to Image
+### ​Request Body Parameter Mapping
+V2V3Description
+extraobjectextraobject
+enable_nsfw_detectionbooleanenable_nsfw_detectionboolean
+nsfw_detection_levelEnum: 0, 1, 2nsfw_detection_levelEnum: 0, 1, 2
+enable_progress_infoDeprecated
+response_image_typeEnum: png, jpegresponse_image_typeEnum: png, webp, jpegV3 adds support for webpimage format
+requestobjectNew FieldAll image generation parameters must be passed via the requestin V3
+promptstring<lora:$sd_name:$weight>promptstringMoved Inside
+lorasobject[]Moved InsideMigrate LoRA usage: From prompt to request.loras parameter
+model_namestringNew FieldName of lora, retrieve the corresponding sd_name_in_api value by invoking the Get Model API endpoint with filter.types=lora as the query parameter.
+strengthnumber(float32)New FieldThe strength value of lora. The larger the value, the more biased the effect is towards lora, Range [0, 1]
+negative_promptstringnegative_promptstringMoved Inside
+sampler_namestringsampler_namestringMoved Inside
+batch_sizeintegerimage_numintegerChanged num_images → request.image_num
+n_iterDeprecated
+stepsstringstepsstringMoved Inside
+cfg_scaleintegerguidance_scalenumber(float32)Changed cfg_scale→ request.guidance_scale
+seedintegerseedintegerMoved Inside
+heightintegerheightintegerMoved InsideRange Change: [128, 2048].
+widthintegerwidthintegerMoved InsideRange Change: [128, 2048].
+model_namestringmodel_namestringMoved InsideThis parameter specifies the name of the model checkpoint. Retrieve the corresponding sd_name value by invoking the Query Model API with filter.types=checkpoint as the query parameter.
+restore_facesboolrestore_facesboolMoved Inside
+restore_faces_modelDeprecated
+sd_vaestringsd_vaestringMoved Inside
+clip_skipintegerclip_skipintegerMoved Inside
+enable_hrbooleanhires_fixobjectChanged enable_hr→ request.hires_fix
+hr_upscalerEnum: Latent, ESRGAN_4x, R-ESRGAN 4x+, R-ESRGAN 4x+ Anime6BupscalerEnum: RealESRGAN_x4plus_anime_6B, RealESRNet_x4plus,LatentChanged hr_upscaler→request.hires_fix.upscaler
+hr_scalenumberDeprecated
+hr_resize_xintegertarget_widthintegerChanged hr_resize_x→ request.hires_fix.target_width
+hr_resize_yintegertarget_heightintegerChanged hr_resize_y→ request.hires_fix.target_height
+img_expire_ttlintegerDeprecatedDefault 3600s
+sd_refinerobjectrefinerobjectChanged sd_refiner→ request.refiner
+checkpointstringDeprecated
+switch_atnumber(float32)switch_atnumber(float32)Changed sd_refiner.switch_at→ request.refiner.switch_at
+controlnet_unitsobject[]Deprecatedimg2img Only
+### ​Response Parameter Mapping
+V2V3Description
+codeDeprecated
+msgDeprecated
+dataDeprecated
+task_idtask_idChanged data.task_id→ task_id
+warnDeprecated
+### ​Example
+## Text to Image V2
+- Request
+Copy
+```
+curl --location "https://api.novita.ai/v2/txt2img" \
+--header "Authorization: Bearer {{API Key}}" \
+--header "Content-Type: application/json" \
+--data '{
+"extra": {
+"enable_nsfw_detection": false,
+"nsfw_detection_level": 0,
+"response_image_type": "jpeg"
+},
+"prompt": "(masterpiece, best quality, ultra-detailed:1.3), , 1girl, mecha armor, futuristic city background, glowing neon lights, dynamic pose, cyberpunk style, intricate mechanical details, (floating holographic interface:1.2), sparkling blue eyes, wind-blown hair, (steam and energy particles:1.1), cinematic lighting",
+"negative_prompt":"(worst quality, low quality:1.4), (deformed, distorted:1.3), disfigured, blurry, bad anatomy, extra limbs, (mutated hands:1.2), (text, watermark:1.5),
+overexposed, underexposed, (cartoonish:1.2), (simplistic background:1.3),
+grainy, (traditional drawing:1.2), (realistic:1.4), (noisy:1.3)",
+"sampler_name":"DPM++ 2M Karras",
+"batch_size": 1,
+"n_iter": 1,
+"steps": 25,
+"cfg_scale": 7,
+"seed": 65531,
+"height": 512,
+"width": 512,
+"model_name": "sd_xl_base_1.0.safetensors",
+"restore_faces": false,
+"restore_faces_model": "",
+"sd_vae": "",
+"clip_skip": 1,
+"enable_hr": true,
+"hr_upscaler": "Latent",
+"hr_scale": 2,
+"hr_resize_x": 1024,
+"hr_resize_y": 1024,
+"img_expire_ttl": 3600
+}'
+```
+- Response
+Copy
+```
+{
+"code": 0,
+"msg": "",
+"data": {
+"task_id": "12905b6a-d436-4010-b199-d800130c0aab"
+}
+}
+```
+## Text to Image V3
+- Reqeust
+Copy
+```
+curl --location 'https://api.novita.ai/v3/async/txt2img' \
+--header 'Authorization: Bearer {{API Key}}' \
+--header 'Content-Type: application/json' \
+--data '{
+"extra": {
+"enable_nsfw_detection": false,
+"nsfw_detection_level": 0,
+"response_image_type": "jpeg"
+},
+"request": {
+"prompt": "(masterpiece, best quality, ultra-detailed:1.3), 1girl, mecha armor, futuristic city background, glowing neon lights, dynamic pose, cyberpunk style, intricate mechanical details,(floating holographic interface:1.2), sparkling blue eyes, wind-blown hair, (steam and energy particles:1.1), cinematic lighting",
+"negative_prompt": "(worst quality, low quality:1.4), (deformed, distorted:1.3), disfigured,blurry, bad anatomy, extra limbs, (mutated hands:1.2), (text, watermark:1.5),overexposed, underexposed,(cartoonish:1.2), (simplistic background:1.3), grainy, (traditional drawing:1.2),(realistic:1.4), (noisy:1.3)",
+"model_name": "sd_xl_base_1.0.safetensors",
+"width": 512,
+"height": 512,
+"image_num": 1,
+"steps": 25,
+"seed": 65531,
+"restore_faces": false,
+"clip_skip": 1,
+"sampler_name":"DPM++ 2M Karras",
+"guidance_scale": 7,
+"hires_fix": {
+"target_width": 1024,
+"target_height": 1024,
+"strength": 0.8,
+"upscaler": "Latent"
+},
+"loras": [
+{
+"model_name": "AnimeStyle_XL_v1_AutoRunMech_103883",
+"strength": 0.8
+}
+]
+}
+}'
+```
+- Repspone
+Copy
+```
+{
+"task_id":"0696ce57-22df-4a89-9efc-80c386a82dbd"
+}
+```
+## ​Image to Image
+### ​Request Body Parameter Mapping
+V2V3Description
+extraobjectextraobject
+enable_nsfw_detectionbooleanenable_nsfw_detectionboolean
+nsfw_detection_levelEnum: 0, 1, 2nsfw_detection_levelEnum: 0, 1, 2
+enable_progress_infoDeprecated
+response_image_typeEnum: png, jpegresponse_image_typeEnum: png, webp, jpegV3 adds support for webpimage format
+requestobjectNew fieldAll image generation parameters must be passed via the requestin V3
+promptstring<lora:$sd_name:$weight>promptstringMoved Inside
+lorasobject[]Moved InsideMigrate LoRA usage: From prompt to request.loras parameter
+model_namestringNew FieldName of lora, retrieve the corresponding sd_name_in_api value by invoking the Get Model API endpoint with filter.types=lora as the query parameter.
+strengthnumber(float32)New FieldThe strength value of lora. The larger the value, the more biased the effect is towards lora, Range [0, 1]
+negative_promptstringnegative_promptstringMoved Inside
+sampler_namestringsampler_namestringMoved Inside
+batch_sizeintegerimage_numintegerChanged batch_size→ request.image_num
+n_iterintegerDeprecated
+stepsstringstepsstringMoved Inside
+cfg_scaleintegerguidance_scalenumber(float32)Changed cfg_scale→ request.guidance_scale
+seedintegerseedintegerMoved Inside
+heightintegerheightintegerMoved InsideRange Change: [128, 2048].
+widthintegerwidthintegerMoved InsideRange Change: [128, 2048].
+model_namestringmodel_namestringMoved InsideThis parameter specifies the name of the model checkpoint. Retrieve the corresponding sd_name value by invoking the Query Model API with filter.types=checkpoint as the query parameter.
+init_imagesstring[]image_base64stringChanged init_images→ request.image_base64
+denoising_strengthnumber(float)strengthnumber(float)Changed denoising_strength→ request.strength
+restore_facesboolDeprecated
+sd_vaestringsd_vaestringMoved Inside
+clip_skipintegerclip_skipintegerMoved Inside
+maskstringDeprecatedRecommendation: Use V3 Inpainting API
+mask_blurintegerDeprecatedRecommendation: Use V3 Inpainting API
+resize_modeintegerDeprecated
+image_cfg_scaleintegerDeprecated
+inpainting_fillintegerDeprecatedRecommendation: Use V3 Inpainting API
+inpaint_full_resintegerDeprecatedRecommendation: Use V3 Inpainting API
+inpaint_full_res_paddingintegerDeprecatedRecommendation: Use V3 Inpainting API
+inpainting_mask_invertintegerDeprecatedRecommendation: Use V3 Inpainting API
+initial_noise_multipliernumber(float32)Deprecated
+img_expire_ttlintegerDeprecatedDefault 3600s
+sd_refinerobjectrefinerobjectChanged sd_refiner→ request.refiner
+checkpointDeprecated
+switch_atnumber(float32)switch_atnumber(float32)Moved Inside
+controlnetobjectNew Field
+controlnet_unitsobject[]unitsobject[]Changed controlnet_units→ request.controlnet.units
+modelstringmodel_namestringChanged controlnet_units.model→ request.controlnet.units.model_name
+weightnumberstrengthnumber(float32)Changed controlnet_units.weight→ request.controlnet.units.strength
+input_imagestringimage_base64stringChanged controlnet_units.input_image→ request.controlnet.units.image_base64
+modulestring,Enumpreprocessorstring,EnumChangedcontrolnet_units.module→ request.controlnet.units.preprocessor
+control_modeDeprecated
+maskDeprecatedRecommendation: Use V3 Inpainting API
+resize_modeDeprecated
+processor_resDeprecated
+threshold_aDeprecated
+threshold_bDeprecated
+guidance_startnumber(float32)guidance_startnumber(float32)Moved Inside
+guidance_endnumber(float32)guidance_endnumber(float32)Moved Inside
+pixel_perfectDeprecated
+### ​Response Parameter Mapping
+V2V3Description
+codeDeprecated
+msgDeprecated
+dataDeprecated
+task_idtask_idChanged data.task_id→ task_id
+warnDeprecated
+### ​Example
+## Image to Image V2
+- Request
+Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v2/img2img \
+--header 'Authorization: ' \
+--header 'Content-Type: application/json' \
+--data '{
+"extra": {
+"enable_nsfw_detection": false,
+"nsfw_detection_level": 0,
+"response_image_type": "png"
+},
+"prompt": "realistic, photograph, (masterpiece), 8k quality, (detailed eyes:1.2), (highest quality:1.1), highly detailed, majestic, top quality, best quality, newest, ai-generated, (intricate details:1.1), extremely beautiful, elegant, majestic, immersive background+, (detailed face, perfect face), In the heart of a vibrant garden, a girl with red hair and brown eyes sits in contemplation of the nature around her.",
+"negative_prompt": "(worst quality:1.5), (low quality:1.5), (normal quality:1.5), anime, cartoon, painting, drawing, illustration, manga, sketch, nudity, young, child, hairband, headband, horns, lowres, bad anatomy, bad hands, multiple eyebrow, (cropped), extra limb, missing limbs, deformed hands, long neck, long body, long torso, (bad hands), signature, username, artist name, conjoined fingers, deformed fingers, ugly eyes, imperfect eyes, skewed eyes, unnatural face, unnatural body, error, grain, jpeg artifacts",
+"sampler_name":"DPM++ 2M Karras",
+"batch_size": 1,
+"n_iter": 1,
+"steps": 25,
+"cfg_scale": 7.5,
+"seed": 765824,
+"height": 768,
+"width": 512,
+"model_name": "cyberrealistic_v31_62396.safetensors",
+"init_images": [
+" "
+],
+"denoising_strength": 0.8,
+"restore_faces": false,
+"clip_skip": 1,
+"img_expire_ttl": 3600,
+"controlnet_units": {
+"model": "control_v11p_sd15_lineart",
+"weight": 1,
+"input_image": " ",
+"module": "lineart",
+"guidance_start": 0,
+"guidance_end": 1
+}
+}'
+```
+- Response
+Copy
+```
+{
+"code": 0,
+"msg": "",
+"data": {
+"task_id": "a1b0d99b-2ef0-4b20-8eeb-c641ae84ed45"
+}
+}
+```
+## Image to Image V3
+- Request
+Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/async/img2img \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '{
+"extra": {
+"enable_nsfw_detection": false,
+"nsfw_detection_level": 0,
+"response_image_type": "png"
+},
+"request": {
+"prompt": "realistic, photograph, (masterpiece), 8k quality, (detailed eyes:1.2), (highest quality:1.1), highly detailed, majestic, top quality, best quality, newest, ai-generated, (intricate details:1.1), extremely beautiful, elegant, majestic, immersive background+, (detailed face, perfect face), In the heart of a vibrant garden, a girl with red hair and brown eyes sits in contemplation of the nature around her.",
+"negative_prompt": "(worst quality:1.5), (low quality:1.5), (normal quality:1.5), anime, cartoon, painting, drawing, illustration, manga, sketch, nudity, young, child, hairband, headband, horns, lowres, bad anatomy, bad hands, multiple eyebrow, (cropped), extra limb, missing limbs, deformed hands, long neck, long body, long torso, (bad hands), signature, username, artist name, conjoined fingers, deformed fingers, ugly eyes, imperfect eyes, skewed eyes, unnatural face, unnatural body, error, grain, jpeg artifacts",
+"sampler_name": "DPM++ 2M Karras",
+"image_num": 1,
+"steps": 25,
+"guidance_scale": 7.5,
+"seed": 765824,
+"height": 768,
+"width": 512,
+"model_name": "cyberrealistic_v31_62396.safetensors",
+"image_base64": " ",
+"strength": 0.8,
+"clip_skip": 1,
+"controlnet": {
+"units": [
+{
+"model_name": "control_v11p_sd15_lineart",
+"strength": 1,
+"image_base64": " ",
+"preprocessor": "lineart",
+"guidance_start": 0,
+"guidance_end": 1
+}
+]
+}
+}
+}'
+```
+- Response
+Copy
+```
+{
+"task_id": "9490dde7-cd28-493e-9db0-8a38a65bf5e6"
+}
+```
+Was this page helpful? Yes No Training Image Caption Guidance Rate limits ⌘ I

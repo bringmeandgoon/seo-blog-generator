@@ -1,0 +1,123 @@
+Source: https://novita.ai/docs/api-reference/model-apis-seedream-5.0-lite
+============================================================
+
+- Seedream 5.0 lite - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImage GeneratorSeedream 5.0 liteGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image GeneratorPOSTText to Image
+- POSTImage to Image
+- POSTReimagine
+- POSTFLUX.1 [schnell] Text to Image
+- POSTFLUX.1 Kontext Dev
+- POSTFLUX.1 Kontext Pro
+- POSTFLUX.1 Kontext Max
+- POSTSeedream 3.0 Text to Image
+- POSTSeedream 4.0
+- POSTSeedream 4.5
+- POSTSeedream 5.0 lite
+- POSTQwen-Image Text to Image
+- POSTHunyuan Image 3
+- POSTFlux 2 Dev Image Gen
+- POSTFlux 2 Flex Image Gen
+- POSTFlux 2 Pro Image Gen
+- POSTZ Image Turbo LoRA
+- POSTZ Image Turbo
+- POSTGLM Image Generation
+- Image Editor
+- Video Generator
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Seedream 5.0 lite cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/seedream-5.0-lite \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"size": " ",
+"image": [
+{}
+],
+"prompt": " ",
+"watermark": true,
+"optimize_prompt_options": {
+"mode": " "
+},
+"sequential_image_generation": " ",
+"sequential_image_generation_options": {
+"max_images": 123
+}
+}
+'
+```
+200 Copy
+```
+{
+"images": [
+" "
+]
+}
+```
+POST / v3 / seedream-5.0-lite Seedream 5.0 lite cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/seedream-5.0-lite \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"size": " ",
+"image": [
+{}
+],
+"prompt": " ",
+"watermark": true,
+"optimize_prompt_options": {
+"mode": " "
+},
+"sequential_image_generation": " ",
+"sequential_image_generation_options": {
+"max_images": 123
+}
+}
+'
+```
+200 Copy
+```
+{
+"images": [
+" "
+]
+}
+```
+API for Seedream 5.0 lite image generation model. Supports text-to-image, single image-to-image, multi-image-to-image, and sequential image generation features.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ size string default: "2048x2048" Specifies the size of the generated image. Method 1: Specify resolution (2K, 3K); Method 2: Specify width and height in pixels (e.g., 2048x2048). Total pixel range: [2560x1440=3686400, 3072x3072x1.1025=10404496], aspect ratio range: [1/16, 16].
+​ image array Array of input image information, supporting URL or Base64 encoding. Up to 14 reference images can be provided. Supported image formats: jpeg, png, webp, bmp, tiff, gif. Array length: 1 - 14
+​ prompt string required Prompt for image generation, supports both Chinese and English. Recommended not to exceed 300 Chinese characters or 600 English words.
+​ watermark boolean default: true Whether to add a watermark to the generated images.
+​ optimize_prompt_options object Configuration for prompt optimization feature. Hide properties ​ mode string default: "standard" Sets the mode for prompt optimization. standard: Standard mode with higher quality but longer processing time; fast: Fast mode with shorter processing time but average quality. Currently only standard mode is supported. Optional values: standard
+​ sequential_image_generation string default: "disabled" Controls whether to disable sequential image generation. auto: Automatic mode where the model determines whether to return sequential images based on the prompt; disabled: Disables sequential image generation and only generates one image. Optional values: auto , disabled
+​ sequential_image_generation_options object Configuration for sequential image generation. Only effective when sequential_image_generation is set to auto. Hide properties ​ max_images integer default: 15 Specifies the maximum number of images that can be generated in this request. Number of input reference images + number of generated images ≤ 15. Value range: [1, 15]
+## ​Response
+​ images string[] Array of generated image information. Was this page helpful? Yes No Seedream 4.5 Qwen-Image Text to Image ⌘ I

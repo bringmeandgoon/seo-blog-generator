@@ -1,0 +1,63 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-update-image-prewarm
+============================================================
+
+- Update Image Prewarm Task - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImageUpdate Image Prewarm TaskGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- Instance
+- ImagePOSTSave Instance Image
+- GETGet Image Prewarm Quota
+- POSTCreate Image Prewarm Task
+- GETList Image Prewarm Tasks
+- POSTUpdate Image Prewarm Task
+- POSTDelete Image Prewarm Tasks
+- Template
+- Product
+- Network
+- Image Registry
+- Storage
+- Jobs
+- Serverless GPUs
+Update Image Prewarm Task cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/image/prewarm/edit \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"id": " ",
+"note": " "
+}
+'
+```
+POST / gpu-instance / openapi / v1 / image / prewarm / edit Try it Update Image Prewarm Task cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/image/prewarm/edit \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"id": " ",
+"note": " "
+}
+'
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ id string required Prewarm task ID.
+​ note string Task note. Was this page helpful? Yes No List Image Prewarm Tasks Delete Image Prewarm Tasks ⌘ I

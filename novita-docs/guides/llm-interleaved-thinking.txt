@@ -1,0 +1,288 @@
+Source: https://novita.ai/docs/guides/llm-interleaved-thinking
+============================================================
+
+- Interleaved Thinking Supporty - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationLLMInterleaved Thinking SupportyGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLMLarge Language Models
+- Vision Language Models
+- Recommended Models
+- Reasoning Models
+- DeepSeek-OCR Usage
+- Function Calling
+- Structured Outputs
+- Prompt Cache
+- Dedicated Endpoint User Manual
+- Batch Inference
+- Rate limits
+- LLM Monitoring
+- Interactive Playground
+- Anthropic SDK Compatibility
+- Interleaved Thinking Supporty
+- Common Error Codes
+- LLM FAQs
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - 1. Overview
+- 2. Key Concepts
+- 2.1 Interleaving
+- 2.2 Reasoning Details (reasoning_details)
+- 2.3 Conversation Memory Requirement
+- 3. API Behavior
+- 3.1 Request Format
+- 3.2 Response Format
+- 4. Example Request (MiniMax-M2)
+- 5. Example Response (Non-Streaming)
+- 6. Streaming Response Example
+- 7. Developer Notes
+- 7.1 Models That Support Interleaved Thinking
+- 7.2 Pricing
+- 7.3 Error Handling
+- 8. Best Practices
+- 9. Summary
+Last Updated : 2025-12-03
+Status : Supported (OpenAI-Compatible)
+## ​1. Overview
+Interleaved Thinking is an advanced reasoning framework that enables models to perform explicit reasoning steps between tool calls.
+Models with Interleaved Thinking can:
+- Reflect on the current environment and tool outputs
+- Decide the next action based on updated reasoning
+- Maintain a continuous reasoning chain across multiple tool invocations
+- Provide transparent, inspectable multi-step thinking through reasoning_details or reasoning_content
+This capability transforms traditional function-calling into agent-level tool use , making complex workflows more accurate, reliable, and context-aware.
+Novita fully supports Interleaved Thinking for all models that natively expose reasoning streams (e.g., MiniMax-M2 and other OpenAI-compatible reasoning models).
+## ​2. Key Concepts
+### ​2.1 Interleaving
+Instead of executing a single reasoning phase followed by a tool call, the model performs:
+Copy
+```
+Reason → Tool Call → Observe → Reason → Tool Call → ...
+```
+This allows the model to adjust its strategy dynamically based on previous tool outputs.
+### ​2.2 Reasoning Details (reasoning_details)
+For some models, the content of the model’s thinking will be returned in the form of a separate structure:
+Copy
+```
+"reasoning_details": [
+{
+"type": "reasoning.text",
+"format": "openai-responses-v1",
+"text": "Model’s step-by-step reasoning..."
+}
+]
+```
+For such models, Novita supports returning this field in both streaming and non-streaming modes.
+### ​2.3 Conversation Memory Requirement
+To maintain reasoning continuity: You must append the model’s full response including reasoning_details , tool_calls , and content to subsequent messages .
+Failing to preserve the chain may result in:
+- Incorrect tool use
+- Lost reasoning context
+- Repeated or circular tool calls
+- Reduced reliability
+This requirement mirrors OpenAI’s reasoning APIs.
+## ​3. API Behavior
+### ​3.1 Request Format
+No changes are required on the user side.
+Interleaved Thinking works with the standard OpenAI-compatible Chat Completions API.
+### ​3.2 Response Format
+The model may return the following fields:
+- reasoning_content: original thinking content
+- reasoning_details: structured reasoning segments, this field is optioanl
+- tool_calls: tool invocation plan
+- content: natural language output
+These extend the standard OpenAI format.
+## ​4. Example Request (MiniMax-M2)
+Copy
+```
+{
+"model": "minimax/minimax-m2",
+"messages": [
+{
+"role": "user",
+"content": "How's the weather in San Francisco?"
+},
+{
+"role": "assistant",
+"name": "MiniMax AI",
+"content": "",
+"tool_calls": [
+{
+"id": "call_function_asqvfevfc8af_1",
+"type": "function",
+"function": {
+"name": "get_weather",
+"arguments": "{\"location\": \"San Francisco, US\"}"
+}
+}
+],
+"reasoning_details": [
+{
+"type": "reasoning.text",
+"id": "reasoning-text-1",
+"format": "openai-responses-v1",
+"index": 0,
+"text": "The user is asking about the weather in San Francisco..."
+}
+]
+},
+{
+"role": "tool",
+"tool_call_id": "call_function_asqvfevfc8af_1",
+"content": "24℃, sunny"
+}
+],
+"stream": true,
+"reasoning_split": true,
+"max_tokens": 1024,
+"temperature": 0.7,
+"tools": [
+{
+"type": "function",
+"function": {
+"name": "get_weather",
+"description": "Get weather for a specific location",
+"parameters": {
+"type": "object",
+"properties": {
+"location": { "type": "string" }
+},
+"required": ["location"]
+}
+}
+}
+]
+}
+```
+## ​5. Example Response (Non-Streaming)
+Copy
+```
+{
+"id": "07a4dedfdb1498b045498dfd42497639",
+"object": "chat.completion",
+"created": 1764303147,
+"model": "MiniMax",
+"choices": [
+{
+"index": 0,
+"message": {
+"role": "assistant",
+"content": "",
+"name": "MiniMax",
+"tool_calls": [
+{
+"index": 0,
+"id": "call_function_9w7wq1j9zmpl_1",
+"type": "function",
+"function": {
+"name": "get_weather",
+"arguments": "{\"location\": \"ShangHai\"}"
+}
+}
+],
+"reasoning_content": "The user asked for Shanghai weather...",
+"reasoning_details": [
+{
+"type": "reasoning.text",
+"text": "The user is asking about the weather in Shanghai...",
+"id": "reasoning-text-1",
+"format": "openai-responses-v1",
+"index": 0
+}
+]
+},
+"finish_reason": "tool_calls"
+}
+]
+}
+```
+## ​6. Streaming Response Example
+Copy
+```
+{
+"id": "664c5ad870c1888fbcbd267d9829e354",
+"object": "chat.completion.chunk",
+"created": 1764303504,
+"model": "minimax-m2",
+"choices": [
+{
+"index": 0,
+"delta": {
+"role": "assistant",
+"reasoning_content": "...\n\nThe user has specifically asked...",
+"reasoning_details": [
+{
+"type": "reasoning.text",
+"text": ".\n\nThe user has specifically asked...",
+"id": "reasoning-text-1",
+"format": "openai-responses-v1",
+"index": 0
+}
+]
+},
+"finish_reason": null
+}
+]
+}
+```
+## ​7. Developer Notes
+### ​7.1 Models That Support Interleaved Thinking
+All models exposing reasoning_details through OpenAI-compatible APIs, including:
+- MiniMax-M2
+- (Upcoming) Novita Reasoning Series
+- Other reasoning-enabled partner models
+### ​7.2 Pricing
+Billing is based on reasoning tokens, following the model’s pricing rules.
+reasoning_details will increase token usage.
+### ​7.3 Error Handling
+You may encounter:
+- Missing tool parameters
+- Recursive or repeated tool calls
+- Incorrect assumptions in the reasoning phase
+Ensure your application validates tool arguments and handles model errors gracefully.
+## ​8. Best Practices
+✓ Always include full model messages in the next request
+Include:
+- content
+- tool_calls
+- reasoning_details
+✓ Enable streaming for long-chain reasoning
+Streaming allows the client to:
+- Monitor the reasoning process
+- Detect incorrect tool plans early
+- Provide faster user feedback
+✓ Combine with server-side state machines for stability
+For production systems, we recommend pairing Interleaved Thinking with deterministic guardrails, e.g.:
+- Parameter validators
+- Execution sandbox
+- Maximum recursion safeguards
+## ​9. Summary
+Interleaved Thinking significantly enhances multi-step reasoning and tool-use reliability:
+- Transparent and inspectable step-wise reasoning
+- Adaptive planning between tool invocations
+- Stronger context retention across long workflows
+- Fully compatible with OpenAI-style Chat Completions API
+Novita will continue expanding support for advanced reasoning models, bringing agent-level intelligence to the API layer. Was this page helpful? Yes No Anthropic SDK Compatibility Common Error Codes ⌘ I

@@ -1,0 +1,140 @@
+Source: https://novita.ai/docs/api-reference/model-apis-seedream-4-0
+============================================================
+
+- Novita AI Seedream 4.0 API | Generate imageSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationImage GeneratorSeedream 4.0GuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and VideoWebhook
+- Model
+- Task
+- Image GeneratorPOSTText to Image
+- POSTImage to Image
+- POSTReimagine
+- POSTFLUX.1 [schnell] Text to Image
+- POSTFLUX.1 Kontext Dev
+- POSTFLUX.1 Kontext Pro
+- POSTFLUX.1 Kontext Max
+- POSTSeedream 3.0 Text to Image
+- POSTSeedream 4.0
+- POSTSeedream 4.5
+- POSTSeedream 5.0 lite
+- POSTQwen-Image Text to Image
+- POSTHunyuan Image 3
+- POSTFlux 2 Dev Image Gen
+- POSTFlux 2 Flex Image Gen
+- POSTFlux 2 Pro Image Gen
+- POSTZ Image Turbo LoRA
+- POSTZ Image Turbo
+- POSTGLM Image Generation
+- Image Editor
+- Video Generator
+- Audio
+- Face Editor
+- Training
+- Deprecated
+GPUs - GPU Instance
+- Serverless GPUs
+Seedream 4.0 cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/seedream-4.0 \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"prompt": " ",
+"images": [
+" "
+],
+"size": " ",
+"sequential_image_generation": " ",
+"max_images": 123,
+"watermark": true
+}
+'
+```
+200 Copy
+```
+{
+"images": [
+" "
+]
+}
+```
+POST / v3 / seedream-4.0 Try it Seedream 4.0 cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/v3/seedream-4.0 \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"prompt": " ",
+"images": [
+" "
+],
+"size": " ",
+"sequential_image_generation": " ",
+"max_images": 123,
+"watermark": true
+}
+'
+```
+200 Copy
+```
+{
+"images": [
+" "
+]
+}
+```
+Seedream 4.0 is a cutting-edge image generation model that provides flexible image creation features, including 4K resolution support. The Seedream 4.0 API enables image generation from both text and other images.
+## ​Request Headers
+​ Content-Type string required Supports: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ prompt string required The prompt for image generation. The recommended length is no more than 600 English words. If the prompt is too long, the information may become scattered. The model might ignore details and only concentrate on the main points, resulting in a image with missing elements.
+​ images string[] Enter the Base64 encoding or an accessible URL of the image to edit. Supports inputting a single image or multiple images.
+- Image URL: Make sure that the image URL is accessible.
+- Base64 encoding: The format must be data:image/<image format>;base64,<Base64 encoding>.
+An input image must meet the following requirements:
+Image format: jpeg, png
+- Aspect ratio (width/height): In the range [1/3, 3]
+- Width and height (px): > 14
+- Size: No more than 10 MB
+- The value of total pixels: No more than 6000×6000
+- supports uploading a maximum of 10 reference images.
+​ size string Set the specification for the generated image. Two methods are available but cannot be used together.
+- Method 1, specify the resolution.
+Optional values: 1K, 2K, 4K
+- Method 2, specify the width and height of the generated image in pixels.
+Default: 2048x2048
+- The value range of total pixels: [1024x1024, 4096x4096]
+- The aspect ratio value range: [1/16, 16]
+Recommended width and height: Aspect ratioWidth and Height Pixel Values
+1:12048x2048
+4:32304x1728
+3:41728x2304
+16:92560x1440
+9:161440x2560
+3:22496x1664
+2:31664x2496
+21:93024x1296
+​ sequential_image_generation string default: "disabled" Controls whether to disable the batch generation feature.
+- auto: In automatic mode, the model automatically determines whether to return multiple images and how many images it will contain based on the user’s prompt.
+- disabled: Disables batch generation feature. The model will only generate one image.
+​ max_images integer default: 15 Specifies the maximum number of images to generate in this request. This parameter is only effective when sequential_image_generation is set to auto . Value range: [1, 15] Description The actual number of generated images is affected by max_images and the number of input reference images. Number of input reference images + Number of generated images ≤ 15.
+​ watermark boolean default: true Adds a watermark to the generated image.
+- false: Does not add a watermark.
+- true: Adds a watermark with the text “AI generated” in the bottom-right corner of the image.
+## ​Response
+​ images string[] An array containing links to download the generated images. Was this page helpful? Yes No Seedream 3.0 Text to Image Seedream 4.5 ⌘ I

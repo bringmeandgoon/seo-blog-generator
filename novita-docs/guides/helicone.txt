@@ -1,0 +1,132 @@
+Source: https://novita.ai/docs/guides/helicone
+============================================================
+
+- Helicone - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationIntegrationsHeliconeGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- IntegrationsClaude Code Integration Guide
+- OpenAI Agents SDK
+- AnythingLLM
+- Dify
+- Helicone
+- Hugging Face
+- Langflow
+- Continue
+- Cursor
+- LangChain
+- Skyvern
+- LobeChat
+- AI Gradio
+- Langfuse
+- MLflow
+- Verba
+- Portkey
+- DocsGPT
+- LlamaIndex
+- LoLLMS WebUI
+- CodeCompanion
+- Page Assist
+- DeepSearcher
+- Browser Use
+- OWL
+- LiteLLM
+- ChatBox
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Setting Up Helicone AI Gateway
+- Step1: Create an Account
+- Step 2: Generate an API Key
+- Step 3: Pick Your Preferred Integration Method
+- Step 4: Send Your First Request
+- Obtaining Novita AI API Key
+- Step 1: Go to Novita AI and Log in
+- Step 2: Manage Novita AI LLM API Key
+- How to Integrate Novita AI API with Helicone
+- Step 1: Log into your Novita AI Account and Helicone Account
+- Step 2: Set HELICONE_API_KEY and NOVITA_API_KEY as Environment Variables
+- Step 3: Modify the Base URL and Add Auth Headers
+Novita AI’s integration with Helicone’s observability platform marks a significant advancement in LLM development. This combination provides developers with a streamlined inference platform and comprehensive monitoring capabilities, transforming how teams work with Large Language Models.
+By leveraging Helicone’s monitoring tools through Novita AI’s infrastructure, developers gain access to robust analytics and performance insights. This guide will walk you through setting up Helicone AI Gateway, obtaining Novita AI API Key, and integrating Novita AI API with Helicone.
+## ​Setting Up Helicone AI Gateway
+Getting started with Helicone AI Gateway only requires four steps: creating an account, generating an API key, picking your preferred integration method, and sending your first request.
+### ​Step1: Create an Account
+- After account creation, you can move forward with the setup process.
+### ​Step 2: Generate an API Key
+- Go to Settings: Locate and select your organization name in the upper-left corner, then select Settings from the dropdown.
+- Select the API Key Tab.
+- Generate New Key: Click on Generate new key. During the API key creation process, you can enable read and write permissions. Write keys enable access to Helicone through our proxy service, feedback or any other Helicone service when calling  POST or using our gateway.
+### ​Step 3: Pick Your Preferred Integration Method
+- Choose your provider from the options below to view specific instructions.
+### ​Step 4: Send Your First Request
+- Upon receiving your requests, you will see them in the Requests tab.
+- Your new request will be immediately visible on the Dashboard.
+## ​Obtaining Novita AI API Key
+To obtain your Novita AI API key , simply log into your account, navigate to the LLM API key management section, and add the necessary credits to begin.
+### ​Step 1: Go to Novita AI and Log in
+- Novita AI offers multiple login options: use your Google or GitHub credentials for instant account creation, or register directly with your email address.
+### ​Step 2: Manage Novita AI LLM API Key
+Novita AI ensures secure API access by using Bearer authentication, where your API key is included in the header format “Authorization: Bearer {{API Key}}”.
+- Your first login generates a default key automatically - access all keys through the “Key Management” section in settings.
+- Additional keys can be created using the “+ Add New Key” function.
+## ​How to Integrate Novita AI API with Helicone
+The Novita AI-Helicone integration requires three simple steps: accessing both platform accounts, configuring your API keys as environment variables (HELICONE_API_KEY and NOVITA_API_KEY), and updating the base URL with proper authentication headers.
+### ​Step 1: Log into your Novita AI Account and Helicone Account
+- Access your Novita AI account or create one, then generate your API key directly from the dashboard.
+- Sign in to Helicone (or create a new account) to obtain your API key.
+### ​Step 2: Set HELICONE_API_KEY and NOVITA_API_KEY as Environment Variables
+Copy
+```
+$env:HELICONE_API_KEY=" "
+$env:NOVITA_API_KEY=" "
+```
+### ​Step 3: Modify the Base URL and Add Auth Headers
+- Update the following Novita AI URL with the Helicone Gateway URL.
+https://api.novita.ai  ->  https://novita.helicone.ai
+- Then add the following headers for authentication:
+Copy
+```
+* curl -H "Authorization: Bearer "
+```
+Example
+- Now you can use this simple fetch call to interact with any Novita AI model.
+- Copy
+```
+curl \
+--header 'Authorization: Bearer ' \
+--header 'Content-Type: application/json' \
+--data '{
+"model": "deepseek/deepseek-r1",
+"messages": [
+{
+"role": "user",
+"content": "What language is mostly spoken in Singapore?"
+}
+]
+}' \
+--url https://novita.helicone.ai/v3/chat/completions
+```
+Was this page helpful? Yes No Dify Hugging Face ⌘ I

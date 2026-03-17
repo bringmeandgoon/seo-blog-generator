@@ -1,0 +1,62 @@
+Source: https://novita.ai/docs/guides/gpu-image-prewarm
+============================================================
+
+- Image Prewarm - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationGuidesImage PrewarmGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- Integrations
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU InstanceOverview
+- Quickstart
+- GuidesGPU Instance Pricing
+- Edit Instance
+- Upgrade Instance
+- Save Image
+- How to Choose a GPU?
+- Jupyter Lab
+- Image Prewarm
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - Operation Steps
+- Quota Limits
+The image prewarm feature supports synchronizing specified images from the source image repository to the cluster’s local cache in advance. When instances start or elastic scaling is triggered in Serverless scenarios, images can be loaded directly from the local cache, avoiding remote repository pulls, improving startup performance and optimizing scaling response time.
+By default: The system will select cache nodes within the cluster for image prewarm, and other nodes will pull images from these nodes via the internal network when starting instances or scaling.
+## ​Operation Steps
+- Navigate to the Image Prewarm page.
+- Create a prewarm task:
+Click the “Create Image Prewarm Task” button to enter the task creation page and complete the following configurations:
+You can manually enter the image address, or directly select a template to load the images configured in the template.
+- If the image is located in a non-public repository, you need to select pre-configured image repository authentication information.
+- Select the target prewarm region.
+- Select the card type (GPU/accelerator card type) to be prewarmed; if not selected, the system will prewarm all card types by default.
+- Click “Confirm Create”, and the system will generate the image prewarm task.
+- View task status:
+You can view task progress and status in real-time in the prewarm task list.
+- Create a template based on prewarmed images:
+After prewarm is complete, you can directly create an image template based on the prewarmed images for subsequent instance or service deployment.
+Notes: During the image prewarm process, images will be pulled in parallel across multiple nodes in the cluster. Please confirm in advance whether the source image repository has access rate limiting policies . If rate limiting or bandwidth restrictions exist, the prewarm task may remain in an executing state for an extended period or fail.
+## ​Quota Limits
+Currently, the image prewarm feature supports up to 5 concurrent prewarm tasks by default, and the image pull quota limit per task is 100 GB .
+If you need to adjust the number of concurrent tasks or the pull quota per task, please contact technical support for assistance with configuration. Was this page helpful? Yes No Jupyter Lab Overview ⌘ I

@@ -1,0 +1,117 @@
+Source: https://novita.ai/docs/guides/pageassist
+============================================================
+
+- Page Assist - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationIntegrationsPage AssistGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Get started - Introduction
+- Quickstart
+Model APIs - Overview
+- LLM
+- Image, Audio and Video
+- IntegrationsClaude Code Integration Guide
+- OpenAI Agents SDK
+- AnythingLLM
+- Dify
+- Helicone
+- Hugging Face
+- Langflow
+- Continue
+- Cursor
+- LangChain
+- Skyvern
+- LobeChat
+- AI Gradio
+- Langfuse
+- MLflow
+- Verba
+- Portkey
+- DocsGPT
+- LlamaIndex
+- LoLLMS WebUI
+- CodeCompanion
+- Page Assist
+- DeepSearcher
+- Browser Use
+- OWL
+- LiteLLM
+- ChatBox
+Agent Sandbox - Overview
+- Installing SDKs & CLI
+- Quickstart
+- Sandbox
+- Template
+- Filesystem
+- Commands
+- CLI
+- Integrations
+- Agent Runtime
+GPUs - Overview
+- GPU Instance
+- Serverless GPUs
+- Template Guide
+Observability - LLM API Metrics
+Resources - Payment Methods
+- Budgets
+- Automatic Top-Up
+- Low Balance Alert
+- Team
+- FAQ
+On this page - How to Integrate Novita AI with Page Assist
+- Step 1: Prepare Your Environment
+- Step 2: Clone Page Assist Repository
+- Step 3: Build Page Assist Extension
+- Step 4: Load the Extension
+- Step 5: Configure Novita AI as OpenAI API Compatible Endpoint
+- Step 6: Choose your Model and Test Page Assist with Novita AI
+Page Assist offers a seamless browser extension that integrates AI capabilities directly into your web interactions. By combining Novita AI with Page Assist, you can unlock a powerful AI-enhanced browsing experience that enhances productivity and insight generation.
+This guide will walk you through the process of deploying and running Page Assist with Novita AI to supercharge your web interactions.
+## ​How to Integrate Novita AI with Page Assist
+You can find the GitHub repository of Page Assist here: n4ze3m/page-assist .
+### ​Step 1: Prepare Your Environment
+- Install Bun or npm: Follow the installation guide for Bun or use npm as an alternative.
+### ​Step 2: Clone Page Assist Repository
+- Open your terminal and run:
+Copy
+```
+git clone https://github.com/n4ze3m/page-assist.git
+cd page-assist
+```
+- Install dependencies using Bun or npm:
+Copy
+```
+bun install
+```
+### ​Step 3: Build Page Assist Extension
+- Build the extension for Chrome (default):
+Copy
+```
+bun run build
+```
+- For Firefox, use:
+Copy
+```
+bun build:firefox
+```
+### ​Step 4: Load the Extension
+- For Chrome:
+Navigate to chrome://extensions.
+- Enable Developer Mode.
+- Click Load unpacked and select the build/chrome-xxx (e.g. build/chrome-mv3) directory.
+- For Firefox:
+Go to about:addons.
+- Click Extensions tab.
+- Click Manage Your Extensions.
+- Select Load Temporary Add-on and choose the manifest.json file from in the build/firefox-xxx (e.g. build/firefox-mv3) directory.
+### ​Step 5: Configure Novita AI as OpenAI API Compatible Endpoint
+- Obtain Your Novita AI API Key:
+Log in to your Novita AI account.
+- Navigate to the Key Management page.
+- Generate a new API Key and copy it.
+- Set Up Novita AI Endpoint:
+In your Page Assist Settings, enter Open Compatible API to add provider.
+- Choose Novita from the Custom list, and use your API key for authentication.
+### ​Step 6: Choose your Model and Test Page Assist with Novita AI
+- Choose your model from the model list provided by Novita AI.
+- Interact with your Novita AI model by asking questions or analyzing web content.
+Was this page helpful? Yes No CodeCompanion DeepSearcher ⌘ I

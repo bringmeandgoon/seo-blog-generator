@@ -1,0 +1,76 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-set-auto-migrate
+============================================================
+
+- Set Auto Migrate Strategy - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationInstanceSet Auto Migrate StrategyGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- InstancePOSTCreate GPU Instance
+- POSTCreate CPU Instance
+- GETList Instances
+- GETGet Instance
+- POSTEdit Instance
+- POSTStart Instance
+- POSTStop Instance
+- POSTRestart Instance
+- POSTUpgrade Instance
+- POSTMigrate Instance
+- GETMonitor Metrics
+- POSTRenew Subscription Instance
+- POSTConvert Pay-As-You-Go Instance to Subscription
+- POSTDelete Instance
+- POSTSet Auto Renew
+- POSTSet Auto Migrate Strategy
+- Image
+- Template
+- Product
+- Network
+- Image Registry
+- Storage
+- Jobs
+- Serverless GPUs
+Set Auto Migrate Strategy cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/gpu/instance/setAutoMigrate \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"instanceId": " ",
+"autoMigrateOpen": true,
+"autoMigrateSystemDisk": true
+}
+'
+```
+POST / gpu-instance / openapi / v1 / gpu / instance / setAutoMigrate Try it Set Auto Migrate Strategy cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/gpu/instance/setAutoMigrate \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"instanceId": " ",
+"autoMigrateOpen": true,
+"autoMigrateSystemDisk": true
+}
+'
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ instanceId string required Instance ID.
+​ autoMigrateOpen boolean required Enable/disable automatic instance migration.
+​ autoMigrateSystemDisk boolean required Enable/disable automatic system disk migration during instance migration. Was this page helpful? Yes No Set Auto Renew Save Instance Image ⌘ I

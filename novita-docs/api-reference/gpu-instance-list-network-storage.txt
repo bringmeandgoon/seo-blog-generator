@@ -1,0 +1,120 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-list-network-storage
+============================================================
+
+- List Network Storage - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationStorageList Network StorageGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- Instance
+- Image
+- Template
+- Product
+- Network
+- Image Registry
+- StoragePOSTCreate Network Storage
+- POSTDelete Network Storage
+- POSTEdit Network Storage
+- GETList Network Storage
+- Jobs
+- Serverless GPUs
+List Network Storage cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/networkstorages/list \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"data": [
+{
+"storageId": " ",
+"storageName": " ",
+"storageSize": 123,
+"clusterId": " ",
+"clusterName": " ",
+"price": " "
+}
+],
+"total": 123
+}
+```
+GET / gpu-instance / openapi / v1 / networkstorages / list Try it List Network Storage cURL Copy
+```
+curl --request GET \
+--url https://api.novita.ai/gpu-instance/openapi/v1/networkstorages/list \
+--header 'Authorization: ' \
+--header 'Content-Type: '
+```
+200 Copy
+```
+{
+"data": [
+{
+"storageId": " ",
+"storageName": " ",
+"storageSize": 123,
+"clusterId": " ",
+"clusterName": " ",
+"price": " "
+}
+],
+"total": 123
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Query Parameters
+​ pageNo integer
+​ pageSize integer
+​ storageName string
+​ storageId string
+## ​Response
+​ data object[] Show properties ​ storageId string ​ storageName string ​ storageSize integer ​ clusterId string ​ clusterName string ​ price string
+​ total integer
+## ​Example
+Request
+Copy
+```
+curl --request GET \
+--url 'https://api.novita.ai/gpu-instance/openapi/v1/networkstorages/list' \
+--header 'Authorization: Bearer {{API Key}}'
+```
+Response
+Copy
+```
+{
+"data": [
+{
+"storageId": "d4e82677-3f80-4020-a731-d15b1c589aa8",
+"storageName": "123",
+"storageSize": 10,
+"clusterId": "5",
+"clusterName": "EU-01",
+"price": "100"
+},
+{
+"storageId": "082383c6-bc28-4bfa-a3b3-b6d6511bdf64",
+"storageName": "123",
+"storageSize": 10,
+"clusterId": "5",
+"clusterName": "EU-01",
+"price": "100"
+}
+],
+"total": 2
+}
+```
+Was this page helpful? Yes No Edit Network Storage List Jobs ⌘ I

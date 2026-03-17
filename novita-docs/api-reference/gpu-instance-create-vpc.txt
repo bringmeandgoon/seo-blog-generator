@@ -1,0 +1,121 @@
+Source: https://novita.ai/docs/api-reference/gpu-instance-create-vpc
+============================================================
+
+- Create VPC Network - DocumentationSkip to main contentDocumentation home pageSearch...⌘KSearch...NavigationNetworkCreate VPC NetworkGuidesAPI ReferenceChangelogDocumentation
+- Discord Community
+- Dev Support
+Overview - API Reference Overview
+Basic - Authentication
+- API Error Codes
+- GETUser Balance Info
+- GETQuery Monthly Bill
+- GETQuery Usage-based Billing
+- GETQuery Fixed-Term Billing
+Model APIs - Introduction
+- LLM API
+- Image, Audio and Video
+GPUs - GPU InstanceCluster
+- Instance
+- Image
+- Template
+- Product
+- NetworkPOSTCreate VPC Network
+- GETList VPC Networks
+- GETGet VPC Network
+- POSTUpdate VPC Network
+- POSTDelete VPC Network
+- Image Registry
+- Storage
+- Jobs
+- Serverless GPUs
+Create VPC Network cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/network/create \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"clusterId": " ",
+"name": " "
+}
+'
+```
+200 Copy
+```
+{
+"network": [
+{
+"Id": " ",
+"user": " ",
+"name": " ",
+"state": [
+{
+"state": " ",
+"error": " "
+}
+],
+"segment": " ",
+"clusterId": " ",
+"Addresses": [
+{
+"Id": " ",
+"Ip": " "
+}
+],
+"createTime": " "
+}
+]
+}
+```
+POST / gpu-instance / openapi / v1 / network / create Try it Create VPC Network cURL Copy
+```
+curl --request POST \
+--url https://api.novita.ai/gpu-instance/openapi/v1/network/create \
+--header 'Authorization: ' \
+--header 'Content-Type: ' \
+--data '
+{
+"clusterId": " ",
+"name": " "
+}
+'
+```
+200 Copy
+```
+{
+"network": [
+{
+"Id": " ",
+"user": " ",
+"name": " ",
+"state": [
+{
+"state": " ",
+"error": " "
+}
+],
+"segment": " ",
+"clusterId": " ",
+"Addresses": [
+{
+"Id": " ",
+"Ip": " "
+}
+],
+"createTime": " "
+}
+]
+}
+```
+## ​Request Headers
+​ Content-Type string required Enum: application/json
+​ Authorization string required Bearer authentication format, for example: Bearer {{API Key}}.
+## ​Request Body
+​ clusterId string required Cluster ID. You can obtain this via the List Clusters API. String, length limit: 1-255 characters.
+​ name string Name of the VPC network. Customizable. String, length limit: 0-30 characters.
+## ​Response
+​ network object[] required VPC network information. Hide properties ​ Id string required VPC network ID. ​ user string required User account ID. ​ name string required VPC network name. ​ state object[] required VPC network status. Hide properties ​ state string required VPC network status. Possible values:
+- creating: Being created.
+- ready: Successfully created.
+​ error string Error message if VPC network creation fails or the network is unavailable. ​ segment string required VPC network segment. ​ clusterId string required Cluster ID. ​ Addresses object[] required Instance information under the VPC network. Hide properties ​ Id string required Instance ID. ​ Ip string required Instance IP address. ​ createTime string required VPC network creation time. Was this page helpful? Yes No List CPU Products List VPC Networks ⌘ I
