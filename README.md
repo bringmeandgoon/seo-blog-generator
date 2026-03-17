@@ -1,94 +1,155 @@
-# Dev Blog Platform
+# AI Blog Generator
 
-AI-powered technical blog generation platform. Input a model name + keywords, get complete WordPress-ready articles with SEO optimization.
+AI-powered technical blog generation platform. Input a model name + keywords, get complete WordPress-ready articles with inline citations, benchmark tables, and SEO optimization.
 
-## Architecture
+## How It Works
 
 ```
-React Frontend (Vite:5173)
-  → Express API (server.js:3001)
-    → Job Queue (jobs/pending/)
-      → worker.sh → claude -p (Claude Code CLI)
+You type: "GLM-5; GLM-5 VRAM; GLM-5 vs Kimi K2.5; GLM-5 API providers"
+                              ↓
+              4-Agent Pipeline (fully automated)
+                              ↓
+        3-4 complete HTML articles with source citations
 ```
 
-- **Frontend**: React + Tailwind CSS — keyword input, article list, viewer, SEO stats dashboard
-- **Backend**: Express — job management, article CRUD, Feishu Bitable integration (optional)
-- **Worker**: Bash script — watches job queue, runs `claude -p` with SKILL.md prompt to generate articles
-- **SKILL**: Modular writing skill with search workflow, style guidelines, and article templates
+**Pipeline: Search → Architect → Write → Check**
+
+| Agent | Tool | What it does |
+|-------|------|-------------|
+| **Search** | HuggingFace API, Tavily, Novita API | Collects model specs, benchmarks, pricing, community discussions |
+| **Architect** | Claude Code CLI | Detects article type, generates structured outline with data source assignments |
+| **Write** | Claude Code CLI | Writes full HTML article following the outline, with inline `<a href>` citations |
+| **Check** | MiniMax M2.5 API | Quality review (factual accuracy, tone, SEO) + data cross-validation |
 
 ## Quick Start
 
 ```bash
-# 1. Install dependencies
-npm install
+# 1. One-click setup (checks deps, creates symlink, installs packages)
+bash setup.sh
 
-# 2. Configure environment
-cp .env.example .env
-# Edit .env — add your PERPLEXITY_API_KEY at minimum
+# 2. Edit .env with your API keys
+#    - PPIO_API_KEY    (required, for QC check agent)
+#    - TAVILY_API_KEY  (required, for web search)
 
-# 3. Start all services (worker + server + frontend)
+# 3. Start all services
 ./start.sh
 ```
 
-Open http://localhost:5173
+Open **http://localhost:3001**
 
-## How It Works
+## Requirements
 
-1. Enter keywords in the UI: `Model Name; keyword1; keyword2; keyword3`
-2. Frontend sends job to Express backend
-3. Backend writes job JSON to `jobs/pending/`
-4. Worker picks up the job, runs pre-search (HuggingFace, Bing, Reddit, etc.)
-5. Worker injects research data + SKILL.md prompt into `claude -p`
-6. Claude Code CLI generates a complete article with HTML formatting
-7. Result is saved to `jobs/done/`, frontend polls and displays it
+- **Node.js** 18+
+- **Python** 3.9+
+- **Claude Code CLI** — `npm install -g @anthropic-ai/claude-code` and authenticate
+- **macOS** recommended (worker uses `scutil` for proxy detection; Linux works with minor tweaks)
 
 ## Project Structure
 
 ```
-├── server.js          # Express API (jobs + optional Feishu SEO stats)
-├── worker.sh          # Job processor: pre-search + claude -p
-├── start.sh           # Starts worker + server + vite
-├── skill/             # Blog writing skill (prompt + references)
-│   ├── SKILL.md       # Main skill prompt
-│   ├── USAGE.md       # Usage guide
-│   └── references/    # Style guides, templates, keyword strategies
-├── src/
-│   ├── components/
-│   │   ├── KeywordInput.jsx    # Keyword input + job submission
-│   │   ├── ArticleList.jsx     # Article list sidebar
-│   │   ├── ArticleViewer.jsx   # Article display + quality checks
-│   │   └── SeoStats.jsx        # SEO tracking dashboard (Feishu)
-│   └── App.jsx
+├── setup.sh               # One-click setup script
+├── start.sh               # Start all services (worker + server)
+├── server.js              # Express API — job queue, article CRUD
+├── worker.sh              # Main dispatcher — routes jobs to 4 agents
+├── worker-search.sh       # Search Agent — data collection (1800 lines)
+├── worker-architect.sh    # Architect Agent — outline generation
+├── worker-write.sh        # Write Agent — article generation
+├── worker-check.sh        # Check Agent — QC + cross-validation
+│
+├── skill/                 # Prompt rules & templates (symlinked to ~/.claude/skills/)
+│   ├── write-rules.md     # Write Agent system prompt
+│   ├── check-rules.md     # Check Agent rules (10 categories)
+│   ├── shared/
+│   │   └── data-source-rules.md   # Data source mapping (HARD CONSTRAINTS)
+│   ├── templates/         # Article type templates (6 types)
+│   │   ├── vram.md        #   VRAM / hardware requirements
+│   │   ├── vs.md          #   Model A vs Model B
+│   │   ├── api_provider.md#   API provider comparison
+│   │   ├── how_to.md      #   How to access / use
+│   │   ├── tool_integration.md  # Use [Model] in [Tool]
+│   │   └── platform.md    #   Platform-specific guide
+│   └── references/        # Style guides, examples, search templates
+│
+├── novita-docs/           # RAG knowledge base (Novita AI docs, ~200 files)
+├── scripts/               # Doc crawling, embedding, RAG retrieval
+├── seo-monitor/           # SEO tracking (GSC + Feishu reports)
+│
+├── src/                   # React frontend
+│   ├── App.jsx
+│   └── components/
+│       ├── KeywordInput.jsx     # Input: model name + keywords
+│       ├── ArticleList.jsx      # Sidebar: article list
+│       ├── ArticleViewer.jsx    # Viewer: HTML + QC markers
+│       ├── OutlineEditor.jsx    # Outline: drag-to-reorder sections
+│       ├── SourceReview.jsx     # Sources: review/remove before writing
+│       ├── SeoStats.jsx         # SEO dashboard (optional)
+│       └── compare/
+│           └── CompareView.jsx  # VS comparison cards
+│
 ├── jobs/
-│   ├── pending/       # Queued jobs (JSON)
-│   └── done/          # Completed articles (JSON)
-├── .env.example       # Environment template
-└── CLAUDE.md          # Claude Code project rules
+│   ├── pending/           # Queued jobs (JSON)
+│   ├── done/              # Completed articles (JSON)
+│   └── logs/              # Agent logs, QC reports
+│
+├── .env.example           # Environment template
+└── CLAUDE.md              # Claude Code project rules
 ```
+
+## Article Types
+
+The system auto-detects article type from keywords:
+
+| Keyword pattern | Article type | Example |
+|----------------|-------------|---------|
+| `[Model] VRAM` | Hardware requirements | "GLM-5 VRAM Requirements Guide" |
+| `[Model] vs [Model]` | Comparison | "GLM-5 vs Kimi K2.5: Which is Better?" |
+| `[Model] API providers` | Provider comparison | "Top GLM-5 API Providers" |
+| `[Model] in Claude Code` | Tool integration | "Use GLM-5 in Claude Code" |
+| `how to access [Model]` | Access guide | "How to Access GLM-5" |
+| `[Model] on [Platform]` | Platform guide | "GLM-5 on Novita AI" |
+
+## Workflow
+
+1. Enter keywords in the UI: `Model Name; keyword1; keyword2; keyword3`
+2. **Search Agent** collects data from HuggingFace, Tavily, Novita API, OpenRouter
+3. **You review sources** — remove irrelevant ones, add feedback, request more searches
+4. **Architect Agent** generates an outline — you can drag-to-reorder sections
+5. **Write Agent** generates the full HTML article following the outline
+6. **Check Agent** reviews quality and cross-validates all numbers against source data
+7. Export as HTML (for WordPress) or Markdown
 
 ## Configuration
 
-See `.env.example` for all options:
-
-- `CLAUDE_MODEL` — Model for article generation (default: `sonnet`)
-- `PERPLEXITY_API_KEY` — Required for worker's real-time search
-- `FEISHU_*` — Optional, for SEO stats tracking via Feishu Bitable
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `PPIO_API_KEY` | Yes | QC cross-validation via MiniMax M2.5 |
+| `TAVILY_API_KEY` | Yes | Web search in pre-search phase |
+| `CLAUDE_MODEL` | No | Model for article generation (default: `sonnet`) |
+| `CLAUDE_TIMEOUT` | No | Timeout per job in seconds (default: `480`) |
+| `ACCESS_PASSWORD` | No | Password-protect the web UI |
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
-| `./start.sh` | Start all services |
-| `npm run dev` | Vite dev server only |
-| `npm run build` | Build frontend |
-| `node server.js` | Express backend only |
-| `./worker.sh` | Worker only |
+| `bash setup.sh` | One-click setup |
+| `./start.sh` | Start all services (worker + server) |
+| `./start.sh --tunnel` | Start + expose via Cloudflare Tunnel |
+| `npm run dev` | Vite dev server only (hot reload) |
+| `npm run build` | Build frontend for production |
+| `./worker.sh` | Worker only (for debugging) |
 
-## Requirements
+## Data Source Rules
 
-- Node.js 18+
-- [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) installed and authenticated
-- macOS recommended (worker uses Homebrew curl for proxy compatibility)
+The system enforces strict data source constraints to prevent hallucination:
+
+| Data | Source | Never from |
+|------|--------|-----------|
+| Architecture, params, benchmarks | HuggingFace model card | LLM memory |
+| API token pricing | Novita AI API (live) | Blog articles |
+| GPU instance pricing | Novita GPU pricing page | Estimated/guessed |
+| Community opinions | Tavily web search | Fabricated quotes |
+| Tool setup steps | Novita RAG docs | LLM memory |
 
 ## License
 
