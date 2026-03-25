@@ -659,38 +659,7 @@ def fmt_model(label, config_path, readme_path, detail_path='', preferred_repo=''
             if not repo:
                 repo = detail.get('id', '')
         except: pass
-    # README param extraction — preferred for MoE models where safetensors counts may differ
-    # from advertised total (e.g. compressed weights vs logical MoE params)
-    _readme_params = 0
-    if os.path.exists(readme_path):
-        try:
-            with open(readme_path) as f:
-                rtxt = f.read(5000).lower()
-            import re as _re
-            # Match patterns like "230B", "230 billion", "1T", "1 trillion"
-            # Check trillion first (higher priority), then billion
-            for pat, multiplier in [
-                (r'total\s+param[^|]*?\|\s*(\d+(?:\.\d+)?)\s*t\b', 1e12),      # table: "| total parameters | 1T |"
-                (r'(\d+(?:\.\d+)?)\s*(?:t|trillion)\s*(?:total\s+)?param', 1e12),
-                (r'total\s+(?:of\s+)?(\d+(?:\.\d+)?)\s*(?:t|trillion)', 1e12),
-                (r'(\d+(?:\.\d+)?)\s*(?:b|billion)\s*(?:total\s+)?param', 1e9),
-                (r'total\s+param[^|]*?\|\s*(\d+(?:\.\d+)?)\s*b\b', 1e9),       # table: "| total parameters | 230B |"
-                (r'total\s+(?:of\s+)?(\d+(?:\.\d+)?)\s*(?:b|billion)', 1e9),
-                (r'(\d+(?:\.\d+)?)\s*(?:b|billion)\s*(?:total)', 1e9),
-                (r'(\d+(?:\.\d+)?)\s*b\b.*?(?:moe|mixture|expert)', 1e9),
-            ]:
-                match = _re.search(pat, rtxt)
-                if match:
-                    val = float(match.group(1))
-                    computed = int(val * multiplier)
-                    if 1e9 < computed < 1e13:  # sanity: 1B-10T range
-                        _readme_params = computed
-                        break
-        except: pass
-    # Prefer README param count (reflects official/marketed total) over safetensors
-    # safetensors may count compressed weights or exclude MoE routing tables
-    if _readme_params:
-        total_params_raw = _readme_params
+    # Use safetensors.total only (= what HF model page displays as "Model size")
     total_params = fmt_params(total_params_raw)
 
     ctx.append(f"--- {label} ---")
