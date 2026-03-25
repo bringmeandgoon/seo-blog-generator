@@ -1,0 +1,8 @@
+{
+  "_comment": "Model name → official announcement/blog URL. Keys are lowercase, matched against hf_query (stripped model name). Add new entries here when writing articles for new models.",
+  "glm-5": "https://z.ai/blog/glm-5",
+  "glm 5": "https://z.ai/blog/glm-5",
+  "minimax m2.5": "https://www.minimax.io/news/minimax-m25",
+  "minimax-m2.5": "https://www.minimax.io/news/minimax-m25",
+  "m2.5": "https://www.minimax.io/news/minimax-m25"
+}
