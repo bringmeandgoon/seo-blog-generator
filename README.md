@@ -69,7 +69,7 @@ Open **http://localhost:3001**
 ├── worker-check.sh        # Check Agent — fact validation
 ├── worker-rewrite.sh      # Rewrite Agent — humanization
 │
-├── skill/                 # Agent prompt rules
+├── system-prompts/        # Agent system prompts
 │   ├── write-rules.md     # Writing constraints (what to write, what to avoid)
 │   ├── check-rules.md     # Validation rules (10 quality categories)
 │   ├── rewrite-rules.md   # Humanization rules

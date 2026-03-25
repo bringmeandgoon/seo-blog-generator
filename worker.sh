@@ -19,7 +19,7 @@ SKILL_DIR=~/.claude/skills/dev-blog-writer
 DATA_SOURCE_RULES=$(cat "$SKILL_DIR/shared/data-source-rules.md")
 ARCHITECT_RULES=$(python3 -c "
 import re, sys
-content = open('$SCRIPT_DIR/skill/ARCHITECT.md').read()
+content = open('$SCRIPT_DIR/system-prompts/ARCHITECT.md').read()
 sys.stdout.write(re.sub(r'^---[\s\S]*?---\n', '', content, count=1))
 ")
 WRITE_RULES=$(cat "$SKILL_DIR/write-rules.md")

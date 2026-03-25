@@ -96,20 +96,20 @@ mkdir -p "$HOME/.claude/skills"
 
 if [ -L "$SKILL_LINK" ]; then
   EXISTING_TARGET=$(readlink "$SKILL_LINK")
-  if [ "$EXISTING_TARGET" = "$SCRIPT_DIR/skill" ]; then
-    ok "Symlink already correct: $SKILL_LINK → $SCRIPT_DIR/skill"
+  if [ "$EXISTING_TARGET" = "$SCRIPT_DIR/system-prompts" ]; then
+    ok "Symlink already correct: $SKILL_LINK → $SCRIPT_DIR/system-prompts"
   else
     warn "Symlink exists but points to: $EXISTING_TARGET"
-    warn "Updating to: $SCRIPT_DIR/skill"
+    warn "Updating to: $SCRIPT_DIR/system-prompts"
     rm "$SKILL_LINK"
-    ln -s "$SCRIPT_DIR/skill" "$SKILL_LINK"
+    ln -s "$SCRIPT_DIR/system-prompts" "$SKILL_LINK"
     ok "Symlink updated"
   fi
 elif [ -e "$SKILL_LINK" ]; then
   warn "$SKILL_LINK exists but is not a symlink — skipping (remove it manually if needed)"
 else
-  ln -s "$SCRIPT_DIR/skill" "$SKILL_LINK"
-  ok "Created symlink: $SKILL_LINK → $SCRIPT_DIR/skill"
+  ln -s "$SCRIPT_DIR/system-prompts" "$SKILL_LINK"
+  ok "Created symlink: $SKILL_LINK → $SCRIPT_DIR/system-prompts"
 fi
 
 # ====== 4. Setup .env ======
@@ -151,7 +151,7 @@ mkdir -p "$SCRIPT_DIR/jobs/pending" "$SCRIPT_DIR/jobs/done" "$SCRIPT_DIR/jobs/lo
 ok "jobs/pending, jobs/done, jobs/logs"
 
 mkdir -p /tmp/blog_references /tmp/blog_data
-cp "$SCRIPT_DIR/skill/references"/*.md /tmp/blog_references/ 2>/dev/null
+cp "$SCRIPT_DIR/system-prompts/references"/*.md /tmp/blog_references/ 2>/dev/null
 ok "/tmp/blog_references (skill reference files copied)"
 
 # ====== Done ======
