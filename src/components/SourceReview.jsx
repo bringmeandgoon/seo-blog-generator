@@ -12,6 +12,7 @@ const CATEGORY_LABELS = {
   additional_0: 'Additional Search',
   additional_1: 'Additional Search',
   additional: 'Additional Search',
+  manual: 'Manual',
 };
 
 const CATEGORY_COLORS = {
@@ -26,12 +27,30 @@ const CATEGORY_COLORS = {
   additional_0: 'bg-pink-100 text-pink-800',
   additional_1: 'bg-pink-100 text-pink-800',
   additional: 'bg-pink-100 text-pink-800',
+  manual: 'bg-teal-100 text-teal-800',
 };
 
-export default function SourceReview({ data, onConfirm, onSearchMore, isLoading }) {
-  const [feedback, setFeedback] = useState('');
+export default function SourceReview({ data, onConfirm, onAddUrl, isLoading }) {
+  const [newUrl, setNewUrl] = useState('');
+  const [urlLoading, setUrlLoading] = useState(false);
+  const [urlError, setUrlError] = useState('');
   const [showContext, setShowContext] = useState(false);
   const [removedUrls, setRemovedUrls] = useState([]);
+
+  const handleAddUrl = async () => {
+    const url = newUrl.trim();
+    if (!url || urlLoading) return;
+    setUrlLoading(true);
+    setUrlError('');
+    try {
+      await onAddUrl(url);
+      setNewUrl('');
+    } catch (err) {
+      setUrlError(err.message);
+    } finally {
+      setUrlLoading(false);
+    }
+  };
 
   const { sources = [], summary = {}, rawContext = '' } = data;
 
@@ -189,32 +208,35 @@ export default function SourceReview({ data, onConfirm, onSearchMore, isLoading 
 
       {/* Actions */}
       <div className="space-y-3">
-        {/* Search More */}
-        <div className="flex gap-2">
-          <input
-            type="text"
-            value={feedback}
-            onChange={e => setFeedback(e.target.value)}
-            placeholder="Need more info? Type search query..."
-            className="flex-1 px-3 py-2 border border-dark-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber-400 focus:border-transparent"
-            disabled={isLoading}
-            onKeyDown={e => {
-              if (e.key === 'Enter' && feedback.trim() && !isLoading) {
-                onSearchMore(feedback.trim(), removedUrls);
-                setFeedback('');
-              }
-            }}
-          />
-          <button
-            onClick={() => { onSearchMore(feedback.trim(), removedUrls); setFeedback(''); }}
-            disabled={isLoading || !feedback.trim()}
-            className="btn bg-amber-500 text-white hover:bg-amber-600 disabled:opacity-50 whitespace-nowrap"
-          >
-            <svg className="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            Search More
-          </button>
+        {/* Add URL */}
+        <div className="space-y-1">
+          <div className="flex gap-2">
+            <input
+              type="url"
+              value={newUrl}
+              onChange={e => setNewUrl(e.target.value)}
+              placeholder="Paste URL to add as source..."
+              className="flex-1 px-3 py-2 border border-dark-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent font-mono"
+              disabled={isLoading || urlLoading}
+              onKeyDown={e => {
+                if (e.key === 'Enter' && newUrl.trim() && !isLoading && !urlLoading) handleAddUrl();
+              }}
+            />
+            <button
+              onClick={handleAddUrl}
+              disabled={isLoading || urlLoading || !newUrl.trim()}
+              className="btn bg-teal-500 text-white hover:bg-teal-600 disabled:opacity-50 whitespace-nowrap"
+            >
+              {urlLoading ? (
+                <><div className="spinner border-white mr-1.5 w-3 h-3"></div>Fetching...</>
+              ) : (
+                <><svg className="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>Add URL</>
+              )}
+            </button>
+          </div>
+          {urlError && <div className="text-xs text-red-500 pl-1">{urlError}</div>}
         </div>
 
         {/* Confirm */}

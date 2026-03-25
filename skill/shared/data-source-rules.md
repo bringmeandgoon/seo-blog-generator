@@ -36,6 +36,16 @@ Every factual claim MUST come from the pre-fetched context. NEVER use your own k
 - **Cite the CORRECT source.** If a number comes from HF → say "HuggingFace", NOT "OpenRouter". NEVER mis-attribute data between sources.
 - **Throughput/latency: HuggingFace Inference Providers table ONLY.** Do NOT use throughput numbers from OpenRouter. If both sources appear in context, IGNORE OpenRouter's throughput/latency columns — use HF's `Throughput(t/s)` and `TTFT(s)` columns exclusively.
 
+## COST COMPARISON RULES
+
+| Cost Type | Rule |
+|-----------|------|
+| **API pricing** (Novita AI, provider comparison) | ✅ Include specific numbers |
+| **Cloud GPU pricing** (Novita GPU instances) | ✅ Include specific numbers |
+| **Self-hosting / local deployment** | ❌ NO specific numbers — hardware depreciation, electricity, cooling vary too much per user. Qualitative description only (e.g., "requires significant upfront hardware investment") |
+
+Never write a cost comparison table that includes self-hosting dollar figures alongside API/cloud figures.
+
 ## VERSION VERIFICATION (CRITICAL — #1 RULE)
 
 - Check if search result is about the EXACT version requested

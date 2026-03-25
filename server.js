@@ -5,6 +5,7 @@ import { writeFileSync, readFileSync, existsSync, unlinkSync, mkdirSync, readdir
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import crypto from 'crypto';
+import { execFileSync } from 'child_process';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -111,6 +112,8 @@ function waitForResult(jobId, timeoutMs = 600000) {
             resolve({ status: 'review', contextFile: data.contextFile, sources: data.sources, summary: data.summary, rawContext: data.rawContext });
           } else if (data.status === 'outline_review') {
             resolve({ status: 'outline_review', outline: data.outline, allSources: data.allSources });
+          } else if (data.status === 'write_review') {
+            resolve({ status: 'write_review', content: data.content, outputMode: data.outputMode || 'article' });
           } else if (data.status === 'clarification') {
             resolve({ status: 'clarification', question: data.question });
           } else {
@@ -322,8 +325,11 @@ app.get('/api/jobs/:jobId', (req, res) => {
   }
 
   if (job.status === 'outline_review') {
-    // Don't delete — user edits outline and confirms
     return res.json({ status: 'outline_review', outline: job.outline, allSources: job.allSources });
+  }
+
+  if (job.status === 'write_review') {
+    return res.json({ status: 'write_review', article: job.article });
   }
 
   if (job.status === 'clarification') {
@@ -360,6 +366,17 @@ function startGenerateAndWait(jobId, topic, outputMode, extraJobData = {}) {
       return;
     }
 
+    if (result.status === 'write_review') {
+      jobResults.set(jobId, {
+        status: 'write_review',
+        topic, outputMode,
+        article: { outputMode: result.outputMode || 'article', content: cleanContent(result.content) },
+        createdAt: Date.now(),
+      });
+      console.log(`[server] Job ${jobId} write_review ready`);
+      return;
+    }
+
     const resultMode = result.outputMode || 'article';
     let article;
     if (resultMode === 'compare') {
@@ -389,18 +406,99 @@ function startGenerateAndWait(jobId, topic, outputMode, extraJobData = {}) {
   });
 }
 
+// Fetch a URL and extract readable text (uses curl with proxy)
+async function fetchUrlContent(url) {
+  const proxy = process.env.https_proxy || process.env.http_proxy || 'http://127.0.0.1:7890';
+  const args = ['-sL', '--max-time', '20', '-A',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+    '-x', proxy, url];
+  const html = execFileSync('curl', args, { encoding: 'utf-8', timeout: 25000 });
+  const title = (html.match(/<title[^>]*>([^<]+)<\/title>/i) || [])[1]?.trim() || url;
+  const text = html
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/<style[\s\S]*?<\/style>/gi, '')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 10000);
+  return { title, text };
+}
+
 // Confirm or request more search for a reviewed job
-app.post('/api/jobs/:jobId/confirm', (req, res) => {
+app.post('/api/jobs/:jobId/confirm', async (req, res) => {
   const { jobId } = req.params;
-  const { action, feedback, removedUrls = [], editedOutline } = req.body;
+  const { action, feedback, removedUrls = [], editedOutline, editedContent } = req.body;
   const job = jobResults.get(jobId);
 
-  if (!job || !['review', 'outline_review'].includes(job.status)) {
-    return res.status(400).json({ error: 'Job not in review or outline_review status' });
+  if (!job || (job.status !== 'review' && job.status !== 'outline_review' && job.status !== 'write_review')) {
+    return res.status(400).json({ error: 'Job not in review, outline_review, or write_review status' });
   }
 
   const { topic, outputMode } = job;
   const jobFile = join(JOBS_PENDING, `${jobId}.json`);
+
+  if (action === 'confirm_write' && job.status === 'write_review') {
+    console.log(`[server] Job ${jobId} write confirmed → rewrite+check${editedContent ? ' (with user edits)' : ''}`);
+    // If user edited the article, overwrite the write.txt so rewrite uses edited version
+    if (editedContent) {
+      const writeFile = join(__dirname, `jobs/logs/${jobId}.write.txt`);
+      writeFileSync(writeFile, editedContent);
+    }
+    jobResults.set(jobId, { status: 'processing', createdAt: Date.now() });
+    writeFileSync(jobFile, JSON.stringify({ topic, outputMode, phase: 'rewrite' }));
+
+    waitForResult(jobId).then(result => {
+      const resultMode = result.outputMode || 'article';
+      let article;
+      if (resultMode === 'compare') {
+        let compareData;
+        try { compareData = JSON.parse(result.content); } catch { compareData = null; }
+        article = {
+          id: `article_${Date.now()}`, title: topic,
+          modelName: topic.split(' ').slice(0, 3).join(' '),
+          keyword: topic, createdAt: new Date().toISOString(),
+          outputMode: 'compare', content: compareData || result.content,
+          compareData, warnings: result.warnings,
+        };
+      } else {
+        article = {
+          id: `article_${Date.now()}`, title: topic,
+          modelName: topic.split(' ').slice(0, 3).join(' '),
+          keyword: topic, createdAt: new Date().toISOString(),
+          outputMode: 'article', content: cleanContent(result.content),
+          warnings: result.warnings,
+        };
+      }
+      jobResults.set(jobId, { status: 'done', article });
+      console.log(`[server] Job ${jobId} rewrite+check done`);
+    }).catch(err => {
+      console.error(`[server] Job ${jobId} rewrite failed:`, err.message);
+      jobResults.set(jobId, { status: 'error', error: err.message });
+    });
+
+    return res.json({ status: 'ok' });
+  }
+
+  if (action === 'add_url' && job.status === 'review') {
+    const urlToAdd = req.body.url;
+    if (!urlToAdd) return res.status(400).json({ error: 'url is required' });
+    try {
+      const { title, text } = await fetchUrlContent(urlToAdd);
+      // Append to context file
+      const contextFile = join(__dirname, `jobs/logs/${jobId}.context`);
+      const existing = existsSync(contextFile) ? readFileSync(contextFile, 'utf-8') : '';
+      writeFileSync(contextFile, existing + `\n\n=== MANUAL SOURCE: ${urlToAdd} ===\nTitle: ${title}\n${text}\n`);
+      // Update in-memory review state
+      const newSource = { url: urlToAdd, title, snippet: text.slice(0, 200), category: 'manual' };
+      job.sources = [...(job.sources || []), newSource];
+      job.rawContext = (job.rawContext || '') + `\n\n[Manual: ${title}]\n${text.slice(0, 500)}`;
+      jobResults.set(jobId, job);
+      console.log(`[server] Job ${jobId} added URL: ${urlToAdd} (${text.length} chars)`);
+      return res.json({ status: 'ok', source: newSource });
+    } catch (err) {
+      return res.status(400).json({ error: `Failed to fetch URL: ${err.message}` });
+    }
+  }
 
   if (action === 'search_more' && job.status === 'review') {
     console.log(`[server] Job ${jobId} search_more: "${feedback}"`);
@@ -426,15 +524,14 @@ app.post('/api/jobs/:jobId/confirm', (req, res) => {
     });
 
   } else if (action === 'confirm_outline' && job.status === 'outline_review') {
-    // User confirmed the outline → start generate phase with edited outline
-    console.log(`[server] Job ${jobId} confirm_outline → generate`);
-    startGenerateAndWait(jobId, topic, outputMode, {
-      removedUrls,
-      editedOutline: editedOutline || job.outline,
-    });
+    // Outline confirmed → save edited outline → start generate
+    console.log(`[server] Job ${jobId} outline confirmed → generate`);
+    const outlineFile = join(__dirname, `jobs/logs/${jobId}.outline.json`);
+    writeFileSync(outlineFile, JSON.stringify(editedOutline));
+    startGenerateAndWait(jobId, topic, outputMode, { removedUrls });
 
-  } else {
-    // Default from review: confirm sources → architect phase
+  } else if (job.status === 'review') {
+    // Default from review: confirm sources → go to architect phase
     console.log(`[server] Job ${jobId} confirmed → architect`);
     writeFileSync(jobFile, JSON.stringify({ topic, outputMode, phase: 'architect', removedUrls }));
     jobResults.set(jobId, { status: 'processing', createdAt: Date.now() });
@@ -442,7 +539,8 @@ app.post('/api/jobs/:jobId/confirm', (req, res) => {
     waitForResult(jobId).then(result => {
       if (result.status === 'outline_review') {
         jobResults.set(jobId, {
-          status: 'outline_review', topic, outputMode,
+          status: 'outline_review',
+          topic, outputMode,
           outline: result.outline,
           allSources: result.allSources,
           createdAt: Date.now(),

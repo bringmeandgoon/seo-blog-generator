@@ -50,7 +50,11 @@ async function pollJob(jobId, maxWait = 10 * 60 * 1000) {
     }
 
     if (data.status === 'outline_review') {
-      return { outline_review: true, outline: data.outline, allSources: data.allSources, jobId };
+      return { outlineReview: true, outline: data.outline, allSources: data.allSources, jobId };
+    }
+
+    if (data.status === 'write_review') {
+      return { writeReview: true, article: data.article, jobId };
     }
 
     if (data.status === 'clarification') {
@@ -102,13 +106,16 @@ export async function generateArticlesWithSkill(topics, outputMode = 'article', 
 /**
  * Confirm reviewed job → architect phase (sources confirmed), or search more
  */
-export async function confirmJob(jobId, action = 'generate', feedback = '', removedUrls = []) {
-  console.log(`Confirm job ${jobId}: ${action}${feedback ? ` — "${feedback}"` : ''}${removedUrls.length ? ` (${removedUrls.length} removed)` : ''}`);
+export async function confirmJob(jobId, action = 'generate', feedback = '', removedUrls = [], editedContent = '') {
+  console.log(`Confirm job ${jobId}: ${action}${feedback ? ` — "${feedback}"` : ''}${removedUrls.length ? ` (${removedUrls.length} removed)` : ''}${editedContent ? ' [with edits]' : ''}`);
+
+  const body = { action, feedback, removedUrls };
+  if (editedContent) body.editedContent = editedContent;
 
   const resp = await fetch(`/api/jobs/${jobId}/confirm`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
-    body: JSON.stringify({ action, feedback, removedUrls }),
+    body: JSON.stringify(body),
   });
 
   checkAuth(resp);
@@ -118,6 +125,24 @@ export async function confirmJob(jobId, action = 'generate', feedback = '', remo
   }
 
   return pollJob(jobId);
+}
+
+/**
+ * Add a URL as a manual source (fetch content server-side, append to context)
+ */
+export async function addUrlToJob(jobId, url) {
+  const resp = await fetch(`/api/jobs/${jobId}/confirm`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+    body: JSON.stringify({ action: 'add_url', url }),
+  });
+  checkAuth(resp);
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err.error || `Add URL failed (${resp.status})`);
+  }
+  const data = await resp.json();
+  return data; // { status: 'ok', source: { url, title, snippet, category: 'manual' } }
 }
 
 /**

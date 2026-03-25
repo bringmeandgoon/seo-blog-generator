@@ -124,7 +124,7 @@ else
   echo ""
   echo "       Required:"
   echo "         PPIO_API_KEY=       (for QC cross-validation, get from ppio.ai)"
-  echo "         TAVILY_API_KEY=     (for web search, get from tavily.com)"
+  echo "         PERPLEXITY_API_KEY= (for web search, get from perplexity.ai)"
   echo ""
   echo "       Optional:"
   echo "         CLAUDE_MODEL=sonnet (default: sonnet)"

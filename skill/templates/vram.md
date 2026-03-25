@@ -1,27 +1,37 @@
 # VRAM / Hardware Requirements Article Template
 
-**For articles like: "[Model] VRAM requirements", "[Model] GPU guide"**
+**For articles like: "[Model] VRAM requirements", "[Model] GPU guide", "[Model] hardware requirements"**
 
 ## Sections (in this order)
 
-1. **Quick Answer callout** — "Testing: [GPU] with [quant]. Production: [GPU] with [quant]. Or skip hardware: API at $X/M tokens."
+1. **Model Overview** — Architecture and why VRAM matters for this model
+   - Key technical innovations (MoE/MLA/MTP/dense vs sparse, etc.) with brief explanation
+   - Parameter count, active params, architecture type
+   - Why this model's architecture affects VRAM requirements
+   - 📌 From HF model card `--- Model ---`, HF README
 
-2. **Model Overview** — Parameters, architecture (dense vs MoE), why VRAM matters for this model
-   - 📌 From HF model card `--- Model ---`
-
-3. **VRAM Requirements by Quantization** (table) — BF16 (full precision), FP8/Q8_0 (8-bit), Q4_K_M, Q2_K with exact VRAM numbers. ALWAYS include 8-bit as the most common production precision.
-   - 📌 From `--- Unsloth GGUF Quantization Sizes ---`
+2. **VRAM Requirements by Quantization** (table) — The core data section
+   - BF16 (full precision), FP8/Q8_0 (8-bit), Q4_K_M, Q2_K with exact VRAM numbers
+   - ALWAYS include 8-bit as the most common production precision
    - FP8 / 8-bit VRAM: use the Q8_0 size from the Unsloth GGUF repo (file size ≈ minimum VRAM)
+   - 📌 From `--- Unsloth GGUF Quantization Sizes ---`
 
-4. **GPU Recommendations** (decision table) — Scenario (testing/production/budget) → GPU → Quantization → Cost
+3. **GPU Recommendations** (decision table) — Scenario → GPU → Quantization → Cost
+   - Testing / Production / Budget tiers
    - 📌 GPU pricing from `--- Novita AI GPU Instance Pricing ---`
 
+4. **Running Locally: Challenges** — Practical pain points of local deployment
+   - Consumer hardware limitations
+   - Setup complexity (dependencies, weight conversion, etc.)
+   - Performance bottlenecks on underpowered devices
+   - Natural transition to API alternative
+
 5. **API Alternative** — Skip hardware, use API instead
+   - Step-by-step API access (login → model library → API key → code example)
+   - Pricing info embedded here
    - 📌 From `>>> USE THIS PRICE <<<`
 
-6. **Deployment Decision Matrix** — Qualitative comparison (NO dollar amounts), columns: Local / Cloud API / Self-Hosted Cloud GPU, rows: Data sovereignty, Setup time, Ops overhead, Scaling, Cost model, Best price/perf at scale, Customization, Time-to-production
-
-7. **Conclusion + Key Takeaways + FAQ**
+6. **Conclusion + FAQ**
 
 ## Constraints
 

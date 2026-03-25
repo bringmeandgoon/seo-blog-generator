@@ -2,7 +2,7 @@
 # Worker Write Agent: loads context, builds prompt, runs claude -p, handles result
 # Sourced by worker.sh — do NOT run directly.
 
-# Prepare generate-phase context: load saved context, strip removed URLs, fetch new outline URLs
+# Prepare generate-phase context: load saved context, strip removed URLs, load outline
 # Sets globals: PRE_CONTEXT, ARCHITECT_JSON
 prepare_write_context() {
   local JOBID="$1" REMOVED_URLS="$2"
@@ -13,123 +13,16 @@ prepare_write_context() {
       # Strip removed URLs from context
       PRE_CONTEXT=$(echo "$PRE_CONTEXT" | strip_removed_urls "$REMOVED_URLS")
 
-      # Load architect outline if it exists (from the architect phase)
+      # Load user-confirmed outline (from outline_review confirm step)
       ARCHITECT_JSON=""
-      EDITED_OUTLINE=$(cat "$JOBS_DIR/pending/${JOBID}.processing" | python3 -c "import sys,json; print(json.dumps(json.load(sys.stdin).get('editedOutline',{})))" 2>/dev/null)
-      if [ -f "$JOBS_DIR/logs/${JOBID}.architect.json" ]; then
-        if [ -n "$EDITED_OUTLINE" ] && [ "$EDITED_OUTLINE" != "{}" ] && [ "$EDITED_OUTLINE" != "null" ]; then
-          ARCHITECT_JSON="$EDITED_OUTLINE"
-          echo "[worker] [$JOBID] Using user-edited outline"
-        else
-          ARCHITECT_JSON=$(cat "$JOBS_DIR/logs/${JOBID}.architect.json" 2>/dev/null)
-          echo "[worker] [$JOBID] Using architect-generated outline"
-        fi
-      fi
-
-      # Fetch text content for any new URLs in the outline that aren't in context
-      if [ -n "$ARCHITECT_JSON" ] && [ "$ARCHITECT_JSON" != "{}" ]; then
-        source /tmp/blog_search_env.sh
-        NEW_URLS_CONTENT=$(OUTLINE_JSON="$ARCHITECT_JSON" EXISTING_CTX="$PRE_CONTEXT" python3 << 'FETCH_NEW_EOF'
-import json, os, re, subprocess, sys
-
-outline_raw = os.environ.get('OUTLINE_JSON', '{}')
-existing_ctx = os.environ.get('EXISTING_CTX', '')
-
-try:
-    outline = json.loads(outline_raw)
-except:
-    exit(0)
-
-# Collect all URLs from outline dataSources
-all_urls = []
-for sec in outline.get('sections', []):
-    for ds in sec.get('dataSources', []):
-        url = ds.get('url', '')
-        if url:
-            all_urls.append(url)
-
-if not all_urls:
-    exit(0)
-
-# Find URLs not already mentioned in existing context
-new_urls = [u for u in all_urls if u not in existing_ctx]
-if not new_urls:
-    exit(0)
-
-# Deduplicate while preserving order
-seen = set()
-unique_new = []
-for u in new_urls:
-    if u not in seen:
-        seen.add(u)
-        unique_new.append(u)
-
-print(f"[fetch-new] {len(unique_new)} new URLs to fetch", file=sys.stderr, flush=True)
-
-# Fetch each URL, extract text
-curl_bin = "/opt/homebrew/opt/curl/bin/curl"
-proxy_port = ""
-try:
-    r = subprocess.run(["scutil", "--proxy"], capture_output=True, text=True, timeout=5)
-    for line in r.stdout.split("\n"):
-        if "HTTPPort" in line:
-            p = line.split(":")[-1].strip()
-            if p and p != "0":
-                proxy_port = p
-except:
-    pass
-
-results = []
-for url in unique_new[:8]:  # max 8 new URLs
-    try:
-        cmd = [curl_bin, "-sL", "--max-time", "15",
-               "-H", "User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"]
-        if proxy_port:
-            cmd.extend(["-x", f"http://127.0.0.1:{proxy_port}"])
-        cmd.append(url)
-        r = subprocess.run(cmd, capture_output=True, text=True, timeout=20)
-        html = r.stdout
-        if not html or len(html) < 100:
-            continue
-
-        # Strip HTML to plain text
-        text = html
-        # Remove script/style blocks
-        text = re.sub(r'<script[^>]*>[\s\S]*?</script>', '', text, flags=re.I)
-        text = re.sub(r'<style[^>]*>[\s\S]*?</style>', '', text, flags=re.I)
-        # Remove HTML tags
-        text = re.sub(r'<[^>]+>', ' ', text)
-        # Decode entities
-        import html as html_lib
-        text = html_lib.unescape(text)
-        # Collapse whitespace
-        text = re.sub(r'[ \t]+', ' ', text)
-        text = re.sub(r'\n\s*\n', '\n\n', text)
-        text = text.strip()
-
-        # Truncate per URL (keep first 3000 chars)
-        if len(text) > 3000:
-            text = text[:3000] + "..."
-
-        if len(text) > 100:
-            results.append(f"[{url}]\n{text}")
-            print(f"[fetch-new] Fetched {url} ({len(text)} chars)", file=sys.stderr, flush=True)
-        else:
-            print(f"[fetch-new] Skipped {url} (too short after extraction)", file=sys.stderr, flush=True)
-    except Exception as e:
-        print(f"[fetch-new] Failed {url}: {e}", file=sys.stderr, flush=True)
-
-if results:
-    print("\n--- Additional Sources (user-added URLs) ---")
-    print("\n\n".join(results))
-    print("")
-FETCH_NEW_EOF
-)
-        if [ -n "$NEW_URLS_CONTENT" ]; then
-          PRE_CONTEXT="${PRE_CONTEXT}
-${NEW_URLS_CONTENT}"
-          echo "[worker] [$JOBID] Fetched new URL content ($(echo "$NEW_URLS_CONTENT" | wc -c | tr -d ' ') bytes)"
-        fi
+      if [ -f "$JOBS_DIR/logs/${JOBID}.outline.json" ]; then
+        ARCHITECT_JSON=$(cat "$JOBS_DIR/logs/${JOBID}.outline.json")
+        echo "[worker] [$JOBID] Write: loaded outline ($(echo "$ARCHITECT_JSON" | wc -c | tr -d ' ') bytes)"
+      elif [ -f "$JOBS_DIR/logs/${JOBID}.architect.json" ]; then
+        ARCHITECT_JSON=$(cat "$JOBS_DIR/logs/${JOBID}.architect.json")
+        echo "[worker] [$JOBID] Write: loaded architect outline ($(echo "$ARCHITECT_JSON" | wc -c | tr -d ' ') bytes)"
+      else
+        echo "[worker] [$JOBID] Write: no outline found, write agent will plan independently"
       fi
 
 }
@@ -156,6 +49,8 @@ Proceed with this answer. Do NOT ask any more questions. Generate the comparison
       # Write prompt to temp file to avoid shell quoting issues with PRE_CONTEXT
       PROMPT_FILE="$JOBS_DIR/logs/${JOBID}.prompt"
       cat > "$PROMPT_FILE" <<COMPARE_PROMPT_EOF
+/dev-blog-writer
+
 ${COMPARE_ANSWER_PREFIX}Topic: ${TOPIC}
 
 ${PRE_CONTEXT}
@@ -220,22 +115,32 @@ Proceed with this answer. Do NOT ask any more questions. Generate the article di
 "
       fi
 
-      # Build outline injection block if architect outline exists
+      # Build outline block from architect JSON (user-confirmed outline)
       OUTLINE_BLOCK=""
-      if [ -n "$ARCHITECT_JSON" ] && [ "$ARCHITECT_JSON" != "{}" ] && [ "$ARCHITECT_JSON" != "null" ]; then
-        OUTLINE_BLOCK="
-ARTICLE OUTLINE (coverage guide — NOT a rigid contract):
-${ARCHITECT_JSON}
-
-OUTLINE USAGE:
-- The outline tells you WHAT topics to cover and WHICH sources to cite — use it as a coverage checklist
-- You decide HOW to structure the narrative. You MAY merge, reorder, or split sections if it improves flow
-- Build a SINGLE NARRATIVE THREAD: each section should build on the previous one, not repeat shared context
-- A fact/quote/insight should appear ONCE in the most relevant section — NEVER repeat across sections
-- If the outline assigns the same source to multiple sections, decide which section benefits most and cite it there only
-- You MAY skip a section if it has no meaningful data support or would be redundant
-- Inline-cite source URLs from dataSources wherever you state facts
-"
+      if [ -n "$ARCHITECT_JSON" ]; then
+        OUTLINE_BLOCK=$(ARCH_JSON="$ARCHITECT_JSON" python3 -c "
+import json, os
+arch = json.loads(os.environ['ARCH_JSON'])
+lines = []
+cq = arch.get('coreQuestion', '')
+if cq:
+    lines.append(f'CORE QUESTION this article answers: {cq}')
+    lines.append('Every section must serve answering this question.')
+    lines.append('')
+lines.append('USER-CONFIRMED OUTLINE (you MUST cover all sections and keyPoints):')
+lines.append('')
+for sec in arch.get('sections', []):
+    lines.append(f\"## {sec.get('h2', 'Untitled')}\")
+    for kp in sec.get('keyPoints', []):
+        lines.append(f'  - {kp}')
+    ds = sec.get('dataSources', [])
+    if ds:
+        lines.append('  Sources:')
+        for s in ds:
+            lines.append(f\"    - [{s.get('label','')}]({s.get('url','')})\")
+    lines.append('')
+print('\n'.join(lines))
+" 2>/dev/null)
       fi
 
       # Generate data map of raw files available for agent to read
@@ -257,7 +162,6 @@ desc = {
     'readme_a.md': 'Full HuggingFace README — benchmarks, usage examples, details',
     'readme_b.md': 'Full HuggingFace README (model B)',
     'novita.json': 'Novita AI API data — pricing, available models, endpoints',
-    'tavily_extract.json': 'Extracted full-text content from key source URLs',
     '_fanout_queries.json': 'Search queries used (for reference)',
 }
 
@@ -295,8 +199,9 @@ DATA_MAP_EOF
       # Write prompt to temp file to avoid shell quoting issues with PRE_CONTEXT
       PROMPT_FILE="$JOBS_DIR/logs/${JOBID}.prompt"
       cat > "$PROMPT_FILE" <<ARTICLE_PROMPT_EOF
-${ANSWER_PREFIX}Topic: ${TOPIC}
+/dev-blog-writer
 
+${ANSWER_PREFIX}Topic: ${TOPIC}
 ${OUTLINE_BLOCK}
 
 DATA OVERVIEW (compressed summary — use as roadmap, verify specifics from raw files):
@@ -304,34 +209,103 @@ ${PRE_CONTEXT}
 
 ${DATA_MAP}
 
-AGENT WORKFLOW — you have full Read/Bash tool access, USE IT:
-1. The compressed overview above gives you the big picture and section plan
-2. Before writing each section, READ the relevant raw data files to get exact numbers:
-   - Architecture/params → Read config_a.json or hf_detail_a.json
-   - Benchmarks → Read readme_a.md and search for benchmark tables
-   - VRAM/quantization → Read hf_gguf_*.json files
-   - Pricing → Read novita.json for exact API pricing
-   - Community insights → Read tavily_fanout_*.json for original search results with full context
-   - Extracted article content → Read tavily_extract.json
-3. VERIFY every number you write against the raw file — do NOT blindly trust the compressed overview
-4. Pay attention to source tags in the overview: [provider-page] data may be provider-specific, [vendor-blog] may be promotional
-5. Reference files at /tmp/blog_references/ have style guides — read style-analysis.md and module-templates.md before writing
-
-RULES:
+--- DATA ACCURACY ---
 - INLINE CITATIONS: Every price, benchmark, spec MUST have an <a href="SOURCE_URL"> link. Bare numbers = UNACCEPTABLE.
 - NOT FOUND → write "not publicly disclosed". NEVER guess or use your own knowledge.
 - VERSION PRECISION (#1 RULE):
-  * Use the CANONICAL MODEL NAME from the box at the top — NEVER shorten or drop version numbers.
-  * For pricing, ONLY use the line marked "USE THIS PRICE" or "◄ THIS ONE". Lines marked "reference only" are OTHER versions.
-  * External sources: verify data is for the EXACT model, not a variant (-Exp/-Flash/-Lite/-Mini). See VARIANT WARNING.
+  * Use the CANONICAL MODEL NAME — NEVER shorten or drop version numbers.
+  * For pricing, ONLY use the line marked "USE THIS PRICE" or "◄ THIS ONE".
+  * External sources: verify data is for the EXACT model, not a variant (-Exp/-Flash/-Lite/-Mini).
   * Sources list: ONLY include sources about the exact canonical model, actually cited in the article body.
-- COMPETITOR FILTER: Sources tagged [vendor-blog] or from competitor domains (haimaker.ai, etc.) may contain biased/promotional content. Extract only verifiable technical facts, NEVER cite them as authoritative. Prefer official docs, HuggingFace, Reddit, and independent blogs.
-- WEB RESEARCH: Incorporate tips/gotchas/community voices from search results. Cite at least 3 community/blog URLs. Weave community opinions into the ONE most relevant section — do NOT scatter the same quote across multiple sections.
-- NO REPETITION: Each fact, quote, or statistic appears ONCE. Later sections reference earlier context ("as noted above") instead of restating.
-- NARRATIVE FLOW: The article should read as a guided journey, not independent sections. Each H2 builds on the previous. Use transitions.
-- MANDATORY SOURCES: The HuggingFace model card URL (from the "--- Model ---" section) MUST always appear in the Sources list. Novita AI docs/pricing URL MUST also be included when Novita data is cited.
-- SOURCE DIVERSITY: Sources list must also include at least 2 blog/review/community URLs, not all API docs.
-- OUTPUT: Print WordPress-ready HTML to stdout. Start with <h2>. No markdown, no code fences, no markdown tables (use HTML <table> only), no planning text. Do NOT write to files.
+- COMPETITOR SOURCES: [vendor-blog] or competitor domains may be biased. Extract only verifiable facts, NEVER cite as authoritative. Prefer official docs, HuggingFace, Reddit, independent blogs.
+
+--- CORE PRINCIPLES ---
+1. Narrative-Driven: single story thread — each section advances the argument
+2. Data Accuracy First: every number verified from raw files — never guess
+3. Visual-First: tables, charts, callout boxes over text walls. Paragraphs: 2-3 sentences MAX
+4. Problem-Oriented: titles and content solve specific problems
+5. English Only
+6. No Absolute Claims: "among the top" — never "best", "fastest"
+7. Code Examples Must Be Verifiable: from official docs or pre-search data only
+8. Claude Code: native installer (curl -fsSL https://claude.ai/install.sh | bash) as primary method
+9. Novita AI: "all-in-one cloud platform for AI development, offering API access, serverless deployment, and GPU instances"
+10. Grammar & Proofreading: check for errors, spelling mistakes, awkward phrasing
+
+--- ARTICLE STRUCTURE ---
+- Every article type has ONE hero section — platform→Model Intro, vs→Benchmark+Head-to-Head, vram→VRAM table, tool_integration→Setup+Demos, how_to→API Access, api_provider→Provider Comparison
+- Pain Point → Solution narrative chain — build the pain with data before pitching solutions
+- Tables are the backbone — minimum 2-3 per article
+- Code examples must be complete and runnable — import, init, full call, output handling
+- VS articles: each model gets its own Spec table, NOT merged into one two-column table
+- VS Head-to-Head: SAME prompt for both models, show actual output differences
+- NO generic "Advantages of API" tables (Automation/Scalability = filler)
+- NO Quick Answer / Key Highlights popups
+- NO Provider-by-Provider breakdown — unified comparison table + one Novita AI deep dive
+- OUTLINE COVERAGE: must cover all outline sections and keyPoints. May merge thin sections
+
+--- WRITING RULES ---
+- Concise, flowing prose — no bullet points in body paragraphs
+- Each paragraph starts with takeaway sentence (conclusion first, evidence follows)
+- Technical blog tone — no marketing fluff
+- Preserve exact numbers — never round when data is available
+- Numbers must be specific — "74.9% on BrowseComp" not "good at browsing"
+- Bold the verdict — <strong> for every recommendation
+- No filler — cut "In this article, we will explore..."
+- H2 TITLES: use question format ("How Much VRAM Does X Need?" > "VRAM Requirements"), include model name, match search patterns
+- ANTI-AI (CRITICAL): write like a human engineer sharing findings, NOT an AI summarizing sources.
+  BANNED — NEVER use these:
+  * "According to [source], ..." / "As mentioned in [source], ..." / "On [source], ..." / "[source] reports that ..." — just state the fact directly, cite with inline <a> link only
+  * "The model boasts / features / offers ..." — say what it IS, not what it "offers"
+  * "It is worth noting that ..." / "Notably, ..." / "Interestingly, ..." — delete, start with the fact
+  * "In the realm of ..." / "In the world of ..." / "When it comes to ..." — get to the point
+  * "This means that ..." / "This suggests that ..." — state the implication directly
+  * "Let's dive into ..." / "Let's explore ..." / "Let's take a look at ..." — just start writing
+  * Listing sources one by one: "Reddit user X said Y. Blog Z mentioned W." — synthesize into ONE conclusion
+  * "As shown in the table above/below..." / "The table shows..." — tables speak for themselves, don't narrate them
+  DO this instead:
+  * Direct assertion: "Qwen3 runs at 147 tok/s on A100 — 2.3x faster than DeepSeek V3."
+  * Problem → solution: "Running 70B on consumer GPUs requires quantization. Q4_K_M cuts VRAM from 140GB to 42GB with <2% quality loss."
+  * Synthesize, don't attribute: "Community testing confirms Q4_K_M as the sweet spot — minimal quality loss with 70% VRAM savings."
+  * Active voice, concrete subjects: "The 128K context window handles full codebases in a single pass."
+  The test: if a sentence sounds like a corporate press release or AI summary, rewrite it as something a senior engineer would say to a colleague.
+- TABLE-PROSE SEPARATION (CRITICAL):
+  * If data is in a table, do NOT repeat the same numbers/specs in surrounding paragraphs
+  * Paragraphs before/after a table should add INSIGHT, INTERPRETATION, or CONTEXT — not restate table contents
+  * Bad: table has "Q4_K_M: 42GB", paragraph says "Q4_K_M quantization requires 42GB of VRAM"
+  * Good: table has "Q4_K_M: 42GB", paragraph says "The sweet spot for single-GPU deployment — fits an A100 with room for 8K context KV cache"
+- ANTI-REPETITION (CRITICAL):
+  * One fact, one place: a statistic, quote, or insight appears ONCE — in the section where it has the most impact
+  * No shared-context restating: if you introduced "262K context window" in the intro, later sections say "the 262K window mentioned above"
+  * Community voices are woven, not sprinkled: a Reddit quote in ONE section only — not scattered across 3
+  * Forward/backward references: "As we'll see in the cost section below..." or "Building on the setup above..."
+- WEB RESEARCH: incorporate community voices, cite ≥3 community/blog URLs, weave into ONE most relevant section
+
+--- OUTPUT FORMAT ---
+WordPress-ready HTML:
+- <h2> sections, <h3> subsections
+- Code: <pre><code class="language-python">...</code></pre>
+- HTML tables only — NO markdown tables
+- Inline styles (no external CSS)
+- Green theme: #CAF6E0 (background), #7CB342 (border/accent)
+- External links: target="_blank" rel="noopener"
+- Key Insight callout: <div style="background:#CAF6E0;border-left:4px solid #7CB342;padding:12px 16px;margin:16px 0;border-radius:0 8px 8px 0;"><strong>Key Takeaway:</strong> [insight]</div>
+- Target: 800-1500 words. Shorter with more visuals > longer with more text
+
+--- POST-PROCESSING (after main body) ---
+- Introduction: 2 paragraphs MAX. P1: hook + thesis in bold (Pain Point→Thesis / Question→Answer / Cost Hook / Challenge Framing). P2: preview key evidence
+- Conclusion: 1 paragraph + 1 Key Takeaway callout box
+- FAQ: 5 questions, 1-2 sentence answers MAX, include exact model version numbers
+- SEO Titles: 10 variations, keyword-first, problem-oriented, ≤10 words
+- Sources: HuggingFace model card URL (always), Novita AI URL when cited, ≥2 community/blog URLs
+
+--- REFERENCES ---
+Read from /tmp/blog_references/:
+- style-analysis.md — Title formulas, engagement patterns
+- module-templates.md — HTML templates per section type
+- style-examples.md — Formatting rules
+- post-processing-prompt.md — Intro, Conclusion, FAQ, SEO prompts
+
+OUTPUT: Print to stdout. Start with <h2>. No markdown, no code fences, no markdown tables, no planning text. Do NOT write to files.
 ARTICLE_PROMPT_EOF
     fi
 
@@ -341,10 +315,8 @@ ARTICLE_PROMPT_EOF
 
     # Run claude -p in background with timeout protection
     # Read prompt from file to avoid shell quoting issues (context may contain special chars)
-    # Both modes use WRITE_RULES + DATA_SOURCE_RULES as system prompt
-    SYSTEM_PROMPT="${DATA_SOURCE_RULES}
-
-${WRITE_RULES}"
+    # System prompt: data source constraints only. Writing rules loaded via /dev-blog-writer skill.
+    SYSTEM_PROMPT="${DATA_SOURCE_RULES}"
     cat "$PROMPT_FILE" | claude -p \
       --system-prompt "$SYSTEM_PROMPT" \
       --permission-mode bypassPermissions \

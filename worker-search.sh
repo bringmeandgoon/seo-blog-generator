@@ -100,7 +100,47 @@ print(m.group(1).strip() if m else '')
     echo "[pre-search] Tool Integration detected: model=\"$hf_query\" tool=\"$TOOL_NAME\""
   fi
 
-  # --- Phase 1: HuggingFace search (find repo names) ---
+  # --- Detect article type (used by fan-out, OpenRouter gating, etc.) ---
+  local _fanout_type="platform"
+  echo "$topic" | grep -qiE 'vram|\bmemory\b' && _fanout_type="vram"
+  echo "$topic" | grep -qiE ' vs ' && _fanout_type="vs"
+  echo "$topic" | grep -qiE 'api.*(provider|pricing|cost|comparison)' && _fanout_type="api_provider"
+  echo "$topic" | grep -qiE 'how.*(access|use)' && _fanout_type="how_to"
+  echo "$topic" | grep -qiE '\b(in|with)\s+(opencode|open.code|openclaw|open.claw|claude.code|trae|cursor|continue|codecompanion)\b' && _fanout_type="tool_integration"
+  echo "$topic" | grep -qiE '\bon\s+(novita|together|replicate|hugging.?face|fireworks|groq|deepinfra)\b|^deploy\b' && _fanout_type="platform"
+  echo "[pre-search] Article type: $_fanout_type"
+
+  # --- parse_hf_repo: select best repo from HF search results ---
+  # Prefers exact normalized match over download-count order
+  parse_hf_repo() {
+    python3 -c "
+import sys,json,re
+query = sys.argv[1] if len(sys.argv) > 1 else ''
+def norm(s):
+    return re.sub(r'[^a-z0-9]', '', s.lower())
+query_sig = norm(query)
+SKIP={'unsloth','lmstudio-community','mlx-community','QuantTrio','RedHatAI','hugging-quants','GadflyII','cyankiwi','DavidAU','TeichAI','lukealonso'}
+try:
+  models = json.loads(sys.stdin.read())
+  valid = []
+  for m in models:
+    org=m['id'].split('/')[0]
+    if org in SKIP: continue
+    if any(x in m['id'] for x in ['-GGUF','-AWQ','-FP8','-quantized','-MLX','-NVFP4']): continue
+    valid.append(m)
+  # Pass 1: exact normalized match (e.g. 'glm47' matches 'GLM-4.7' but NOT 'GLM-4.7-Flash')
+  if query_sig:
+    for m in valid:
+      if norm(m['id'].split('/')[-1]) == query_sig:
+        print(m['id']); sys.exit()
+  # Pass 2: fallback to first valid by downloads (original behavior)
+  if valid:
+    print(valid[0]['id'])
+except: pass
+" "$2" < "$1" 2>/dev/null
+  }
+
+  # --- Phase 1: HuggingFace search → parse repo → fetch config/README/detail ---
   if [ "$is_vs" -gt 0 ]; then
     local model_a=$(echo "$topic" | sed -E 's/ [Vv][Ss] .*//')
     local model_b=$(echo "$topic" | sed -E 's/.* [Vv][Ss] //')
@@ -109,347 +149,156 @@ print(m.group(1).strip() if m else '')
     model_b=$(echo "$model_b" | strip_keywords)
     echo "[pre-search] VS: \"$model_a\" vs \"$model_b\""
     # Sequential HF requests to avoid rate limiting
-    fetch "https://huggingface.co/api/models?search=$(echo "$model_a" | tr ' ' '+')&sort=downloads&direction=-1&limit=15" > /tmp/blog_data/hf_a.json 2>/dev/null
-    fetch "https://huggingface.co/api/models?search=$(echo "$model_b" | tr ' ' '+')&sort=downloads&direction=-1&limit=15" > /tmp/blog_data/hf_b.json 2>/dev/null
+    fetch "https://huggingface.co/api/models?search=$(echo "$model_a" | tr ' ' '+')&sort=downloads&direction=-1&limit=15" > /tmp/_hf_search_a.json 2>/dev/null
+    fetch "https://huggingface.co/api/models?search=$(echo "$model_b" | tr ' ' '+')&sort=downloads&direction=-1&limit=15" > /tmp/_hf_search_b.json 2>/dev/null
   else
     echo "[pre-search] Topic: \"$topic\" → HF query: \"$hf_query\""
-    fetch "https://huggingface.co/api/models?search=$(echo "$hf_query" | tr ' ' '+')&sort=downloads&direction=-1&limit=15" > /tmp/blog_data/hf_a.json 2>/dev/null
+    fetch "https://huggingface.co/api/models?search=$(echo "$hf_query" | tr ' ' '+')&sort=downloads&direction=-1&limit=15" > /tmp/_hf_search_a.json 2>/dev/null
+  fi
+
+  # --- Parse best repo → fetch config.json + README.md + detail API (parallel with Tavily etc.) ---
+  if [ "$is_vs" -gt 0 ]; then
+    local repo_a=$(parse_hf_repo /tmp/_hf_search_a.json "$model_a")
+    local repo_b=""
+    [ -f /tmp/_hf_search_b.json ] && repo_b=$(parse_hf_repo /tmp/_hf_search_b.json "$model_b")
+  else
+    local repo_a=$(parse_hf_repo /tmp/_hf_search_a.json "$hf_query")
+    local repo_b=""
+  fi
+  echo "[pre-search] Repo A: ${repo_a:-NOT FOUND}"
+  [ "$is_vs" -gt 0 ] && echo "[pre-search] Repo B: ${repo_b:-NOT FOUND}"
+
+  if [ -n "$repo_a" ]; then
+    fetch "https://huggingface.co/$repo_a/raw/main/config.json" > /tmp/blog_data/config_a.json 2>/dev/null &
+    fetch "https://huggingface.co/$repo_a/raw/main/README.md" > /tmp/blog_data/readme_a.md 2>/dev/null &
+    fetch "https://huggingface.co/api/models/$repo_a" > /tmp/blog_data/hf_detail_a.json 2>/dev/null &
+  fi
+  if [ -n "$repo_b" ]; then
+    fetch "https://huggingface.co/$repo_b/raw/main/config.json" > /tmp/blog_data/config_b.json 2>/dev/null &
+    fetch "https://huggingface.co/$repo_b/raw/main/README.md" > /tmp/blog_data/readme_b.md 2>/dev/null &
+    fetch "https://huggingface.co/api/models/$repo_b" > /tmp/blog_data/hf_detail_b.json 2>/dev/null &
   fi
 
   # Novita API (public JSON, no auth needed)
   fetch "https://api.novita.ai/v3/openai/models" > /tmp/blog_data/novita.json 2>/dev/null &
-  # --- Tavily API: query fan-out (LLM-generated diverse queries) ---
-  local tavily_key="${TAVILY_API_KEY:-}"
-  if [ -n "$tavily_key" ]; then
+  # Novita GPU products (live pricing via cnovita CLI)
+  if command -v novita >/dev/null 2>&1 && [ -n "${NOVITA_API_KEY:-}" ]; then
+    NOVITA_API_KEY="$NOVITA_API_KEY" novita gpu products --json-output > /tmp/blog_data/novita_gpu_products.json 2>/dev/null &
+    echo "[pre-search] Novita GPU products: fetching via CLI..."
+  else
+    echo "[pre-search] Novita GPU products: CLI not found or NOVITA_API_KEY missing, will use fallback prices"
+  fi
+  # --- Perplexity Search API: query fan-out (multi-query in one request) ---
+  local pplx_key="${PERPLEXITY_API_KEY:-}"
+  if [ -n "$pplx_key" ]; then
 
-    _tavily_search() {
-      local query="$1" outfile="$2" max_results="${3:-5}" days="${4:-120}"
-      [ -z "$query" ] && return
-      local body
-      body=$(python3 -c "
-import json, sys
-d = {
-    'query': sys.argv[1],
-    'max_results': int(sys.argv[2]),
-    'search_depth': 'advanced',
-    'include_answer': True,
-}
-days = int(sys.argv[3])
-if days > 0:
-    d['days'] = days
-print(json.dumps(d))
-" "$query" "$max_results" "$days")
-      $CURL -sL --max-time 30 ${PROXY:+-x "$PROXY"} \
-        -H "Authorization: Bearer $tavily_key" \
-        -H "Content-Type: application/json" \
-        "https://api.ppinfra.com/v3/tavily/search" \
-        -d "$body" > "$outfile" 2>/dev/null &
-    }
+    # _fanout_type already detected above (before Phase 1)
 
-    # Detect article type for fan-out prompt (mirrors worker-architect.sh)
-    local _fanout_type="platform"
-    echo "$topic" | grep -qiE 'vram|\bmemory\b' && _fanout_type="vram"
-    echo "$topic" | grep -qiE ' vs ' && _fanout_type="vs"
-    echo "$topic" | grep -qiE 'api.*(provider|pricing|cost|comparison)' && _fanout_type="api_provider"
-    echo "$topic" | grep -qiE 'how.*(access|use)' && _fanout_type="how_to"
-    echo "$topic" | grep -qiE '\b(in|with)\s+(opencode|open.code|openclaw|open.claw|claude.code|trae|cursor|continue|codecompanion)\b' && _fanout_type="tool_integration"
-    echo "$topic" | grep -qiE '\bon\s+(novita|together|replicate|hugging.?face|fireworks|groq|deepinfra)\b|^deploy\b' && _fanout_type="platform"
-
-    # --- Query fan-out: MiniMax generates diverse search queries per article type ---
-    local fanout_queries=""
-    local ppio_key="${PPIO_API_KEY:-}"
-    if [ -n "$ppio_key" ]; then
-      echo "[pre-search] Fan-out: generating queries via MiniMax (type=$_fanout_type)..."
-      # Build MiniMax prompt via Python, call via curl (urllib gets 403 from some envs)
-      local _fanout_body
-      _fanout_body=$(FANOUT_TOPIC="$topic" FANOUT_MODEL="$hf_query" FANOUT_TYPE="$_fanout_type" python3 << 'FANOUT_BODY_EOF'
+    # --- Generate search queries from templates (no LLM needed) ---
+    local fanout_queries
+    fanout_queries=$(FANOUT_TOPIC="$topic" FANOUT_MODEL="$hf_query" python3 << 'FANOUT_EOF'
 import json, os
 
 topic = os.environ['FANOUT_TOPIC']
 model = os.environ['FANOUT_MODEL']
-atype = os.environ['FANOUT_TYPE']
 
-TYPE_CONTEXTS = {
-    "vram": {
-        "focus": "The article helps readers decide what hardware they need to run {model} locally.",
-        "angles": [
-            "VRAM requirements per quantization level (FP16/Q8/Q4) with specific GPU models",
-            "Real user experiences running {model} on specific GPUs (RTX 4090, A100, etc.)",
-            "Quantization quality tradeoffs — how much quality is lost at Q4 vs Q8",
-            "Self-hosted deployment guides with actual memory measurements",
-            "Cost comparison: local GPU vs cloud API for {model} inference",
-        ],
-    },
-    "vs": {
-        "focus": "The article compares {topic} to help readers pick the right model for their use case.",
-        "angles": [
-            "Head-to-head benchmark scores between the two models on current benchmarks",
-            "Community opinions: which model wins for coding / chat / reasoning tasks",
-            "Pricing and availability differences across API providers",
-            "Real-world usage comparison (latency, quality, context handling)",
-            "Migration experience: switching between these models in production",
-        ],
-    },
-    "how_to": {
-        "focus": "The article walks readers through all ways to access and use {model}, from easiest to advanced.",
-        "angles": [
-            "Official API and playground access for {model} — quickstart guides",
-            "Community setup experiences and gotchas when first using {model}",
-            "Code examples and SDK integration for {model} API",
-            "IDE/tool integration (Cursor, Claude Code, Continue) with {model}",
-            "Local deployment steps and hardware requirements for {model}",
-        ],
-    },
-    "api_provider": {
-        "focus": "The article compares API providers offering {model}, helping readers pick the best one.",
-        "angles": [
-            "Provider pricing comparison for {model} API (per-token costs)",
-            "Throughput and latency benchmarks across different {model} providers",
-            "Provider reliability reviews and rate limit experiences",
-            "Feature comparison: function calling, streaming, context limits by provider",
-            "Cost optimization tips for running {model} API in production",
-        ],
-    },
-    "tool_integration": {
-        "focus": "The article shows how to set up and use {model} specifically inside {topic_tool}. Readers care about the tool's workflow, NOT the model's general capabilities.",
-        "angles": [
-            "{model} {topic_tool} setup configuration guide",
-            "{topic_tool} with {model} real-world coding experience results",
-            "{model} {topic_tool} vs other models in {topic_tool} comparison",
-            "{topic_tool} {model} performance latency agentic coding tasks",
-            "{model} context window limits practical impact in {topic_tool}",
-        ],
-    },
-    "platform": {
-        "focus": "The article introduces {model} on a specific platform, covering deployment and access.",
-        "angles": [
-            "{model} model capabilities architecture key features overview",
-            "{model} community reception user reviews experiences",
-            "Getting started with {model} API deployment tutorial",
-            "{model} benchmark performance comparison with current models",
-            "{model} pricing cost inference production deployment",
-        ],
-    },
-}
+queries = [
+    topic,
+    f'site:reddit.com "{model}"',
+]
+print(json.dumps(queries))
+FANOUT_EOF
+    )
+    echo "[pre-search] Fan-out: $(echo "$fanout_queries" | python3 -c "import sys,json; print(len(json.loads(sys.stdin.read())))" 2>/dev/null) queries (type=$_fanout_type)"
 
-# Extract tool name for tool_integration context
-topic_tool = ""
-import re as _re
-_tool_match = _re.search(r'\b(?:in|with)\s+(opencode|open\s*code|openclaw|open\s*claw|claude\s*code|trae|cursor|continue|codecompanion)', topic, _re.IGNORECASE)
-if _tool_match:
-    topic_tool = _tool_match.group(1).strip()
+    # Save queries for downstream context labeling
+    echo "$fanout_queries" > /tmp/blog_data/_fanout_queries.json
 
-ctx_data = TYPE_CONTEXTS.get(atype, TYPE_CONTEXTS["platform"])
-article_focus = ctx_data["focus"].format(model=model, topic=topic, topic_tool=topic_tool)
-search_angles = [a.format(model=model, topic=topic, topic_tool=topic_tool) for a in ctx_data["angles"]]
+    # --- Execute Perplexity multi-query search ---
+    echo "[pre-search] Perplexity: searching..."
+    PPLX_QUERIES="$fanout_queries" PPLX_KEY="$pplx_key" python3 << 'PPLX_SEARCH_EOF'
+import json, os, subprocess, sys
 
-prompt = f"""Generate exactly 5 diverse Tavily web search queries for a technical blog article.
+D = '/tmp/blog_data'
+queries = json.loads(os.environ.get('PPLX_QUERIES', '[]'))
+pplx_key = os.environ.get('PPLX_KEY', '')
 
-FULL TOPIC: {topic}
-MODEL NAME: {model}
-ARTICLE TYPE: {atype}
-ARTICLE FOCUS: {article_focus}
+if not queries or not pplx_key:
+    print("[pplx] No queries or API key", flush=True)
+    sys.exit(0)
 
-SEARCH ANGLES (generate one query per angle):
-1. {search_angles[0]}
-2. {search_angles[1]}
-3. {search_angles[2]}
-4. {search_angles[3]}
-5. {search_angles[4]}
+# Build request body
+body = json.dumps({
+    'query': queries,
+    'max_results': 20,
+    'max_tokens': 50000,
+    'max_tokens_per_page': 4096,
+    'search_recency_filter': 'month',
+    'return_language': 'en',
+    'search_domain_filter': ['-huggingface.co', '-novita.ai', '-apidog.com'],
+})
 
-RULES:
-- Every query MUST include "{model}"
-- Queries must be specific to the article focus above — NOT generic model queries
-- RECENCY: Include "2026" in at least 3 queries to get recent results. For comparison queries, use CURRENT model versions (e.g. "Claude 4.6" not "Claude 3.5", "GPT-5" not "GPT-4o")
-- For tool_integration: queries must mention the specific tool name, not just the model
-- For vs: queries must mention both models being compared, using their LATEST versions
-- Keep each query concise (under 15 words)
+# Call Perplexity Search API (explicit proxy for reliability)
+proxy_port = os.environ.get('https_proxy', '') or os.environ.get('http_proxy', '')
+curl_cmd = ['curl', '-sL', '--max-time', '45']
+if proxy_port:
+    curl_cmd += ['-x', proxy_port]
+curl_cmd += [
+     '-H', f'Authorization: Bearer {pplx_key}',
+     '-H', 'Content-Type: application/json',
+     'https://api.perplexity.ai/search',
+     '-d', body]
+result = subprocess.run(curl_cmd, capture_output=True, text=True, timeout=50)
 
-Output ONLY a JSON array of 5 query strings. No explanation."""
+if result.returncode != 0:
+    print(f"[pplx] curl failed: {result.stderr[:200]}", flush=True)
+    sys.exit(0)
 
-print(json.dumps({
-    'model': 'minimax/minimax-m2.5',
-    'messages': [{'role': 'user', 'content': prompt}],
-    'max_tokens': 2000,
-    'temperature': 0.7,
-}))
-FANOUT_BODY_EOF
-      )
-      local _fanout_raw
-      _fanout_raw=$($CURL -sL --max-time 30 ${PROXY:+-x "$PROXY"} \
-        -H "Authorization: Bearer $ppio_key" \
-        -H "Content-Type: application/json" \
-        "https://api.ppinfra.com/v3/openai/chat/completions" \
-        -d "$_fanout_body" 2>/dev/null)
-      fanout_queries=$(echo "$_fanout_raw" | python3 -c "
-import json, sys, re
 try:
-    data = json.loads(sys.stdin.read(), strict=False)
-    content = data['choices'][0]['message']['content']
-    if '<think>' in content:
-        content = re.sub(r'<think>[\s\S]*?</think>', '', content).strip()
-    m = re.search(r'\[.*\]', content, re.DOTALL)
-    if m:
-        queries = json.loads(m.group())
-        queries = [q for q in queries if isinstance(q, str) and len(q) > 5][:6]
-        print(json.dumps(queries))
-    else:
-        print('[]')
-except Exception as e:
-    print('[]', flush=True)
-    print(f'[fan-out parse error: {e}]', file=sys.stderr)
-")
-    fi
-
-    # Parse fan-out result; count valid queries
-    local _fq_count
-    _fq_count=$(echo "$fanout_queries" | python3 -c "import sys,json; print(len(json.loads(sys.stdin.read())))" 2>/dev/null || echo "0")
-
-    if [ "$_fq_count" -gt 0 ]; then
-      echo "[pre-search] Fan-out: $_fq_count queries, executing in parallel (over-fetch for dedup)..."
-      # Save queries for downstream context labeling
-      echo "$fanout_queries" > /tmp/blog_data/_fanout_queries.json
-      # Pass 1: Execute all fan-out queries in parallel, over-fetch (10 results each) for dedup headroom
-      echo "$fanout_queries" | python3 -c "
-import json, sys
-for i, q in enumerate(json.loads(sys.stdin.read())):
-    print(f'{i}\t{q}')
-" | while IFS=$'\t' read -r idx query; do
-        echo "[pre-search] Fan-out[$idx]: $query"
-        _tavily_search "$query" "/tmp/blog_data/tavily_fanout_${idx}.json" 10
-      done
-      wait
-      # Pass 2: Deduplicate across queries — each URL kept only in the first query that found it
-      # Queries with < 5 unique results get supplementary searches
-      DEDUP_RESULT=$(FANOUT_QUERIES="$fanout_queries" python3 << 'DEDUP_EOF'
-import json, os, glob, sys
-
-D = '/tmp/blog_data'
-queries = json.loads(os.environ.get('FANOUT_QUERIES', '[]'))
-n = len(queries)
-MIN_PER_QUERY = 5
-
-seen_urls = set()
-deficient = []  # (idx, query, shortfall)
-
-for i in range(n):
-    fpath = f"{D}/tavily_fanout_{i}.json"
-    if not os.path.exists(fpath) or os.path.getsize(fpath) < 50:
-        deficient.append((i, queries[i] if i < len(queries) else '', MIN_PER_QUERY))
-        continue
-    try:
-        data = json.load(open(fpath))
-    except:
-        deficient.append((i, queries[i] if i < len(queries) else '', MIN_PER_QUERY))
-        continue
+    data = json.loads(result.stdout)
     results = data.get('results', [])
-    unique = [r for r in results if r.get('url', '') not in seen_urls]
-    for r in unique:
-        seen_urls.add(r.get('url', ''))
-    # Keep only unique results, up to 5
-    data['results'] = unique[:MIN_PER_QUERY]
-    json.dump(data, open(fpath, 'w'), ensure_ascii=False)
-    actual = len(data['results'])
-    if actual < MIN_PER_QUERY:
-        deficient.append((i, queries[i] if i < len(queries) else '', MIN_PER_QUERY - actual))
-    print(f"[dedup] fanout_{i}: {len(results)} raw → {actual} unique", file=sys.stderr)
+    print(f"[pplx] {len(results)} results returned", flush=True)
 
-# Report deficient queries for supplementary search
-if deficient:
-    # Output: idx\tquery\tshortfall
-    for idx, q, short in deficient:
-        print(f"{idx}\t{q}\t{short}")
-else:
-    print("")
-DEDUP_EOF
-)
-      # Pass 3: Supplementary search for deficient queries
-      if [ -n "$DEDUP_RESULT" ]; then
-        echo "[pre-search] Fan-out dedup: some queries need supplementary results..."
-        echo "$DEDUP_RESULT" | while IFS=$'\t' read -r idx query shortfall; do
-          [ -z "$idx" ] && continue
-          echo "[pre-search] Fan-out[$idx]: supplementary search (need $shortfall more)"
-          _tavily_search "$query additional resources" "/tmp/blog_data/tavily_fanout_${idx}_supp.json" 8
-        done
-        wait
-        # Merge supplementary results into main files, dedup again
-        python3 << 'MERGE_EOF'
-import json, os, glob, sys
+    # Save as unified format compatible with downstream code
+    # Map Perplexity format to Tavily-like format for backward compat
+    converted = {
+        'results': [
+            {
+                'title': r.get('title', ''),
+                'url': r.get('url', ''),
+                'content': r.get('snippet', ''),
+                'date': r.get('date', ''),
+            }
+            for r in results
+        ]
+    }
+    json.dump(converted, open(f"{D}/tavily_fanout_0.json", 'w'), ensure_ascii=False)
 
-D = '/tmp/blog_data'
-MIN_PER_QUERY = 5
-
-# Collect all URLs already in main files
-all_urls = set()
-main_files = sorted(glob.glob(f"{D}/tavily_fanout_[0-9].json"))
-for fpath in main_files:
-    try:
-        data = json.load(open(fpath))
-        for r in data.get('results', []):
-            all_urls.add(r.get('url', ''))
-    except:
-        pass
-
-# Merge supplementary into main
-supp_files = sorted(glob.glob(f"{D}/tavily_fanout_*_supp.json"))
-for supp_path in supp_files:
-    # Extract index: tavily_fanout_2_supp.json → 2
-    base = os.path.basename(supp_path)
-    idx = base.replace('tavily_fanout_','').replace('_supp.json','')
-    main_path = f"{D}/tavily_fanout_{idx}.json"
-    try:
-        main_data = json.load(open(main_path))
-    except:
-        main_data = {'results': []}
-    try:
-        supp_data = json.load(open(supp_path))
-    except:
-        os.remove(supp_path)
-        continue
-    current = len(main_data.get('results', []))
-    need = MIN_PER_QUERY - current
-    if need > 0:
-        for r in supp_data.get('results', []):
-            url = r.get('url', '')
-            if url and url not in all_urls:
-                main_data['results'].append(r)
-                all_urls.add(url)
-                need -= 1
-                if need <= 0:
-                    break
-    json.dump(main_data, open(main_path, 'w'), ensure_ascii=False)
-    os.remove(supp_path)
-    print(f"[merge] fanout_{idx}: now {len(main_data['results'])} results", file=sys.stderr)
-MERGE_EOF
-      fi
-    else
-      # Fallback: hardcoded queries when MiniMax unavailable
-      echo "[pre-search] Fan-out unavailable, using hardcoded queries"
-      local search_term="$topic"
-      if echo "$topic" | grep -qiE 'api\s*provider|api\s*pricing|api\s*cost|\bon\s+novita'; then
-        search_term="$hf_query"
-      fi
-      echo '["'"$search_term"'","site:reddit.com '"$search_term"'","'"$search_term"' site:medium.com OR site:dev.to","site:artificialanalysis.ai/models '"$hf_query"'"]' > /tmp/blog_data/_fanout_queries.json
-      _tavily_search "$search_term" "/tmp/blog_data/tavily_fanout_0.json"
-      _tavily_search "site:reddit.com $search_term" "/tmp/blog_data/tavily_fanout_1.json"
-      _tavily_search "$search_term site:medium.com OR site:dev.to OR site:towardsdatascience.com OR site:hashnode.dev OR site:substack.com" "/tmp/blog_data/tavily_fanout_2.json" 10
-      _tavily_search "site:artificialanalysis.ai/models $hf_query" "/tmp/blog_data/tavily_fanout_3.json" 5 0
-    fi
+    # Log each result
+    for i, r in enumerate(results):
+        print(f"  [{i}] {r.get('title','')[:60]} | {r.get('url','')}", flush=True)
+except Exception as e:
+    print(f"[pplx] parse error: {e}", flush=True)
+    # Save raw response for debugging
+    open(f"{D}/pplx_raw.txt", 'w').write(result.stdout[:5000])
+PPLX_SEARCH_EOF
 
   else
-    echo "[pre-search] No TAVILY_API_KEY, skipping web search"
+    echo "[pre-search] No PERPLEXITY_API_KEY, skipping web search"
   fi
 
   # --- HuggingFace: Unsloth GGUF quantization sizes ---
   local _hf_gguf_query
   _hf_gguf_query=$(echo "$hf_query" | tr ' ' '+')
   echo "[pre-search] HF: searching unsloth GGUF for '$hf_query'..."
-  fetch "https://huggingface.co/api/models?search=unsloth+${_hf_gguf_query}+GGUF&limit=3" > /tmp/blog_data/hf_unsloth_search.json 2>/dev/null
+  fetch "https://huggingface.co/api/models?search=unsloth+${_hf_gguf_query}+GGUF&limit=3" > /tmp/_hf_unsloth_search.json 2>/dev/null
   local _unsloth_repo
   _unsloth_repo=$(python3 -c "
 import json, sys
 try:
-    data = json.load(open('/tmp/blog_data/hf_unsloth_search.json'))
+    raw = open('/tmp/_hf_unsloth_search.json').read()
+    idx = raw.find('[')
+    data = json.loads(raw[idx:]) if idx >= 0 else json.loads(raw)
     for m in data:
         mid = m.get('id','')
         if mid.startswith('unsloth/') and 'GGUF' in mid:
@@ -459,21 +308,23 @@ except: pass
 
   if [ -n "$_unsloth_repo" ]; then
     echo "[pre-search] Unsloth GGUF: $_unsloth_repo"
-    fetch "https://huggingface.co/api/models/$_unsloth_repo/tree/main" > /tmp/blog_data/hf_unsloth_tree.json 2>/dev/null
+    fetch "https://huggingface.co/api/models/$_unsloth_repo/tree/main" > /tmp/_hf_unsloth_tree.json 2>/dev/null
     # Fetch key quant sizes in parallel
     local _gguf_quants
     _gguf_quants=$(python3 -c "
 import json
-tree = json.load(open('/tmp/blog_data/hf_unsloth_tree.json'))
+raw = open('/tmp/_hf_unsloth_tree.json').read()
+idx = raw.find('[')
+tree = json.loads(raw[idx:]) if idx >= 0 else json.loads(raw)
 dirs = [d['path'] for d in tree if d['type'] == 'directory']
 priority = ['BF16', 'Q8_0', 'Q6_K', 'Q4_K_M', 'Q3_K_M', 'Q2_K', 'IQ4_XS', 'UD-IQ2_XXS', 'UD-IQ1_S']
 selected = [p for p in priority if p in dirs]
 if not selected:
     selected = dirs[:6]
-print(' '.join(selected[:8]))
+for s in selected[:8]: print(s)
 " 2>/dev/null)
-    for _q in $_gguf_quants; do
-      fetch "https://huggingface.co/api/models/$_unsloth_repo/tree/main/$_q" > "/tmp/blog_data/hf_gguf_${_q}.json" 2>/dev/null &
+    echo "$_gguf_quants" | while IFS= read -r _q; do
+      [ -n "$_q" ] && fetch "https://huggingface.co/api/models/$_unsloth_repo/tree/main/$_q" > "/tmp/blog_data/hf_gguf_${_q}.json" 2>/dev/null &
     done
   else
     echo "[pre-search] Unsloth GGUF: no repo found for '$hf_query'"
@@ -488,7 +339,9 @@ print(' '.join(selected[:8]))
   _hf_provider_count=$(python3 -c "
 import json
 try:
-    data = json.load(open('/tmp/blog_data/hf_inference.json'))
+    raw = open('/tmp/blog_data/hf_inference.json').read()
+    idx = raw.find('[')
+    data = json.loads(raw[idx:]) if idx >= 0 else json.loads(raw)
     count = 0
     for m in data[:1]:
         for item in m.get('inferenceProviderMapping', []):
@@ -499,12 +352,12 @@ except: print(0)
 " 2>/dev/null)
   echo "[pre-search] HF Inference: ${_hf_provider_count:-0} live providers"
 
-  # --- OpenRouter: only fetch if HF has < 3 live providers ---
-  if [ "${_hf_provider_count:-0}" -lt 3 ]; then
-    echo "[pre-search] OpenRouter: supplementing (HF < 3 providers)..."
+  # --- OpenRouter: only fetch for api_provider articles ---
+  if [ "$_fanout_type" = "api_provider" ]; then
+    echo "[pre-search] OpenRouter: fetching for api_provider article..."
     fetch "https://openrouter.ai/api/v1/models" > /tmp/blog_data/openrouter_models.json 2>/dev/null
   else
-    echo "[pre-search] HF has >= 3 providers, skipping OpenRouter"
+    echo "[pre-search] Non-api_provider article, skipping OpenRouter"
   fi
 
   # OpenRouter model lookup (only if fetched above)
@@ -515,7 +368,9 @@ import json, re, sys
 query = sys.argv[1]
 qn = re.sub(r'[^a-z0-9]', '', query.lower())
 try:
-    data = json.load(open('/tmp/blog_data/openrouter_models.json'))
+    raw = open('/tmp/blog_data/openrouter_models.json').read()
+    idx = raw.find('{')
+    data = json.loads(raw[idx:]) if idx >= 0 else json.loads(raw)
     # Pass 1: exact suffix match (e.g. 'glm47' == 'glm-4.7')
     for m in data.get('data', []):
         suffix = m['id'].split('/')[-1] if '/' in m['id'] else m['id']
@@ -552,8 +407,9 @@ if not os.path.exists(api_path) or os.path.getsize(api_path) < 100:
     exit()
 
 try:
-    with open(api_path) as f:
-        raw = json.load(f)
+    raw_text = open(api_path).read()
+    idx = raw_text.find('{')
+    raw = json.loads(raw_text[idx:]) if idx > 0 else json.loads(raw_text)
     endpoints = raw.get('data', {}).get('endpoints', [])
 except:
     json.dump({"error": "JSON parse failed", "all": [], "selected": []}, open(out_path, "w"))
@@ -583,7 +439,7 @@ for ep in endpoints:
     })
 
 # --- Selection: pick 2-3 providers with different strengths vs Novita ---
-EXCLUDE = {'NovitaAI', 'Novita AI', 'Novita', 'Google Vertex', 'Google', 'Google AI Studio', 'AWS Bedrock', 'Azure'}
+EXCLUDE = {'NovitaAI', 'Novita AI', 'Novita'}
 
 candidates = []
 for p in all_providers:
@@ -634,37 +490,73 @@ sel_info = [f"{s['name']}({s.get('_selected_reason','?')})" for s in selected]
 print(f"[or-parse] {len(all_providers)} providers found, {len(selected)} selected: {sel_info}")
 ORPARSE
 
-      # Step 4: For each selected provider, search their official site (API Provider articles only)
-      if echo "$topic" | grep -qi 'api\s*provider\|api\s*pricing\|api\s*cost' && [ -n "$tavily_key" ] && [ -f /tmp/blog_data/openrouter_providers.json ]; then
-        local or_selected
-        or_selected=$(python3 -c "
-import json
+      # Step 4: For each selected provider, search their official site via Perplexity (API Provider articles only)
+      if echo "$topic" | grep -qi 'api\s*provider\|api\s*pricing\|api\s*cost' && [ -n "$PERPLEXITY_API_KEY" ] && [ -f /tmp/blog_data/openrouter_providers.json ]; then
+        HF_QUERY="$hf_query" python3 << 'PROV_SEARCH_EOF'
+import json, os, subprocess, sys
+
+D = "/tmp/blog_data"
+pplx_key = os.environ.get('PERPLEXITY_API_KEY', '')
+curl_bin = os.environ.get('CURL', 'curl')
+hf_query = os.environ.get('HF_QUERY', '')
+
 PROVIDER_DOMAINS = {
-    'Together': 'together.ai',
-    'Together AI': 'together.ai',
-    'Groq': 'groq.com',
-    'DeepInfra': 'deepinfra.com',
-    'Parasail': 'parasail.io',
-    'SambaNova': 'sambanova.ai',
+    'Together': 'together.ai', 'Together AI': 'together.ai',
+    'Groq': 'groq.com', 'DeepInfra': 'deepinfra.com',
+    'Parasail': 'parasail.io', 'SambaNova': 'sambanova.ai',
     'AtlasCloud': 'atlascloud.ai',
 }
-data = json.load(open('/tmp/blog_data/openrouter_providers.json'))
-for name in data.get('selected', []):
+
+_raw = open(f'{D}/openrouter_providers.json').read()
+_idx = _raw.find('{')
+data = json.loads(_raw[_idx:]) if _idx > 0 else json.loads(_raw)
+selected = data.get('selected', [])
+if not selected:
+    sys.exit(0)
+
+# Build one multi-query request for all providers
+queries = []
+for name in selected:
     domain = PROVIDER_DOMAINS.get(name, '')
-    print(f'{name}\t{domain}')
-" 2>/dev/null)
-        local pidx=0
-        while IFS=$'\t' read -r pname pdomain; do
-          [ -z "$pname" ] && continue
-          if [ -n "$pdomain" ]; then
-            echo "[pre-search] Tavily: searching provider '$pname' (site:$pdomain)"
-            _tavily_search "site:${pdomain} ${hf_query}" "/tmp/blog_data/tavily_provider_${pidx}.json"
-          else
-            echo "[pre-search] Tavily: searching provider '$pname' (by name)"
-            _tavily_search "\"${pname}\" API inference ${hf_query}" "/tmp/blog_data/tavily_provider_${pidx}.json"
-          fi
-          pidx=$((pidx + 1))
-        done <<< "$or_selected"
+    if domain:
+        queries.append(f"site:{domain} {hf_query} API")
+    else:
+        queries.append(f"{name} {hf_query} API inference")
+queries = queries[:5]  # Perplexity max 5 queries
+
+body = json.dumps({
+    'queries': queries,
+    'max_results': 5,
+    'max_tokens': 30000,
+    'max_tokens_per_page': 4096,
+    'search_recency_filter': 'month',
+})
+
+proxy_port2 = os.environ.get('https_proxy', '') or os.environ.get('http_proxy', '')
+curl_cmd2 = [curl_bin, '-sL', '--max-time', '30']
+if proxy_port2:
+    curl_cmd2 += ['-x', proxy_port2]
+curl_cmd2 += [
+     '-H', f'Authorization: Bearer {pplx_key}',
+     '-H', 'Content-Type: application/json',
+     '-X', 'POST', 'https://api.perplexity.ai/search',
+     '-d', body]
+result = subprocess.run(curl_cmd2, capture_output=True, text=True, timeout=35)
+
+try:
+    resp = json.loads(result.stdout)
+    results = resp.get('results', [])
+    converted = {
+        'results': [
+            {'title': r.get('title',''), 'url': r.get('url',''), 'content': r.get('snippet',''), 'date': r.get('date','')}
+            for r in results
+        ]
+    }
+    json.dump(converted, open(f"{D}/tavily_provider_0.json", 'w'), ensure_ascii=False)
+    print(f"[pre-search] Perplexity provider search: {len(results)} results for {len(queries)} queries", flush=True)
+except Exception as e:
+    print(f"[pre-search] Provider search failed: {e}", flush=True)
+PROV_SEARCH_EOF
       fi
     fi
   else
@@ -674,124 +566,62 @@ for name in data.get('selected', []):
 
   wait
 
-  # --- Phase 2: Parse HF repos, fetch config + README ---
-  # $1 = HF search JSON file, $2 = model query (e.g. "glm 4.7")
-  # Prefers exact normalized match over download-count order
-  parse_hf_repo() {
-    python3 -c "
-import sys,json,re
-query = sys.argv[1] if len(sys.argv) > 1 else ''
-def norm(s):
-    return re.sub(r'[^a-z0-9]', '', s.lower())
-query_sig = norm(query)
-SKIP={'unsloth','lmstudio-community','mlx-community','QuantTrio','RedHatAI','hugging-quants','GadflyII','cyankiwi','DavidAU','TeichAI','lukealonso'}
-try:
-  models = json.loads(sys.stdin.read())
-  valid = []
-  for m in models:
-    org=m['id'].split('/')[0]
-    if org in SKIP: continue
-    if any(x in m['id'] for x in ['-GGUF','-AWQ','-FP8','-quantized','-MLX','-NVFP4']): continue
-    valid.append(m)
-  # Pass 1: exact normalized match (e.g. 'glm47' matches 'GLM-4.7' but NOT 'GLM-4.7-Flash')
-  if query_sig:
-    for m in valid:
-      if norm(m['id'].split('/')[-1]) == query_sig:
-        print(m['id']); sys.exit()
-  # Pass 2: fallback to first valid by downloads (original behavior)
-  if valid:
-    print(valid[0]['id'])
-except: pass
-" "$2" < "$1" 2>/dev/null
-  }
-
-  if [ "$is_vs" -gt 0 ]; then
-    local repo_a=$(parse_hf_repo /tmp/blog_data/hf_a.json "$model_a")
-    local repo_b=""
-    [ -f /tmp/blog_data/hf_b.json ] && repo_b=$(parse_hf_repo /tmp/blog_data/hf_b.json "$model_b")
-  else
-    local repo_a=$(parse_hf_repo /tmp/blog_data/hf_a.json "$hf_query")
-    local repo_b=""
-  fi
-
-  echo "[pre-search] Repo A: ${repo_a:-NOT FOUND}"
-  [ "$is_vs" -gt 0 ] && echo "[pre-search] Repo B: ${repo_b:-NOT FOUND}"
-
-  # Fetch config.json + README.md + model detail API (parallel)
-  if [ -n "$repo_a" ]; then
-    fetch "https://huggingface.co/$repo_a/raw/main/config.json" > /tmp/blog_data/config_a.json 2>/dev/null &
-    fetch "https://huggingface.co/$repo_a/raw/main/README.md" > /tmp/blog_data/readme_a.md 2>/dev/null &
-    fetch "https://huggingface.co/api/models/$repo_a" > /tmp/blog_data/hf_detail_a.json 2>/dev/null &
-  fi
-  if [ -n "$repo_b" ]; then
-    fetch "https://huggingface.co/$repo_b/raw/main/config.json" > /tmp/blog_data/config_b.json 2>/dev/null &
-    fetch "https://huggingface.co/$repo_b/raw/main/README.md" > /tmp/blog_data/readme_b.md 2>/dev/null &
-    fetch "https://huggingface.co/api/models/$repo_b" > /tmp/blog_data/hf_detail_b.json 2>/dev/null &
-  fi
-
-  # Tool Integration docs: handled by RAG retrieval from novita-docs/guides/
-  # (cursor.txt, claude-code.txt, continue.txt, etc. are already indexed)
+  # (Phase 2 merged into Phase 1 above — parse_hf_repo + config/README fetch now runs right after HF search)
 
   wait
 
-  # --- Phase 2.5: Tavily extract — deep-read top citation URLs ---
-  local extract_urls
-  extract_urls=$(python3 << 'EXEOF'
-import json, os
-from urllib.parse import urlparse
-SKIP_DOMAINS = {'huggingface.co', 'novita.ai', 'reddit.com', 'arxiv.org', 'github.com'}
-seen = set()
-urls = []
-for pf in [f for f in sorted(os.listdir('/tmp/blog_data')) if f.startswith('tavily_') and f.endswith('.json') and '_extract' not in f]:
-    path = f"/tmp/blog_data/{pf}"
-    if not os.path.exists(path) or os.path.getsize(path) < 50:
-        continue
-    try:
-        with open(path) as f:
-            data = json.load(f)
-        for r in data.get('results', []):
-            u = r.get('url', '')
-            domain = urlparse(u).netloc.replace('www.', '')
-            if domain and not any(sd in domain for sd in SKIP_DOMAINS) and u not in seen:
-                seen.add(u)
-                urls.append(u)
-    except: pass
-# Print top 5 URLs as JSON array for batch extract
-import json as j
-print(j.dumps(urls[:5]))
-EXEOF
-)
-  if [ -n "$extract_urls" ] && [ "$extract_urls" != "[]" ]; then
-    echo "[pre-search] Tavily extract: deep-reading citation URLs..."
-    local extract_body
-    extract_body=$(python3 -c "
-import json, sys
-urls = json.loads(sys.argv[1])
-print(json.dumps({'urls': urls}))
-" "$extract_urls")
-    $CURL -sL --max-time 45 ${PROXY:+-x "$PROXY"} \
-      -H "Authorization: Bearer $tavily_key" \
-      -H "Content-Type: application/json" \
-      "https://api.ppinfra.com/v3/tavily/extract" \
-      -d "$extract_body" > /tmp/blog_data/tavily_extract.json 2>/dev/null
-    local extract_count
-    extract_count=$(python3 -c "
-import json
+  # --- Slim down novita.json: keep only models matching canonical org ---
+  if [ -f /tmp/blog_data/novita.json ] && [ -s /tmp/blog_data/novita.json ]; then
+    NOVITA_ORG="$hf_query" python3 -c "
+import json, re, os, sys
 try:
-    data = json.load(open('/tmp/blog_data/tavily_extract.json'))
-    print(len(data.get('results', [])))
-except: print(0)
-" 2>/dev/null)
-    echo "[pre-search] Tavily extract done ($extract_count pages)"
+    raw = open('/tmp/blog_data/novita.json').read()
+    try: data = json.loads(raw, strict=False)
+    except json.JSONDecodeError:
+        idx = raw.find('{')
+        data = json.loads(raw[idx:], strict=False) if idx >= 0 else {}
+    models = data.get('data', [])
+    if not models: sys.exit(0)
+    org = os.environ.get('NOVITA_ORG','').lower().split()[0] if os.environ.get('NOVITA_ORG') else ''
+    if not org: sys.exit(0)
+    kept = [m for m in models if org in m.get('id','').lower()]
+    data['data'] = kept
+    json.dump(data, open('/tmp/blog_data/novita.json','w'), ensure_ascii=False)
+    print(f'[pre-search] Novita: {len(models)} -> {len(kept)} models (org={org})')
+except Exception as e:
+    print(f'[pre-search] Novita filter error: {e}')
+" 2>/dev/null
   fi
 
+  # --- Clean up temp files ---
+  rm -f /tmp/_hf_search_a.json /tmp/_hf_search_b.json /tmp/_hf_unsloth_search.json /tmp/_hf_unsloth_tree.json
+
   # --- Phase 3: Generate formatted context using Python ---
-  BLOG_TOPIC="$topic" BLOG_MODEL_NAME="$hf_query" BLOG_REPO_A="$repo_a" BLOG_REPO_B="$repo_b" PROJECT_DIR="$SCRIPT_DIR" PPIO_API_KEY="$PPIO_API_KEY" python3 << 'PYEOF' > /tmp/blog_data/_context.txt
+  BLOG_TOPIC="$topic" BLOG_MODEL_NAME="$hf_query" BLOG_REPO_A="$repo_a" BLOG_REPO_B="$repo_b" PROJECT_DIR="$SCRIPT_DIR" PPIO_API_KEY="$PPIO_API_KEY" python3 << 'PYEOF'
 import json, os, re, html as html_lib
 from urllib.parse import unquote
 
 D = "/tmp/blog_data"
 ctx = []
+
+def safe_json_load(path):
+    """Load JSON from file, handling prefix lines and control characters."""
+    with open(path) as f:
+        raw = f.read()
+    # Try direct parse first (strict=False tolerates control chars in strings)
+    try:
+        return json.loads(raw, strict=False)
+    except json.JSONDecodeError:
+        pass
+    # Strip prefix lines until we find JSON start
+    for start_char in ['{', '[']:
+        idx = raw.find(start_char)
+        if idx > 0:
+            try:
+                return json.loads(raw[idx:], strict=False)
+            except json.JSONDecodeError:
+                pass
+    raise json.JSONDecodeError("No valid JSON found", raw[:100], 0)
 
 ARCH_KEYS = ['model_type','hidden_size','num_hidden_layers','num_attention_heads',
   'num_key_value_heads','intermediate_size','vocab_size','max_position_embeddings',
@@ -806,56 +636,28 @@ def fmt_params(n):
     if n >= 1e6: return f"{n/1e6:.0f}M"
     return str(n)
 
-def fmt_model(label, hf_path, config_path, readme_path, detail_path='', preferred_repo=''):
+def fmt_model(label, config_path, readme_path, detail_path='', preferred_repo=''):
     """Format one model's HF data."""
-    # Find repo — use pre-selected repo from parse_hf_repo() if available
-    repo = None
+    repo = preferred_repo or None
     total_params = ''
     total_params_raw = 0
-    other_variants = []
     def _get_param_count(st_data):
         """Extract parameter count from safetensors metadata, excluding I32 routing indices."""
         if not st_data: return 0
         params = st_data.get('parameters', {})
         if params:
-            # Sum only float/bfloat types (F16, BF16, F32, F8_E4M3, etc.), exclude I32/I64 routing tables
             weight_sum = sum(v for k, v in params.items() if not k.startswith('I'))
             if weight_sum > 0:
                 return weight_sum
-        # Fallback to total if no breakdown available
         return st_data.get('total', 0) or 0
 
-    try:
-        with open(hf_path) as f:
-            models = json.load(f)
-        SKIP = {'unsloth','lmstudio-community','mlx-community','QuantTrio','RedHatAI','hugging-quants','GadflyII','cyankiwi','DavidAU','TeichAI','lukealonso'}
-        valid = []
-        for m in models:
-            org = m['id'].split('/')[0]
-            if org in SKIP: continue
-            if any(x in m['id'] for x in ['-GGUF','-AWQ','-FP8','-quantized','-MLX','-NVFP4']): continue
-            valid.append(m)
-        # Prefer the repo already selected by parse_hf_repo()
-        if preferred_repo:
-            for m in valid:
-                if m['id'] == preferred_repo:
-                    repo = m['id']
-                    total_params_raw = _get_param_count(m.get('safetensors',{}))
-                    break
-        # Fallback to first valid
-        if not repo and valid:
-            repo = valid[0]['id']
-            total_params_raw = _get_param_count(valid[0].get('safetensors',{}))
-        # Collect other variants for confusion warning
-        if repo:
-            other_variants = [m['id'] for m in valid if m['id'] != repo]
-    except: pass
-    # Try model detail API for accurate safetensors data (search API often returns empty)
-    if detail_path and not total_params_raw:
+    # Get param count from detail API
+    if detail_path:
         try:
-            with open(detail_path) as f:
-                detail = json.load(f)
+            detail = safe_json_load(detail_path)
             total_params_raw = _get_param_count(detail.get('safetensors',{}))
+            if not repo:
+                repo = detail.get('id', '')
         except: pass
     # README param extraction — preferred for MoE models where safetensors counts may differ
     # from advertised total (e.g. compressed weights vs logical MoE params)
@@ -894,15 +696,6 @@ def fmt_model(label, hf_path, config_path, readme_path, detail_path='', preferre
     ctx.append(f"--- {label} ---")
     if not repo:
         ctx.append("HuggingFace repo: NOT FOUND (model may use a different name on HF)")
-        # Show top 5 search results so model can identify the right one
-        try:
-            with open(hf_path) as f:
-                models = json.load(f)
-            ctx.append("HF search results (top 5):")
-            for m in models[:5]:
-                st = m.get('safetensors',{})
-                ctx.append(f"  {m['id']}  params={st.get('total','')}  downloads={m.get('downloads','')}")
-        except: pass
         ctx.append("")
         return
 
@@ -928,19 +721,11 @@ def fmt_model(label, hf_path, config_path, readme_path, detail_path='', preferre
                     break
         except: pass
     ctx.append("")
-    # Warn about similar variants that could cause confusion
-    if other_variants:
-        ctx.append(f"⚠ VARIANT WARNING — these are DIFFERENT models, do NOT use their data:")
-        for v in other_variants[:5]:
-            ctx.append(f"  ✗ {v} — WRONG, different model")
-        ctx.append(f"  Only use data from: {repo}")
-        ctx.append("")
 
     # config.json — search top level AND nested sub-configs (text_config, llm_config, etc.)
     if os.path.exists(config_path) and os.path.getsize(config_path) > 10:
         try:
-            with open(config_path) as f:
-                config = json.load(f)
+            config = safe_json_load(config_path)
             ctx.append("Architecture (config.json):")
             found_keys = {}
             # Search top level first, then nested dicts (text_config, llm_config, language_config, etc.)
@@ -1273,289 +1058,65 @@ ctx.append("")
 # Model data
 repo_a_env = os.environ.get('BLOG_REPO_A', '')
 repo_b_env = os.environ.get('BLOG_REPO_B', '')
-if os.path.exists(f"{D}/hf_a.json"):
-    label_a = "Model A" if os.path.exists(f"{D}/hf_b.json") else "Model"
-    fmt_model(label_a, f"{D}/hf_a.json", f"{D}/config_a.json", f"{D}/readme_a.md", f"{D}/hf_detail_a.json", repo_a_env)
-if os.path.exists(f"{D}/hf_b.json"):
-    fmt_model("Model B", f"{D}/hf_b.json", f"{D}/config_b.json", f"{D}/readme_b.md", f"{D}/hf_detail_b.json", repo_b_env)
+if repo_a_env or os.path.exists(f"{D}/hf_detail_a.json"):
+    label_a = "Model A" if (repo_b_env or os.path.exists(f"{D}/hf_detail_b.json")) else "Model"
+    fmt_model(label_a, f"{D}/config_a.json", f"{D}/readme_a.md", f"{D}/hf_detail_a.json", repo_a_env)
+if repo_b_env or os.path.exists(f"{D}/hf_detail_b.json"):
+    fmt_model("Model B", f"{D}/config_b.json", f"{D}/readme_b.md", f"{D}/hf_detail_b.json", repo_b_env)
 
-# Tavily web research — collect raw data for filtering
-# Instead of dumping raw search+extract into context, we:
-# 1. Python pre-filter: dedup, truncate, basic cleanup → ~15K
-# 2. MiniMax-M2.5 API: semantic filter → ~3-4K structured summary
-# This keeps context compact so claude -p can focus on SKILL.md rules.
+# Web research — Perplexity search snippets direct into context
 
-def _collect_tavily_raw():
-    """Collect all Tavily search + extract data into a single pre-filter string."""
-    parts = []
-    seen_urls = set()
-    extract_urls = set()
-
-    # Identify URLs with extract data (skip their snippets later)
-    extract_path = f"{D}/tavily_extract.json"
-    if os.path.exists(extract_path) and os.path.getsize(extract_path) > 50:
-        try:
-            with open(extract_path) as f:
-                edata = json.load(f)
-            for r in edata.get('results', []):
-                if r.get('raw_content'):
-                    extract_urls.add(r.get('url', ''))
-        except: pass
-
-    # Search results: answer + deduplicated snippets (dynamic from fan-out)
-    # Load fan-out query labels if available
-    _fanout_labels = {}
-    _fq_path = f"{D}/_fanout_queries.json"
-    if os.path.exists(_fq_path):
-        try:
-            _fq_list = json.load(open(_fq_path))
-            for _i, _q in enumerate(_fq_list):
-                _fanout_labels[f"tavily_fanout_{_i}.json"] = _q[:60]
-        except: pass
-    # Collect all tavily search files (fanout + provider, skip extract)
-    _tavily_files = []
-    for _fn in sorted(os.listdir(D)):
-        if _fn.startswith('tavily_') and _fn.endswith('.json') and '_extract' not in _fn and '_queries' not in _fn:
-            _label = _fanout_labels.get(_fn, _fn.replace('.json','').replace('tavily_',''))
-            _tavily_files.append((_fn, _label))
-    for fname, label in _tavily_files:
-        path = f"{D}/{fname}"
-        if not os.path.exists(path) or os.path.getsize(path) < 50:
+# --- Web Research: Perplexity search snippets (direct, no LLM filter needed) ---
+from urllib.parse import urlparse as _urlparse
+_seen_urls = set()
+_seen_domains = {}  # domain -> count (max 2 per domain to avoid duplicate content)
+_web_parts = []
+for _fn in sorted(os.listdir(D)):
+    if _fn.startswith('tavily_') and _fn.endswith('.json') and '_queries' not in _fn:
+        _path = f"{D}/{_fn}"
+        if not os.path.exists(_path) or os.path.getsize(_path) < 50:
             continue
         try:
-            with open(path) as f:
-                data = json.load(f)
-            results = data.get('results', [])
-            answer = data.get('answer', '')
-            parts.append(f"=== {label} ===")
-            if answer:
-                parts.append(answer[:500])
-            for r in results:
+            _data = safe_json_load(_path)
+            for r in _data.get('results', []):
                 url = r.get('url', '')
-                if url in seen_urls: continue
-                seen_urls.add(url)
+                if url in _seen_urls: continue
+                _seen_urls.add(url)
+                # Domain-level dedup: max 2 results per domain
+                _domain = _urlparse(url).netloc.replace('www.', '')
+                _seen_domains[_domain] = _seen_domains.get(_domain, 0) + 1
+                if _seen_domains[_domain] > 2: continue
+                # Skip non-English results (titles in CJK, Cyrillic, or with common non-EN URL patterns)
                 title = r.get('title', '')
+                _path_lower = url.lower()
+                if any(p in _path_lower for p in ['/nl/', '/it/', '/de/', '/fr/', '/es/', '/pt/', '/ja/', '/ko/', '/zh/', '/ru/']):
+                    continue
                 content = r.get('content', '')
-                if url in extract_urls:
-                    parts.append(f"[{title}] {url} (full text below)")
-                elif content:
-                    parts.append(f"[{title}] {url}")
-                    parts.append(content[:1000])
-            parts.append("")
+                if content:
+                    _web_parts.append(f"[{title}] {url}")
+                    _web_parts.append(content[:1500])
         except: pass
 
-    # Provider search results
-    for i in range(3):
-        prov_path = f"{D}/tavily_provider_{i}.json"
-        if os.path.exists(prov_path) and os.path.getsize(prov_path) > 50:
-            try:
-                with open(prov_path) as f:
-                    data = json.load(f)
-                results = data.get('results', [])
-                answer = data.get('answer', '')
-                parts.append(f"=== Provider {i} ===")
-                if answer:
-                    parts.append(answer[:500])
-                for r in results:
-                    url = r.get('url', '')
-                    if url in seen_urls: continue
-                    seen_urls.add(url)
-                    parts.append(f"[{r.get('title','')}] {url}")
-                    parts.append(r.get('content', '')[:1000])
-                parts.append("")
-            except: pass
-
-    # Extract results: all pages, truncated to 8000 chars each
-    if os.path.exists(extract_path) and os.path.getsize(extract_path) > 50:
-        try:
-            with open(extract_path) as f:
-                edata = json.load(f)
-            extracts = sorted(edata.get('results', []),
-                            key=lambda e: -len(e.get('raw_content', '')))
-            for e in extracts:
-                content = e.get('raw_content', '')
-                if not content or len(content) < 100: continue
-                parts.append(f"=== Extract: {e.get('url','')} ===")
-                parts.append(content[:8000])
-                parts.append("")
-        except: pass
-
-    return '\n'.join(parts)
-
-
-def _llm_filter(pre_text):
-    """Call MiniMax-M2.5 via PPIO API to semantically filter pre-compressed search data."""
-    import urllib.request as _ur
-    api_key = os.environ.get('PPIO_API_KEY', '')
-    if not api_key or not pre_text.strip():
-        return pre_text  # fallback: return unfiltered
-
-    prompt = f"""You are a research data filter. Compress the following web search data into a concise, source-attributed context for an article writer.
-
-CANONICAL MODEL: {canonical_name}
-
-RAW DATA:
-{pre_text}
-
-INSTRUCTIONS:
-1. Remove anything NOT about "{canonical_name}" exactly (wrong model versions, unrelated topics)
-2. KEEP: practical insights, real-world user experiences, deployment tips, gotchas, performance observations, cost experiences, community opinions (both positive and negative)
-3. REMOVE: specs/benchmarks (writer gets those from HuggingFace), code snippets, setup boilerplate, navigation/UI text
-4. CONTEXT PRESERVATION (CRITICAL): Every fact must retain its original scope and conditions:
-   - If a capability is provider-specific, prefix with the provider name: "[on Together AI] supports 100K context"
-   - If a feature is only available via official API (not open-source), say so: "[Alibaba official API only] 1M context via YaRN"
-   - If data comes from a competitor/vendor blog, tag it: "[vendor: haimaker.ai] claims lowest pricing"
-   - If a comparison involves a specific model, note its current status if known: "[GPT-4o — deprecated]"
-   - NEVER strip the qualifying conditions from a fact. "Provider X offers 100K" must NOT become just "supports 100K"
-
-SOURCE ATTRIBUTION FORMAT (CRITICAL):
-- First, list all cited source URLs as a numbered index, with source TYPE tag:
-  [1] [provider-page] https://example.com/provider-offering
-  [2] [reddit-thread] https://reddit.com/r/LocalLLaMA/...
-  [3] [vendor-blog] https://competitor.ai/blog/...
-  [4] [official-docs] https://huggingface.co/...
-  [5] [tech-blog] https://medium.com/...
-  Source types: provider-page | reddit-thread | vendor-blog | official-docs | tech-blog | tutorial | benchmark-site
-- Then, EVERY fact/insight in the body MUST end with its source number(s), e.g.:
-  "[on Novita AI] runs at 57 tokens/s [1]. Reddit users report context lengths above 32K cause significant slowdown [2][5]."
-- A sentence without a source number is UNACCEPTABLE. If you cannot attribute it, drop it.
-
-OUTPUT FORMAT:
-SOURCES:
-[1] [source-type] url1
-[2] [source-type] url2
-...
-
-PERFORMANCE:
-[facts with source context and numbers]
-
-DEPLOYMENT:
-[facts with source context and numbers]
-
-COMMUNITY:
-[facts with source context and numbers]
-
-COST:
-[facts with source context and numbers]
-
-CONSTRAINTS:
-- Max 12000 characters total (source index + body). Use the space — more context = better article.
-- Write in English
-- Output directly, no preamble"""
-
-    payload = json.dumps({
-        'model': 'minimax/minimax-m2.5',
-        'messages': [{'role': 'user', 'content': prompt}],
-        'max_tokens': 6000,
-        'temperature': 0.3,
-    }).encode()
-
-    req = _ur.Request(
-        'https://api.ppinfra.com/v3/openai/chat/completions',
-        data=payload,
-        headers={
-            'Authorization': f'Bearer {api_key}',
-            'Content-Type': 'application/json',
-        },
-    )
-    try:
-        opener = _ur.build_opener(_ur.ProxyHandler({}))
-        with opener.open(req, timeout=90) as resp:
-            data = json.loads(resp.read().decode())
-        content = data['choices'][0]['message']['content']
-        # Strip thinking tags if present
-        if '<think>' in content:
-            content = re.sub(r'<think>[\s\S]*?</think>', '', content).strip()
-        return content
-    except Exception as e:
-        print(f"[pre-search] LLM filter failed ({e}), using Python-only pre-filter", flush=True)
-        return pre_text  # fallback
-
-# --- Search coverage summary (helps architect gauge data density per angle) ---
-_fq_path = f"{D}/_fanout_queries.json"
-if os.path.exists(_fq_path):
-    try:
-        _fq_list = json.load(open(_fq_path))
-        ctx.append("--- Search Coverage (fan-out queries → result count) ---")
-        for _i, _q in enumerate(_fq_list):
-            _fp = f"{D}/tavily_fanout_{_i}.json"
-            _cnt = 0
-            if os.path.exists(_fp) and os.path.getsize(_fp) > 50:
-                try:
-                    _cnt = len(json.load(open(_fp)).get('results', []))
-                except: pass
-            density = "rich" if _cnt >= 4 else "moderate" if _cnt >= 2 else "sparse"
-            ctx.append(f"  [{density:8s}] ({_cnt} results) {_q}")
-        ctx.append("Use this to gauge which angles have strong data support (→ expand) vs sparse (→ keep brief or skip).")
-        ctx.append("")
-    except: pass
-
-# --- Run the filtering pipeline ---
-_raw_web = _collect_tavily_raw()
-if _raw_web.strip():
-    print(f"[pre-search] Web data pre-filter: {len(_raw_web):,} chars", flush=True)
-    _filtered = _llm_filter(_raw_web)
-    print(f"[pre-search] LLM filter: {len(_raw_web):,} → {len(_filtered):,} chars", flush=True)
-
-    ctx.append("--- Web Research (filtered by relevance to article topic) ---")
+if _web_parts:
+    ctx.append("--- Web Research (Perplexity Search) ---")
     ctx.append(f"⚠ CITATION VERSION CHECK: canonical model = \"{canonical_name}\"")
-    ctx.append(f"  Before citing ANY source below, verify it discusses THIS EXACT version.")
-    ctx.append(f"  Sources about different versions (V3 ≠ V3.2, M2 ≠ M2.1, base ≠ Exp/Flash/Lite) → do NOT cite.")
+    ctx.append("  Before citing ANY source, verify it discusses THIS EXACT version.")
     ctx.append("NOTE: Use web research for practical insights (tips, gotchas, use cases) only.")
     ctx.append("Do NOT re-use specs/benchmarks from here — those come from HuggingFace ONLY.")
     ctx.append("")
-    ctx.append(_filtered)
+    ctx.append('\n'.join(_web_parts))
     ctx.append("")
+    import sys as _sys; print(f"[pre-search] Web research: {len(_seen_urls)} sources, {len(chr(10).join(_web_parts)):,} chars", file=_sys.stderr, flush=True)
 
-# OpenRouter provider data (API Provider articles — parsed from model page SSR)
-or_prov_path = f"{D}/openrouter_providers.json"
-if os.path.exists(or_prov_path) and os.path.getsize(or_prov_path) > 50:
-    try:
-        with open(or_prov_path) as f:
-            or_data = json.load(f)
-        all_provs = or_data.get('all', [])
-        selected = or_data.get('selected_details', [])
-        model_id = or_data.get('model_id', '')
-
-        if all_provs:
-            ctx.append(f"--- OpenRouter Provider Data for {model_id} ---")
-            ctx.append(f"Source: https://openrouter.ai/{model_id}")
-            ctx.append("NOTE: OpenRouter is a DATA SOURCE / aggregator — it is NOT an API provider itself. Do NOT list OpenRouter as a provider in the article.")
-            ctx.append(f"Total providers on OpenRouter: {len(all_provs)}")
-            ctx.append("")
-
-            # Full provider table (all providers)
-            ctx.append("ALL PROVIDERS (from OpenRouter — use this data directly for price/latency/throughput/uptime, do NOT fabricate or use Perplexity for these):")
-            ctx.append("| Provider | Quant | Input $/M | Output $/M | Latency | Throughput | Uptime% | Context |")
-            ctx.append("|----------|-------|-----------|------------|---------|------------|---------|---------|")
-            for p in sorted(all_provs, key=lambda x: x['output_price']):
-                lat = f"{p['latency_ms']:.0f}ms" if p.get('latency_ms') else "N/A"
-                thr = f"{p['throughput_tps']:.0f} t/s" if p.get('throughput_tps') else "N/A"
-                up = f"{p['uptime_pct']:.1f}" if p.get('uptime_pct') else "N/A"
-                ctx.append(f"| {p['name']} | {p['quantization']} | ${p['input_price']:.2f} | ${p['output_price']:.2f} | {lat} | {thr} | {up} | {p['context_length']} |")
-            ctx.append("")
-
-            # Selected providers for the article — each chosen for a different strength
-            if selected:
-                sel_info = [f"{s['name']} ({s.get('_selected_reason','?')})" for s in selected]
-                ctx.append(f"SELECTED PROVIDERS for article (each with a different strength vs Novita AI): {sel_info}")
-                ctx.append("Novita AI is ALWAYS included. Use these 2-3 as competitors, highlighting their unique advantage (cheapest / lowest latency / highest throughput).")
-                ctx.append("PRICING/PERFORMANCE: Use the OpenRouter table above. Provider search data is included in the filtered web research above.")
-                ctx.append("")
-
-    except:
-        pass
-
-# Tool integration docs are now handled by RAG retrieval (see below)
-# Tavily extract data is now included in the filtered web research above (_collect_tavily_raw + _llm_filter)
+# OpenRouter / HF Inference data: Write Agent reads JSON files directly via DATA_MAP
+# (openrouter_providers.json, hf_inference.json, openrouter_endpoints.json)
 
 # Novita AI pricing (from /v3/openai/models API)
 # FILTER to only show relevant models — prevent version confusion (e.g. V3 vs V3.2)
 novita_path = f"{D}/novita.json"
 if os.path.exists(novita_path) and os.path.getsize(novita_path) > 50:
     try:
-        with open(novita_path) as f:
-            novita_data = json.load(f)
+        novita_data = safe_json_load(novita_path)
         models_list = novita_data.get('data', [])
         if models_list:
             ctx.append("--- Novita AI Pricing (USD per 1M tokens) ---")
@@ -1619,79 +1180,48 @@ if os.path.exists(novita_path) and os.path.getsize(novita_path) > 50:
             ctx.append("")
     except: pass
 
-# Novita AI GPU Instance Pricing (static reference for VRAM/deployment articles)
-# HuggingFace Inference Provider data (throughput, pricing, latency)
-hf_inf_path = f"{D}/hf_inference.json"
-hf_provider_count = 0
-if os.path.exists(hf_inf_path) and os.path.getsize(hf_inf_path) > 50:
+gpu_path = f"{D}/novita_gpu_products.json"
+_gpu_written = False
+if os.path.exists(gpu_path) and os.path.getsize(gpu_path) > 50:
     try:
-        hf_inf_data = json.load(open(hf_inf_path))
-        providers = []
-        for m in hf_inf_data[:1]:
-            for item in m.get('inferenceProviderMapping', []):
-                if item.get('status') != 'live':
-                    continue
-                perf = item.get('performance', {})
-                details = item.get('providerDetails', {})
-                pricing = details.get('pricing', {})
-                features = item.get('features', {})
-                providers.append({
-                    'provider': item.get('provider', '?'),
-                    'input_price': pricing.get('input'),
-                    'output_price': pricing.get('output'),
-                    'context': details.get('context_length'),
-                    'ttft_s': perf.get('firstTokenLatencyMs', 0) / 1000,
-                    'throughput': perf.get('tokensPerSecond', 0),
-                    'tools': features.get('toolCalling', False),
-                    'structured': features.get('structuredOutput', False),
-                })
-        hf_provider_count = len(providers)
-        if providers:
-            ctx.append(f"--- HuggingFace Inference Providers ({len(providers)} live) ---")
-            ctx.append("Source: HuggingFace Inference Provider benchmarks — use this data for throughput, pricing, and cost comparison")
-            ctx.append("Provider | Input $/M | Output $/M | Context | TTFT(s) | Throughput(t/s) | Tools | Structured")
-            for p in providers:
-                inp = f"${p['input_price']}" if p['input_price'] is not None else "N/A"
-                out = f"${p['output_price']}" if p['output_price'] is not None else "N/A"
-                ctx_val = f"{p['context']:,}" if p['context'] else "N/A"
-                tools = "Yes" if p['tools'] else "No"
-                structured = "Yes" if p['structured'] else "No"
-                ctx.append(f"  {p['provider']} | {inp} | {out} | {ctx_val} | {p['ttft_s']:.2f} | {p['throughput']:.0f} | {tools} | {structured}")
-            throughputs = [p['throughput'] for p in providers if p['throughput'] > 0]
-            if throughputs:
-                avg_tps = sum(throughputs) / len(throughputs)
-                ctx.append(f"Average throughput: {avg_tps:.0f} tokens/s (use for cost comparison: tokens/s → hours to process workload → $/month)")
+        gpu_data = safe_json_load(gpu_path)
+        products = gpu_data if isinstance(gpu_data, list) else gpu_data.get('products', gpu_data.get('data', []))
+        if products:
+            ctx.append("--- Novita AI GPU Instance Pricing (https://novita.ai/gpu-instance) ---")
+            ctx.append("Source: novita.ai live API via cnovita CLI — use these REAL prices, do NOT make up GPU costs")
+            for p in products:
+                name = p.get('gpu_type') or p.get('name') or p.get('product_name', '')
+                vram = p.get('gpu_memory') or p.get('vram') or p.get('memory', '')
+                if vram:
+                    vram = f"{vram}GB VRAM" if str(vram).isdigit() else str(vram)
+                od = p.get('on_demand_price') or p.get('price') or p.get('hourly_price')
+                spot = p.get('spot_price') or p.get('preemptible_price')
+                gpu_num = p.get('gpu_num', 1)
+                label = f"  {name}" + (f" {vram}" if vram else "") + (f" (x{gpu_num})" if gpu_num and int(gpu_num) > 1 else "")
+                pricing = ""
+                if od:
+                    pricing += f"On-Demand ${float(od):.2f}/hr"
+                if spot:
+                    pricing += f" | Spot ${float(spot):.2f}/hr"
+                if pricing:
+                    ctx.append(f"{label}: {pricing}")
+            ctx.append("IMPORTANT: When writing about GPU deployment costs, use these Novita prices as reference.")
+            ctx.append("  For multi-GPU setups, calculate from single-GPU price × count.")
             ctx.append("")
-    except:
+            _gpu_written = True
+    except Exception as _e:
         pass
 
-# OpenRouter throughput data (fallback if HF has < 3 providers)
-if hf_provider_count < 3:
-    or_ep_path = f"{D}/openrouter_endpoints.json"
-    if os.path.exists(or_ep_path) and os.path.getsize(or_ep_path) > 100:
-        try:
-            with open(or_ep_path) as f:
-                ep_raw = json.load(f)
-            endpoints = ep_raw.get('data', {}).get('endpoints', [])
-            throughputs = [ep.get('throughput_last_30m') for ep in endpoints if ep.get('throughput_last_30m')]
-            if throughputs:
-                avg_tps = sum(throughputs) / len(throughputs)
-                ctx.append(f"--- OpenRouter Inference Speed (supplementary, from {len(throughputs)} providers) ---")
-                ctx.append(f"Average throughput: {avg_tps:.0f} tokens/s")
-                ctx.append(f"Range: {min(throughputs):.0f} - {max(throughputs):.0f} tokens/s")
-                ctx.append("")
-        except:
-            pass
-
-ctx.append("--- Novita AI GPU Instance Pricing (https://novita.ai/gpu-instance) ---")
-ctx.append("Source: novita.ai/gpu-instance — use these REAL prices, do NOT make up GPU costs")
-ctx.append("  RTX 5090 32GB VRAM: On-Demand $0.63/hr (1x), $5.04/hr (8x) | Spot $0.32/hr (1x), $2.56/hr (8x)")
-ctx.append("  RTX 4090 24GB VRAM: On-Demand $0.67/hr (1x), $5.36/hr (8x)")
-ctx.append("  H100 SXM 80GB VRAM: On-Demand $1.45/hr (1x), $11.60/hr (8x) | Spot $0.73/hr (1x), $5.84/hr (8x)")
-ctx.append("  Storage: Container Disk 60GB free then $0.005/GB/day | Volume Disk $0.005/GB/day | Network Volume $0.002/GB/day")
-ctx.append("IMPORTANT: When writing about GPU deployment costs, use these Novita prices as reference.")
-ctx.append("  For multi-GPU setups, calculate from single-GPU price × count (e.g., 4×H100 = $5.80/hr on-demand).")
-ctx.append("")
+if not _gpu_written:
+    ctx.append("--- Novita AI GPU Instance Pricing (https://novita.ai/gpu-instance) ---")
+    ctx.append("Source: novita.ai/gpu-instance — use these REAL prices, do NOT make up GPU costs")
+    ctx.append("  RTX 5090 32GB VRAM: On-Demand $0.63/hr (1x), $5.04/hr (8x) | Spot $0.32/hr (1x), $2.56/hr (8x)")
+    ctx.append("  RTX 4090 24GB VRAM: On-Demand $0.67/hr (1x), $5.36/hr (8x)")
+    ctx.append("  H100 SXM 80GB VRAM: On-Demand $1.45/hr (1x), $11.60/hr (8x) | Spot $0.73/hr (1x), $5.84/hr (8x)")
+    ctx.append("  Storage: Container Disk 60GB free then $0.005/GB/day | Volume Disk $0.005/GB/day | Network Volume $0.002/GB/day")
+    ctx.append("IMPORTANT: When writing about GPU deployment costs, use these Novita prices as reference.")
+    ctx.append("  For multi-GPU setups, calculate from single-GPU price × count (e.g., 4×H100 = $5.80/hr on-demand).")
+    ctx.append("")
 
 # Unsloth GGUF quantization sizes (from HuggingFace API)
 import glob as _glob
@@ -1701,7 +1231,7 @@ if gguf_files:
     for gf in gguf_files:
         quant = os.path.basename(gf).replace('hf_gguf_', '').replace('.json', '')
         try:
-            files = json.load(open(gf))
+            files = safe_json_load(gf)
             total = sum(f.get('size', 0) for f in files if f.get('type') == 'file')
             if total > 0:
                 sizes.append((quant, total / 1e9))
@@ -1714,7 +1244,7 @@ if gguf_files:
         # Detect MoE: check if config has n_routed_experts
         _is_moe = False
         try:
-            _cfg = json.load(open(f"{D}/config_a.json"))
+            _cfg = safe_json_load(f"{D}/config_a.json")
             for _layer in [_cfg] + [v for v in _cfg.values() if isinstance(v, dict)]:
                 if 'n_routed_experts' in _layer or 'num_local_experts' in _layer:
                     _is_moe = True; break
@@ -1784,8 +1314,6 @@ else:
         _missing.append("README content (no benchmarks, intro, or key sections extracted)")
 if '--- Unsloth GGUF' not in _ctx_joined:
     _missing.append("Unsloth GGUF quantization sizes")
-if '--- HuggingFace Inference Providers' not in _ctx_joined:
-    _missing.append("HuggingFace Inference Provider data")
 if '--- Novita AI Pricing' not in _ctx_joined:
     _missing.append("Novita AI API pricing")
 if '--- Web Research' not in _ctx_joined:
@@ -1796,7 +1324,7 @@ if _missing:
     ctx.append("⚠ DATA COMPLETENESS WARNING — the following data was NOT found during pre-search:")
     for m in _missing:
         ctx.append(f"  • MISSING: {m}")
-    ctx.append("You MUST use `source /tmp/blog_search_env.sh && fetch \"URL\"` or tavily_search to find this data yourself.")
+    ctx.append("You MUST use `source /tmp/blog_search_env.sh && fetch \"URL\"` to find this data yourself.")
     ctx.append("Do NOT guess or make up data for missing items.")
 
 ctx.append("=== END PRE-FETCHED DATA ===")
@@ -1805,7 +1333,7 @@ with open(f"{D}/_context.txt", 'w') as f:
     f.write('\n'.join(ctx))
 
 total = len('\n'.join(ctx))
-print(f"[pre-search] Context: {total} chars, files: {len([x for x in os.listdir(D) if not x.startswith('_')])}")
+import sys as _sys2; print(f"[pre-search] Context: {total} chars, files: {len([x for x in os.listdir(D) if not x.startswith('_')])}", file=_sys2.stderr)
 PYEOF
 }
 
@@ -1816,23 +1344,44 @@ extract_review() {
 
   python3 << 'REVIEW_EOF' > /tmp/blog_data/_review.json
 import json, os, glob, re
+from urllib.parse import urlparse
 
 D = "/tmp/blog_data"
 sources = []
 seen_urls = set()
+seen_domains = {}  # domain -> count
 
-# Extract sources from tavily search results
+def safe_json_load(path):
+    raw = open(path).read()
+    try: return json.loads(raw, strict=False)
+    except json.JSONDecodeError: pass
+    for ch in ['{', '[']:
+        idx = raw.find(ch)
+        if idx > 0:
+            try: return json.loads(raw[idx:], strict=False)
+            except: pass
+    raise json.JSONDecodeError("No valid JSON", raw[:100], 0)
+
+# Extract sources from Perplexity search results
 for fname in sorted(glob.glob(f"{D}/tavily_*.json")):
-    if '_extract' in fname:
-        continue
     try:
-        with open(fname) as f:
-            data = json.load(f)
+        data = safe_json_load(fname)
         category = os.path.basename(fname).replace('.json','').replace('tavily_','')
         for r in data.get('results', []):
             url = r.get('url', '')
             if url and url not in seen_urls:
                 seen_urls.add(url)
+                # Domain-level dedup: max 2 per domain
+                domain = urlparse(url).netloc.replace('www.', '')
+                seen_domains[domain] = seen_domains.get(domain, 0) + 1
+                if seen_domains[domain] > 2: continue
+                # Skip non-English URLs (path patterns, .cn TLD, non-ASCII)
+                if any(p in url.lower() for p in ['/nl/', '/it/', '/de/', '/fr/', '/es/', '/pt/', '/ja/', '/ko/', '/zh/', '/ru/']):
+                    continue
+                if domain.endswith('.cn') or domain.endswith('.com.cn'):
+                    continue
+                if not url.isascii():
+                    continue
                 sources.append({
                     'title': r.get('title', ''),
                     'url': url,
@@ -1850,8 +1399,7 @@ for name in ['hf_detail_a.json']:
     if not os.path.exists(path):
         continue
     try:
-        with open(path) as f:
-            data = json.load(f)
+        data = safe_json_load(path)
         if isinstance(data, dict) and 'id' in data:
             hf_repo = data['id']
             st = data.get('safetensors', {})
@@ -1864,20 +1412,6 @@ for name in ['hf_detail_a.json']:
             break
     except:
         pass
-if not hf_repo:
-    path = f"{D}/hf_a.json"
-    if os.path.exists(path):
-        try:
-            with open(path) as f:
-                data = json.load(f)
-            if isinstance(data, list) and data:
-                hf_repo = data[0].get('id', '')
-                total = data[0].get('safetensors', {}).get('total', 0)
-                if total and total >= 1e9:
-                    hf_params = f"{total/1e9:.1f}B"
-        except:
-            pass
-
 # Add HF as source
 if hf_repo:
     sources.insert(0, {
@@ -1887,11 +1421,12 @@ if hf_repo:
         'category': 'huggingface',
     })
 
+
 # Read context
 context = ''
 ctx_path = f"{D}/_context.txt"
 if os.path.exists(ctx_path):
-    context = open(ctx_path).read()
+    context = open(ctx_path, errors='replace').read()
 
 # Extract Novita pricing match from context
 novita_match = ''
@@ -1904,8 +1439,7 @@ provider_count = 0
 or_path = f"{D}/openrouter_providers.json"
 if os.path.exists(or_path):
     try:
-        with open(or_path) as f:
-            or_data = json.load(f)
+        or_data = safe_json_load(or_path)
         provider_count = len(or_data.get('all', []))
     except:
         pass
@@ -1935,7 +1469,7 @@ REVIEW_EOF
 run_search_more() {
   local JOBID="$1" TOPIC="$2" FEEDBACK="$3" REMOVED_URLS="$4"
 
-  echo "[worker] [$JOBID] Phase: additional search (MiniMax M2.5) — $FEEDBACK"
+  echo "[worker] [$JOBID] Phase: additional search — $FEEDBACK"
   source /tmp/blog_search_env.sh
 
   # Restore saved data
@@ -1949,16 +1483,15 @@ run_search_more() {
         echo "$_ctx" > /tmp/blog_data/_context.txt
       fi
 
-      SEARCH_TOPIC="$TOPIC" SEARCH_FEEDBACK="$FEEDBACK" PPIO_API_KEY="$PPIO_API_KEY" TAVILY_API_KEY="${TAVILY_API_KEY:-}" CURL_BIN="$CURL" PROXY_URL="${PROXY:-}" python3 << 'SEARCH_MORE_EOF'
-import json, os, re, urllib.request as ur
+      SEARCH_TOPIC="$TOPIC" SEARCH_FEEDBACK="$FEEDBACK" PPIO_API_KEY="$PPIO_API_KEY" PERPLEXITY_API_KEY="$PERPLEXITY_API_KEY" CURL_BIN="$CURL" python3 << 'SEARCH_MORE_EOF'
+import json, os, re, subprocess, urllib.request as ur
 
 D = "/tmp/blog_data"
 topic = os.environ.get('SEARCH_TOPIC', '')
 feedback = os.environ.get('SEARCH_FEEDBACK', '')
 ppio_key = os.environ.get('PPIO_API_KEY', '')
-tavily_key = os.environ.get('TAVILY_API_KEY', '')
+pplx_key = os.environ.get('PERPLEXITY_API_KEY', '')
 curl_bin = os.environ.get('CURL_BIN', 'curl')
-proxy_url = os.environ.get('PROXY_URL', '')
 
 # Strip keywords to get canonical model name (same logic as pre_search)
 def strip_kw(text):
@@ -1972,10 +1505,10 @@ def strip_kw(text):
 model_name = strip_kw(topic)
 print(f"[search_more] Model: '{model_name}', Feedback: '{feedback}'", flush=True)
 
-# --- Step 1: MiniMax M2.5 generates Tavily queries ---
+# --- Step 1: MiniMax M2.5 generates search queries ---
 queries = []
 if ppio_key:
-    prompt = f"""You are a search query optimizer. Given a model name and user feedback, generate 1-2 precise Tavily search queries.
+    prompt = f"""You are a search query optimizer. Given a model name and user feedback, generate 1-3 concise search queries.
 
 MODEL NAME: {model_name}
 ORIGINAL TOPIC: {topic}
@@ -1983,12 +1516,13 @@ USER FEEDBACK: {feedback}
 
 RULES:
 - ALWAYS include the model name "{model_name}" in every query
+- Keep each query concise (under 12 words), like searching on Google
 - If user says data is wrong, search for authoritative sources (HuggingFace, official docs)
 - If user wants more sources, search for the specific type (Reddit, blogs, benchmarks, etc.)
 - Output ONLY a JSON array of query strings, nothing else
-- Max 2 queries
+- Max 3 queries
 
-Example output: ["{model_name} VRAM requirements GPU memory", "site:reddit.com {model_name} deployment experience"]"""
+Example output: ["{model_name} VRAM requirements", "{model_name} deployment tips reddit"]"""
 
     payload = json.dumps({
         'model': 'minimax/minimax-m2.5',
@@ -2008,7 +1542,6 @@ Example output: ["{model_name} VRAM requirements GPU memory", "site:reddit.com {
         content = data['choices'][0]['message']['content']
         if '<think>' in content:
             content = re.sub(r'<think>[\s\S]*?</think>', '', content).strip()
-        # Parse JSON array from response
         m = re.search(r'\[.*\]', content, re.DOTALL)
         if m:
             queries = json.loads(m.group())
@@ -2021,93 +1554,57 @@ if not queries:
     queries = [f"{model_name} {feedback}"]
     print(f"[search_more] Fallback queries: {queries}", flush=True)
 
-# --- Step 2: Execute Tavily searches ---
-import subprocess
-all_results = []
-for i, query in enumerate(queries[:2]):
+# --- Step 2: Perplexity multi-query search ---
+results = []
+if pplx_key:
     body = json.dumps({
-        'query': query,
-        'max_results': 5,
-        'search_depth': 'advanced',
-        'include_answer': True,
+        'queries': queries[:5],
+        'max_results': 10,
+        'max_tokens': 30000,
+        'max_tokens_per_page': 4096,
+        'search_recency_filter': 'month',
     })
-    outfile = f"{D}/tavily_additional_{i}.json"
-    cmd = [curl_bin, '-sL', '--max-time', '30',
-           '-H', f'Authorization: Bearer {tavily_key}',
-           '-H', 'Content-Type: application/json',
-           'https://api.ppinfra.com/v3/tavily/search',
-           '-d', body]
-    if proxy_url:
-        cmd.extend(['-x', proxy_url])
     try:
-        subprocess.run(cmd, capture_output=True, timeout=35)
-        if os.path.exists(outfile):
-            pass  # curl doesn't write to outfile by default
-        # Actually write via -o or capture stdout
-        result = subprocess.run(cmd, capture_output=True, timeout=35, text=True)
-        with open(outfile, 'w') as f:
-            f.write(result.stdout)
-        data = json.loads(result.stdout)
-        all_results.append(data)
-        rcount = len(data.get('results', []))
-        print(f"[search_more] Tavily query {i}: '{query}' → {rcount} results", flush=True)
+        proxy_sm = os.environ.get('https_proxy', '') or os.environ.get('http_proxy', '')
+        curl_sm = [curl_bin, '-sL', '--max-time', '30']
+        if proxy_sm:
+            curl_sm += ['-x', proxy_sm]
+        curl_sm += [
+             '-H', f'Authorization: Bearer {pplx_key}',
+             '-H', 'Content-Type: application/json',
+             '-X', 'POST', 'https://api.perplexity.ai/search',
+             '-d', body]
+        result = subprocess.run(curl_sm, capture_output=True, text=True, timeout=35)
+        resp = json.loads(result.stdout)
+        results = resp.get('results', [])
+        # Save as backward-compatible format
+        converted = {
+            'results': [
+                {'title': r.get('title',''), 'url': r.get('url',''), 'content': r.get('snippet',''), 'date': r.get('date','')}
+                for r in results
+            ]
+        }
+        json.dump(converted, open(f"{D}/tavily_additional_0.json", 'w'), ensure_ascii=False)
+        print(f"[search_more] Perplexity: {len(results)} results", flush=True)
     except Exception as e:
-        print(f"[search_more] Tavily query {i} failed: {e}", flush=True)
+        print(f"[search_more] Perplexity search failed: {e}", flush=True)
 
-# --- Step 3: MiniMax M2.5 filters results ---
-raw_parts = []
-for data in all_results:
-    answer = data.get('answer', '')
-    if answer:
-        raw_parts.append(answer[:500])
-    for r in data.get('results', []):
-        raw_parts.append(f"[{r.get('title','')}] {r.get('url','')}")
-        content = (r.get('content', '') or '')[:1000]
-        if content:
-            raw_parts.append(content)
-raw_text = '\n'.join(raw_parts)
-
-filtered = raw_text  # default: unfiltered
-if ppio_key and raw_text.strip():
-    filter_prompt = f"""Filter the following search results. Keep ONLY content about "{model_name}" exactly.
-
-RAW RESULTS:
-{raw_text}
-
-RULES:
-1. Remove anything NOT about "{model_name}" (wrong model versions, unrelated topics)
-2. KEEP: practical insights, deployment tips, performance data, user experiences, pricing info
-3. Every fact must include its source URL
-4. Max 4000 characters
-5. Output directly, no preamble"""
-
-    payload = json.dumps({
-        'model': 'minimax/minimax-m2.5',
-        'messages': [{'role': 'user', 'content': filter_prompt}],
-        'max_tokens': 2000,
-        'temperature': 0.3,
-    }).encode()
-    req = ur.Request(
-        'https://api.ppinfra.com/v3/openai/chat/completions',
-        data=payload,
-        headers={'Authorization': f'Bearer {ppio_key}', 'Content-Type': 'application/json'},
-    )
-    try:
-        opener = ur.build_opener(ur.ProxyHandler({}))
-        with opener.open(req, timeout=60) as resp:
-            data = json.loads(resp.read().decode())
-        filtered = data['choices'][0]['message']['content']
-        if '<think>' in filtered:
-            filtered = re.sub(r'<think>[\s\S]*?</think>', '', filtered).strip()
-        print(f"[search_more] MiniMax filter: {len(raw_text)} → {len(filtered)} chars", flush=True)
-    except Exception as e:
-        print(f"[search_more] MiniMax filter failed ({e}), using raw results", flush=True)
+# --- Step 3: Append snippets directly to context (no LLM filter) ---
+snippet_parts = []
+for r in results:
+    title = r.get('title', '')
+    url = r.get('url', '')
+    snippet = (r.get('snippet', '') or '')[:1500]
+    if snippet:
+        snippet_parts.append(f"[{title}] {url}")
+        snippet_parts.append(snippet)
+additional_text = '\n'.join(snippet_parts)
 
 # --- Step 4: Append to context ---
-ctx = open(f"{D}/_context.txt").read()
+ctx = open(f"{D}/_context.txt", errors='replace').read()
 ctx = ctx.replace("=== END PRE-FETCHED DATA ===", "")
 ctx += f"\n--- Additional Search (user request: {feedback}) ---\n"
-ctx += filtered
+ctx += additional_text
 ctx += "\n\n=== END PRE-FETCHED DATA ===\n"
 open(f"{D}/_context.txt", 'w').write(ctx)
 print(f"[search_more] Context updated ({len(ctx)} chars total)", flush=True)

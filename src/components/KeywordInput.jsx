@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { generateArticlesWithSkill, confirmJob, confirmOutline } from '../utils/skillCaller';
+import { generateArticlesWithSkill, confirmJob, confirmOutline, addUrlToJob } from '../utils/skillCaller';
 import { storage } from '../utils/storage';
 import SourceReview from './SourceReview';
 import OutlineEditor from './OutlineEditor';
@@ -15,6 +15,8 @@ export default function KeywordInput({ onArticlesGenerated }) {
   const [clarificationAnswer, setClarificationAnswer] = useState('');
   const [reviewData, setReviewData] = useState(null); // { sources, summary, rawContext, jobId }
   const [outlineData, setOutlineData] = useState(null); // { outline, allSources, jobId }
+  const [writeReviewData, setWriteReviewData] = useState(null); // { article, jobId }
+  const editRef = useRef(null);
   const timerRef = useRef(null);
 
   const hasVs = /\bvs\b/i.test(input);
@@ -55,8 +57,18 @@ export default function KeywordInput({ onArticlesGenerated }) {
       return;
     }
 
-    if (result && result.outline_review) {
-      setOutlineData(result);
+    if (result && result.outlineReview) {
+      setOutlineData({ outline: result.outline, allSources: result.allSources, jobId: result.jobId });
+      setReviewData(null);
+      setProgress('');
+      setIsGenerating(false);
+      return;
+    }
+
+    if (result && result.writeReview) {
+      setWriteReviewData({ article: result.article, jobId: result.jobId });
+      setOutlineData(null);
+      setReviewData(null);
       setProgress('');
       setIsGenerating(false);
       return;
@@ -82,6 +94,7 @@ export default function KeywordInput({ onArticlesGenerated }) {
     setProgress('');
     setReviewData(null);
     setOutlineData(null);
+    setWriteReviewData(null);
   };
 
   const handleGenerate = async () => {
@@ -89,6 +102,7 @@ export default function KeywordInput({ onArticlesGenerated }) {
     setProgress('');
     setReviewData(null);
     setOutlineData(null);
+    setWriteReviewData(null);
 
     const topics = input
       .split(/[;；,，]/)
@@ -152,21 +166,11 @@ export default function KeywordInput({ onArticlesGenerated }) {
     }
   };
 
-  const handleSearchMore = async (feedback, removedUrls = []) => {
-    if (!reviewData || !feedback) return;
-
-    setError('');
-    setIsGenerating(true);
-    setProgress(`Searching more: "${feedback}"...`);
-
-    try {
-      const result = await confirmJob(reviewData.jobId, 'search_more', feedback, removedUrls);
-      handleResult(result);
-    } catch (err) {
-      setError(`搜索失败: ${err.message}`);
-      setProgress('');
-    } finally {
-      setIsGenerating(false);
+  const handleAddUrl = async (url) => {
+    if (!reviewData || !url) return;
+    const data = await addUrlToJob(reviewData.jobId, url);
+    if (data.source) {
+      setReviewData(prev => ({ ...prev, sources: [...(prev.sources || []), data.source] }));
     }
   };
 
@@ -189,6 +193,83 @@ export default function KeywordInput({ onArticlesGenerated }) {
       setIsGenerating(false);
     }
   };
+
+  // Set editable content when writeReviewData arrives
+  useEffect(() => {
+    if (writeReviewData && editRef.current) {
+      editRef.current.innerHTML = writeReviewData.article?.content || '';
+    }
+  }, [writeReviewData]);
+
+  // Show WriteReview when article is ready for humanization review
+  if (writeReviewData && !isGenerating) {
+    return (
+      <div className="fixed inset-0 z-50 bg-white overflow-y-auto">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div className="mb-6">
+            <div className="flex items-center mb-2">
+              <div className="w-8 h-8 rounded-lg bg-green-500 flex items-center justify-center mr-3">
+                <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              <h2 className="text-xl font-display font-black text-dark-900">Article Draft Ready</h2>
+            </div>
+            <p className="text-sm text-dark-500 ml-11">直接在下方编辑文章草稿（可增删内容），确认后点 "Approve & Polish" 进行润色校验。</p>
+          </div>
+
+          <div
+            ref={editRef}
+            contentEditable={true}
+            suppressContentEditableWarning={true}
+            className="prose max-w-none border border-dark-200 rounded-xl p-6 mb-6 bg-white overflow-auto max-h-[60vh] text-sm outline-none focus:ring-2 focus:ring-primary-300 cursor-text"
+          />
+
+          {error && (
+            <div className="mb-4 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 animate-scale-in">
+              <div className="flex items-start">
+                <svg className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div className="whitespace-pre-line text-sm">{error}</div>
+              </div>
+            </div>
+          )}
+
+          <div className="flex gap-3">
+            <button
+              onClick={async () => {
+                setError('');
+                setIsGenerating(true);
+                setProgress('正在润色并校验...');
+                const jobId = writeReviewData.jobId;
+                const editedContent = editRef.current?.innerHTML || writeReviewData.article?.content || '';
+                setWriteReviewData(null);
+                try {
+                  const result = await confirmJob(jobId, 'confirm_write', '', [], editedContent);
+                  handleResult(result);
+                } catch (err) {
+                  setError(`润色失败: ${err.message}`);
+                  setProgress('');
+                } finally {
+                  setIsGenerating(false);
+                }
+              }}
+              className="btn btn-primary flex-1"
+            >
+              Approve &amp; Polish (Rewrite + QC)
+            </button>
+            <button
+              onClick={() => { setWriteReviewData(null); setError(''); }}
+              className="btn bg-dark-100 text-dark-600 hover:bg-dark-200"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // Show OutlineEditor when we have outline data (and not generating)
   if (outlineData && !isGenerating) {
@@ -224,7 +305,7 @@ export default function KeywordInput({ onArticlesGenerated }) {
           <SourceReview
             data={reviewData}
             onConfirm={handleConfirmGenerate}
-            onSearchMore={handleSearchMore}
+            onAddUrl={handleAddUrl}
             isLoading={isGenerating}
           />
           {error && (
@@ -369,7 +450,7 @@ export default function KeywordInput({ onArticlesGenerated }) {
             </div>
           </div>
           <div className="text-sm text-primary-600">
-            {outlineData ? 'Claude Code 正在根据 outline 生成文章...' : reviewData ? '正在生成文章大纲...' : '正在搜索数据源，完成后会展示结果供你审核'}
+            {progress === '正在润色并校验...' ? '正在润色去 AI 味并进行质量校验...' : outlineData ? 'Claude Code 正在根据 outline 生成文章...' : reviewData ? '正在生成文章大纲...' : '正在搜索数据源，完成后会展示结果供你审核'}
           </div>
         </div>
       )}

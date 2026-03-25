@@ -15,10 +15,16 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 JOBS_DIR="$SCRIPT_DIR/jobs"
 SKILL_DIR=~/.claude/skills/dev-blog-writer
 
-# Load split prompt files (architect uses data-source-rules + template, write uses write-rules)
+# Load split prompt files
 DATA_SOURCE_RULES=$(cat "$SKILL_DIR/shared/data-source-rules.md")
+ARCHITECT_RULES=$(python3 -c "
+import re, sys
+content = open('$SCRIPT_DIR/skill/ARCHITECT.md').read()
+sys.stdout.write(re.sub(r'^---[\s\S]*?---\n', '', content, count=1))
+")
 WRITE_RULES=$(cat "$SKILL_DIR/write-rules.md")
 CHECK_RULES=$(cat "$SKILL_DIR/check-rules.md")
+REWRITE_RULES=$(cat "$SKILL_DIR/rewrite-rules.md")
 # Copy reference files to /tmp so claude -p can read them on demand
 mkdir -p /tmp/blog_references
 cp "$SKILL_DIR"/references/*.md /tmp/blog_references/ 2>/dev/null
@@ -102,6 +108,7 @@ print(ctx, end='')
 source "$SCRIPT_DIR/worker-search.sh"
 source "$SCRIPT_DIR/worker-architect.sh"
 source "$SCRIPT_DIR/worker-write.sh"
+source "$SCRIPT_DIR/worker-rewrite.sh"
 source "$SCRIPT_DIR/worker-check.sh"
 
 # ====== Main loop ======
@@ -155,9 +162,8 @@ else
   PROXY=""
 fi
 fetch() {
-  local url="$1" attempt=0 max_retries=2
+  local url="$1" attempt=0 max_retries=2 result=""
   while [ $attempt -le $max_retries ]; do
-    local result
     if [ -n "$PROXY" ]; then
       result=$($CURL -sL --max-time 15 -x "$PROXY" -H "$UA" "$url" 2>/dev/null)
     else
@@ -184,20 +190,36 @@ HELPER_EOF
       echo "[worker] [$JOBID] Phase: generate (context: $(echo "$PRE_CONTEXT" | wc -c | tr -d ' ') bytes, outline: $(echo "$ARCHITECT_JSON" | wc -c | tr -d ' ') bytes)"
       run_write "$JOBID" "$TOPIC" "$IS_VS" "$OUTPUT_MODE" "$ANSWER"
 
-      # --- Check Agent (post-generation QC) ---
       RESULT="$WRITE_RESULT"
       EXITCODE="$WRITE_EXITCODE"
-      WARNINGS="$WRITE_WARNINGS"
-      LOGFILE="$WRITE_LOGFILE"
 
-      if [ $EXITCODE -eq 0 ] && [ -n "$RESULT" ] && [ $(echo "$RESULT" | wc -c | tr -d ' ') -gt 3000 ]; then
+      # --- Save write result for rewrite phase ---
+      echo "$RESULT" > "$JOBS_DIR/logs/${JOBID}.write.txt"
+
+      # --- Write write_review status so frontend can preview ---
+      python3 -c "
+import json, sys
+content = sys.stdin.read()
+json.dump({'status': 'write_review', 'content': content, 'outputMode': '${OUTPUT_MODE}'}, open('${JOBS_DIR}/done/${JOBID}.json', 'w'))
+" <<< "$RESULT"
+      echo "[worker] [$JOBID] Write done, waiting for write_review confirmation"
+
+    elif [ "$PHASE" = "rewrite" ]; then
+      # --- Rewrite + Check Agent ---
+      RESULT=$(cat "$JOBS_DIR/logs/${JOBID}.write.txt" 2>/dev/null)
+      PRE_CONTEXT=$(cat "$JOBS_DIR/logs/${JOBID}.context" 2>/dev/null)
+      IS_VS=$(echo "$TOPIC" | grep -ci ' vs ')
+      WARNINGS=""
+
+      if [ -n "$RESULT" ] && [ $(echo "$RESULT" | wc -c | tr -d ' ') -gt 3000 ]; then
+        run_rewrite "$JOBID" "$TOPIC"
+        RESULT="$REWRITE_RESULT"
         run_check "$JOBID" "$TOPIC"
         RESULT="$CHECK_RESULT"
         WARNINGS="$CHECK_WARNINGS"
       fi
 
-      # --- Save result ---
-      save_result "$JOBID" "$RESULT" "$EXITCODE" "$WARNINGS" "$IS_VS" "$OUTPUT_MODE"
+      save_result "$JOBID" "$RESULT" "0" "$WARNINGS" "$IS_VS" "$OUTPUT_MODE"
 
     elif [ "$PHASE" = "architect" ]; then
       # --- Architect Agent ---

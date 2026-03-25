@@ -1,50 +1,78 @@
 # How to Access Article Template
 
-**Focus: 4 access methods from easiest to most advanced — Web Playground → API → Code Tools → Local Deployment.**
+**For articles like: "How to access [Model]", "How to use [Model]", "[Model] complete guide"**
+
+**Focus: 5 access methods from easiest to most advanced — Web Playground → API → Code Tools → Local Deployment. Each method kept concise — no single method should dominate.**
 
 ## Sections (in this order)
 
-1. **Quick Answer callout** — "Try it now: Novita AI web playground (zero setup). Build with it: Novita AI API (3 lines of code). Power users: plug into Claude Code or OpenClaw."
-
-2. **Model Introduction** — A substantial section covering four parts (this is NOT a brief intro — give it proper depth):
+1. **Model Introduction** — A substantial section (this is NOT a brief intro — give it proper depth):
    - **What's New / Key Highlights** (1 paragraph): what makes this model stand out — new capabilities, signature features, notable updates from previous versions. Lead with the most exciting point.
      - 📌 From HF README `--- Model ---`
-   - **Core Specs** (1 paragraph or mini-table): developer/org, parameter count, architecture (dense vs MoE, active params), context window, modalities, quantization support.
+   - **Core Specs** (table): developer/org, parameter count, architecture (dense vs MoE, active params), context window, modalities, license
      - 📌 From HF model card `--- Model ---`
-   - **Benchmark Performance** (table + 1 paragraph): key benchmark scores in a table (e.g., SWE-bench, AIME, GPQA, LiveCodeBench, HLE, BrowseComp — pick the most relevant 4-6). Include 1-2 reference models for comparison. Add a paragraph interpreting what the numbers mean in practice.
+   - **Benchmark Performance** (table + 1 paragraph): key benchmark scores (pick 4-6 most relevant), include 1-2 reference models for comparison. Interpret what the numbers mean in practice.
      - 📌 From HF README `ALL BENCHMARKS`
-   - **Pros and Cons** (2-column table): concrete strengths and weaknesses derived from HF specs and benchmarks above. At least 3 items per side. Must be data-backed with specific numbers, not generic ("74.9% BrowseComp" not just "good at browsing").
-     - 📌 Derived from HF data only
 
-3. **Web Playground** — zero-barrier entry point. Direct link (official playground or Novita AI playground), no signup needed, best for quick evaluation.
+2. **Novita AI Playground** — Zero-barrier entry point
+   - Direct link: `https://novita.ai/models/llm/{model-slug}` — built-in chat interface with parameter controls
+   - No signup needed for trial, best for quick evaluation before API integration
+   - Keep brief — 1-2 paragraphs max
 
-4. **Novita AI API (main section)** — programmatic access (see Endpoint Rule for correct base_url).
+3. **Novita AI API** (main section) — Programmatic access
+   - Step-by-step guide (login → model library → API key → code example)
+   - Complete working code example (Python, OpenAI SDK), with streaming
+   - Pricing info embedded here
+   - 📌 Setup from `--- Novita AI Integration Guide ---`
    - 📌 Pricing from `>>> USE THIS PRICE <<<`
-   - Complete working code example (Python, OpenAI SDK), streaming example.
 
-5. **Code Tool Access** — Pick 2-3 tools most relevant to the model from Novita's integration guides below.
+4. **Code Tool Access** — Pick 2-3 tools most relevant to the model
+   - Brief comparison of selected tools (type, pricing, best-for) before diving into setup
    - 📌 Setup from `--- Novita AI Integration Guide ---` or blog guides
-   - Available tools:
-     - **Claude Code** — Anthropic's terminal CLI agent. Docs: https://novita.ai/docs/guides/claude-code
-     - **Cursor** — AI-first code editor (VS Code fork). Docs: https://novita.ai/docs/guides/cursor
-     - **Continue** — Open-source AI code assistant (VS Code/JetBrains). Docs: https://novita.ai/docs/guides/continue
-     - **Trae** — Free AI IDE (VS Code-based) with Builder mode. Blog: https://blogs.novita.ai/access-novita-ai-llm-on-trae/
-     - **OpenCode** — Open-source terminal AI agent. Blog: https://blogs.novita.ai/opencode-integration-guide/
-     - **CodeCompanion** — Neovim AI plugin. Docs: https://novita.ai/docs/guides/codecompanion
-     - **Novita OpenClaw CLI** — Local automation framework. Docs: https://novita.ai/docs/guides/novita-openclaw-cli
+   - Available tools (with comparison context):
+     - **Claude Code** — Terminal CLI agent (Anthropic). $20/mo Pro plan or BYOK. Best for: agentic coding, multi-file refactoring. Docs: https://novita.ai/docs/guides/claude-code
+     - **Cursor** — AI-first IDE (VS Code fork). Free tier + $20/mo Pro. Best for: inline completion, chat-driven editing. Docs: https://novita.ai/docs/guides/cursor
+     - **Continue** — Open-source plugin (VS Code/JetBrains). Free, self-hostable. Best for: BYOK flexibility, enterprise. Docs: https://novita.ai/docs/guides/continue
+     - **Trae** — Free AI IDE (VS Code-based) with Builder mode. Best for: free access, Chinese developer community. Blog: https://blogs.novita.ai/access-novita-ai-llm-on-trae/
+     - **OpenCode** — Open-source terminal agent. Free. Best for: lightweight terminal workflow. Blog: https://blogs.novita.ai/opencode-integration-guide/
+     - **CodeCompanion** — Neovim AI plugin. Free, open-source. Best for: Vim/Neovim users. Docs: https://novita.ai/docs/guides/codecompanion
+     - **Novita OpenClaw CLI** — Local automation framework. Best for: CI/CD, scripted workflows. Docs: https://novita.ai/docs/guides/novita-openclaw-cli
 
-6. **Local Deployment** — VRAM requirements and hardware.
+5. **Local Deployment** — Running on your own hardware
+   - **Framework comparison table** (columns: Method, Pros, Hardware, Typical Use)
+   - Per-framework instructions with code examples — pick 2-3 most relevant from:
+     - Transformers (official, flexible)
+     - Llama.cpp / Ollama (lightweight, consumer hardware)
+     - vLLM (high throughput, production inference)
+   - VRAM requirements by quantization level
+   - Always recommend API as the easier alternative at the end
    - 📌 GGUF sizes from `--- Unsloth GGUF ---`, HF repo from `--- Model ---`
-   - Always recommend API as easier alternative.
 
-7. **Comparison table** — columns: Method, Setup Time, Cost, Best For.
+6. **Comparison Table** — All methods side by side
+   - Columns: Method, Setup Time, Cost, Best For
+   - One row per access method (Playground / API / Code Tools / Local)
 
-8. **Bottom Line** — "Explore via web playground → build with the API → supercharge your IDE with code tools. Self-host only if [specific condition]."
+7. **Usage Tips** — Practical tips specific to this model
+   - 3-5 scenario-based tips, covering different aspects:
+     - **Inference parameters**: recommended temperature/top_p/top_k and when to adjust
+     - **Chat template / reasoning mode**: how to choose between modes (e.g. thinking vs non-thinking, analysis vs final)
+     - **Cost optimization**: caching, tier selection, token budgeting
+     - **Quantization selection**: which quant level for which hardware/quality trade-off
+     - **Tool-calling / agentic usage**: best practices for function calling or multi-step workflows
+   - Each tip: scenario + recommended practice + why (keep compact but informative)
+   - Only include tips backed by official docs or community-validated practices
+   - 📌 From HF README, web research, community discussions
+
+8. **Conclusion + FAQ**
 
 ## Constraints
 
-- Do NOT create a standalone "Developer Experience" section. Integrate developer experience insights into the relevant method sections.
+- **Cost comparisons: API pricing and cloud GPU pricing only** — self-hosting/local deployment costs have too many variables (hardware, electricity, cooling); describe qualitatively only, no dollar figures or $/month comparisons
+- **API is the main section** — give it the most depth (step-by-step + code + pricing). Other methods keep concise
+- Local Deployment must include actual code examples, not just descriptions
+- Usage Tips should be model-specific — generic advice like "use system prompts" is not valuable
+- Do NOT create a standalone "Developer Experience" section
 
 ## Thesis Template
 
-"The fastest way to use [model] is [Novita AI API] — here's how to get started in 2 minutes"
+"The fastest way to use [Model] is [Novita AI API] — here's how to get started in 2 minutes, plus code tools, local deployment, and practical tips"

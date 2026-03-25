@@ -14,23 +14,24 @@ Review and FIX the article according to these rules. Output the CORRECTED articl
 - If a benchmark says "Not disclosed" or "N/A" but the data actually exists in another table in the same article, FIX it with the correct number.
 - No Chinese characters or Chinese punctuation anywhere in English articles (check for stray characters).
 - Code examples must use correct parameter names matching current API docs.
+- **GLM-5 parameter count**: Total parameters must be **754B** (not 744B or any other number).
+- **Model IDs in code**: GLM-5 must use `zai-org/glm-5`. MiniMax M2.5 must use `minimax/minimax-m2.5`. The `model=` parameter must contain a single valid model ID string — not "model-a or model-b". Fix any other variants.
+- **GPU configs for GLM-5 FP8**: Must use 8×H200 (141GB each) or 16×H100. No other GPU configs.
+- **Z.AI API pricing**: Must not be described as "monthly subscription only" — Z.AI also has pay-as-you-go pricing.
 
 **2. TONE & EXPRESSION**
 - REMOVE absolute superlatives: "best", "fastest", "most powerful", "No. 1", "unmatched", "unrivaled". Replace with "top", "leading", "strong", "competitive".
 - Stay objective and neutral. No "crushes", "destroys", "dominates" in comparisons.
 - CTA (call-to-action) must feel natural in context. Max 2-3 CTAs total. Remove duplicate/excessive CTAs.
 - Brand mentions should appear only at natural touchpoints, not forced into every section.
+- **Throughput positioning**: Current Novita throughput (~77 tps) is not a strong differentiator. Do not single it out as a key selling point.
 
 **3. COMPLIANCE**
 - All third-party quotes/data must have source attribution with link.
 - No political, religious, gender, race, or other sensitive content.
 - Competitor comparisons: present data without editorial judgment. Note comparison date if applicable.
 
-**4. BRAND CONSISTENCY**
-- "Novita AI" — always this exact spelling in running text.
-- Remove off-topic paragraphs that don't serve the article's core thesis.
-
-**5. STRUCTURE**
+**4. STRUCTURE**
 - Title: problem-oriented, ≤10 words, contains core keyword.
 - Introduction: ≤2 paragraphs, state pain point + core thesis.
 - H2/H3 headings: progressive (no skipped levels), at least 2 siblings per level.
@@ -39,50 +40,55 @@ Review and FIX the article according to these rules. Output the CORRECTED articl
 - All images must have meaningful alt text.
 - Links use descriptive anchor text, never "click here".
 
-**6. SEO/GEO**
+**5. SEO/GEO**
 - Primary keyword appears in: title, first paragraph of intro, at least one H2, and conclusion.
 - FAQ questions use H3 format.
 - Prefer structured content (tables, ordered lists, clear H2/H3 sections).
 
-**7. CODE EXAMPLES & CONFIGURATION (MUST VERIFY — #1 source of fabricated content)**
+**6. CODE EXAMPLES & CONFIGURATION (MUST VERIFY — #1 source of fabricated content)**
 - Every code example MUST be verifiable against official docs or pre-search data. If no source exists, REMOVE the code block.
 - Do NOT fabricate tool-calling JSON schemas, API request/response examples, or CLI flags that are not documented.
 - Setup commands (env vars, install steps) MUST come from the pre-search Novita integration guide or official tool docs.
 
 **Known tool restrictions (HARD BLOCKLIST — remove on sight):**
-- **Claude Code installation**: The official method is `curl -fsSL https://claude.ai/install.sh | bash` (macOS/Linux/WSL) or `irm https://claude.ai/install.ps1 | iex` (Windows PowerShell). Windows requires Git for Windows. The old `npm install -g @anthropic-ai/claude-code` still works but is NOT the recommended method. If the article only shows npm install, ADD the native installer as the primary method.
+- **Claude Code installation**: The official method is `curl -fsSL https://claude.ai/install.sh | bash` (macOS/Linux/WSL) or `irm https://claude.ai/install.ps1 | iex` (Windows PowerShell). Windows requires Git for Windows. Must NOT say "requires Node.js". The old `npm install -g @anthropic-ai/claude-code` still works but is NOT the recommended method — add the native installer as primary if missing.
 - **Claude Code does NOT support**: temperature, top-p, top-k, or any sampling parameter configuration. There are NO `ANTHROPIC_TEMPERATURE`, `ANTHROPIC_TOP_P`, `ANTHROPIC_TOP_K` env vars or CLI flags. If the article includes any sampling parameter configuration for Claude Code, DELETE it entirely.
 - **Claude Code does NOT require manual tool-calling configuration**: Users do NOT write tool-calling JSON schemas. Claude Code handles tool use internally. Remove any fabricated `{"type": "function", "function": {...}}` examples that claim to be "how Claude Code uses tools."
-- **Novita AI API key format**: Always starts with `sk-` (e.g., `sk-xxxxxx`). NEVER `nv-xxxxxx`. If the article shows a different format, FIX it.
+- **Novita AI API key format**: Always starts with `sk-` with hyphen (e.g., `sk-xxxxxx`). NEVER `nv-xxxxxx` or `sk_` (underscore). If the article shows a different format, FIX it.
 - **General rule**: If a "configuration" or "optimization" section describes parameters the tool does not actually expose, REMOVE the entire section rather than leaving misleading content.
 
-**8. COMPETITIVE & BRAND RULES**
-- NEVER recommend or link to competitor platforms as a primary solution. Objective mention in comparison tables is OK, but do NOT write "go to [competitor] to try it" or link to competitor sign-up pages.
-- Brand names must use the LATEST official name. Known rebrands: Zhipu AI → Z.ai (international). If pre-search data shows an outdated name, use the current one.
-- Novita AI SLA: 99.5%. Do NOT claim higher without source.
+**7. COMPETITIVE & BRAND RULES**
+- NEVER recommend or link to competitor platforms as a primary solution. Objective mention in comparison tables is OK, but do NOT write "go to [competitor] to try it" or link to competitor sign-up pages. Competitor pricing is only acceptable if their price is HIGHER than Novita's.
+- Brand names must use the LATEST official name. Known rebrands: Zhipu AI → Z.ai (international).
+- Novita AI SLA: **99.5%**. Do NOT claim higher without source.
+- **Novita AI standard description**: Use — "Novita AI is an AI cloud platform that offers developers an easy way to deploy AI models using our simple API, while also providing an affordable and reliable GPU cloud for building and scaling." Do NOT use marketing-heavy variations.
+- **Z.AI playground**: Must not dedicate large sections to explaining how to use Z.AI's playground or other competitor products.
 
-**9. CONTENT CONSISTENCY**
+**8. CONTENT CONSISTENCY**
 - **Intro must match body**: If the introduction promises to compare Tool A vs Tool B, the body MUST actually contain that comparison. Remove unfulfilled promises from intro, or add the missing content.
-- **No duplicate sections**: If benchmark data appears in a table, do NOT repeat the same numbers in a "Use Cases" or other section. Each section must add unique value.
-- **Cost comparisons require assumptions**: Any cost comparison (API vs self-host vs cloud) MUST state the usage assumptions (e.g., "assuming 1M tokens/day for 30 days"). Never compare without stating the basis.
+- **No duplicate sections**: If benchmark data appears in a table, do NOT repeat the same numbers in a "Use Cases" section. Use Cases must describe real-world applications and workflows — not restate benchmark numbers.
+- **Cost comparisons require assumptions**: Any cost comparison MUST state the usage assumptions (e.g., "assuming 1M tokens/day for 30 days"). Never compare without stating the basis.
 - **Deployment feasibility**: Models >200B parameters (dense) should NOT recommend local/self-hosted deployment as a practical option. Always lead with API access for very large models.
 - **Alternative model comparisons must be factually grounded**: When suggesting Model B as a "lighter/cheaper alternative" to Model A, verify that Model B actually requires significantly fewer resources (VRAM, compute, cost). If two models need similar VRAM (e.g., both >200GB), do NOT present one as a "step-down" option. Either cite specific VRAM numbers to justify the comparison, or remove the recommendation.
+- **Novita API cache pricing**: If Novita API pricing is mentioned, cache pricing (Cache Read) must also be included. Standard cache read rates: $0.03/Mt for MiniMax M2.5, $0.20/Mt for GLM-5.
 
-**10. FORMATTING**
-- English punctuation: comma followed by a space (`, `), period followed by a space (`. `). No Chinese punctuation.
-- Product/tool mentions: always include a link on first mention (e.g., GPU product page, tool docs page).
-- Tool names: "Claude Code" (two words, both capitalized), "OpenClaw" (one word, camel case). Check ALL occurrences — never "claude code", "Claude code", "openclaw", "Openclaw".
-- Spelling: "Recommended Reading" (NOT "Recommend Reading"). Double-check common -ed/-ing endings.
-- Do NOT describe coding tools as connecting "through official connectors" — they integrate via API endpoints and environment variables, not physical/official connectors.
-
-**11. THROUGHPUT & PARAMETER ACCURACY**
+**9. THROUGHPUT & PARAMETER ACCURACY**
 - **Throughput numbers** must match the HuggingFace Inference Providers data in pre-search context. If the article claims X tokens/s but the pre-search data shows Y, FIX to Y. If no throughput data exists in context, write "varies by provider" — never guess.
 - **Parameter counts** must match `config.json` data. Common error: confusing total params with activated params for MoE models. Always specify which one: "754B total parameters (29B activated per token)".
-- **Model comparison benchmarks must use current models**: Do NOT compare against old model versions (e.g. Claude Sonnet 3.5) when newer versions exist (Claude Sonnet 4.5). Use the model versions found in the HuggingFace benchmark tables.
+- **Model comparison benchmarks must use current models**: Do NOT compare against old versions (e.g. Claude Sonnet 3.5). When Claude models are used as benchmarks, use Claude Opus 4.5 or Claude Sonnet 4.5.
 
-**12. COST COMPARISON RULES**
+**10. COST COMPARISON RULES**
 - VRAM articles: the Deployment Decision Matrix MUST be qualitative only. NO dollar-amount monthly cost calculations (no "$X/month vs $Y/month"). If a quantitative cost table exists alongside the Decision Matrix, REMOVE the quantitative table.
-- Novita AI description: use the standard version — "Novita AI is an all-in-one cloud platform for AI development, offering API access, serverless deployment, and GPU instances." Do NOT use marketing-heavy variations with "empowers your AI ambitions" or "make your AI vision a reality".
+- Self-hosting costs (hardware depreciation, electricity, cooling) are too variable — qualitative description only, no specific dollar amounts.
+
+**11. FORMATTING**
+- English punctuation: comma followed by a space (`, `), period followed by a space (`. `). No Chinese punctuation in English text. Full-width question marks (？) must be replaced with (?).
+- Product/tool mentions: always include a link on first mention.
+- Tool names: "Claude Code" (two words, both capitalized), "OpenClaw" (one word, camel case). Check ALL occurrences.
+- Spelling: "Recommended Reading" (NOT "Recommend Reading").
+- Do NOT describe coding tools as connecting "through official connectors".
+- **Z.AI formatting**: use `Z.AI` consistently. Do not mix `z.ai`, `Z.Ai`, or `api.z.ai`.
+- **Parenthetical labels**: `(For Developers)`, `(Recommended)`, `(Optional)` must be followed by a space before the next word. Not `(Recommended)Start with...`.
 
 ### Output
 - Output the corrected article ONLY. No commentary, no notes, no explanations.

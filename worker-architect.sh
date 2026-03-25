@@ -3,7 +3,7 @@
 # Sourced by worker.sh — do NOT run directly.
 
 # Run architect phase: detect article type, load template, run claude -p for outline
-# Expects globals: JOBS_DIR, DATA_SOURCE_RULES, MODEL, load_template()
+# Expects globals: JOBS_DIR, ARCHITECT_RULES, MODEL, load_template()
 # Returns: writes outline_review or error to done/${JOBID}.json
 run_architect() {
   local JOBID="$1" TOPIC="$2" REMOVED_URLS="$3"
@@ -30,58 +30,71 @@ run_architect() {
       ARTICLE_TEMPLATE=$(load_template "$ARTICLE_TYPE")
       echo "[worker] [$JOBID] Architect: type=$ARTICLE_TYPE, template=$(echo "$ARTICLE_TEMPLATE" | wc -c | tr -d ' ') bytes"
 
-      # Build architect system prompt from split files
-      ARCHITECT_SYSTEM="${DATA_SOURCE_RULES}
+      # Build architect system prompt: ARCHITECT_RULES enforces JSON schema; /dev-blog-architect skill in user prompt as reinforcement
+      ARCHITECT_SYSTEM="${ARCHITECT_RULES}"
 
-${ARTICLE_TEMPLATE}"
+      # Generate data map of raw files available
+      DATA_MAP=$(python3 << 'DATA_MAP_EOF'
+import os, json
+
+D = '/tmp/blog_data'
+R = '/tmp/blog_references'
+lines = []
+lines.append("--- RAW DATA FILES ---")
+lines.append(f"Directory: {D}/")
+
+desc = {
+    '_context.txt': 'Compressed overview (included above)',
+    'hf_detail_a.json': 'HuggingFace model card JSON — architecture, params, license',
+    'hf_detail_b.json': 'HuggingFace model card JSON (model B)',
+    'config_a.json': 'config.json — exact architecture parameters',
+    'config_b.json': 'config.json (model B)',
+    'readme_a.md': 'Full HuggingFace README — benchmarks, usage examples',
+    'readme_b.md': 'Full HuggingFace README (model B)',
+    'novita.json': 'Novita AI API data — pricing, available models',
+    '_fanout_queries.json': 'Search queries used (for reference)',
+}
+
+if not os.path.isdir(D):
+    print("(no data directory)")
+    exit()
+
+for f in sorted(os.listdir(D)):
+    path = os.path.join(D, f)
+    if not os.path.isfile(path) or f.startswith('.'):
+        continue
+    kb = os.path.getsize(path) // 1024
+    if f in desc:
+        lines.append(f"  {f} ({kb}KB) — {desc[f]}")
+    elif f.startswith('tavily_fanout_'):
+        label = f.replace('.json','').replace('tavily_fanout_','#')
+        lines.append(f"  {f} ({kb}KB) — fan-out search results {label}")
+    elif f.startswith('hf_gguf_'):
+        quant = f.replace('hf_gguf_','').replace('.json','')
+        lines.append(f"  {f} ({kb}KB) — GGUF {quant} quantization sizes")
+    elif f.startswith('hf_'):
+        lines.append(f"  {f} ({kb}KB) — HuggingFace data")
+print('\n'.join(lines))
+DATA_MAP_EOF
+)
 
       # Write architect user prompt to file
       ARCHITECT_PROMPT_FILE="$JOBS_DIR/logs/${JOBID}.architect_prompt"
       cat > "$ARCHITECT_PROMPT_FILE" <<ARCHITECT_PROMPT_EOF
-You are an article architect. Design the H2 structure for a blog article based on what real users want to know and what data is actually available.
+/dev-blog-architect
 
 Topic: ${TOPIC}
 Article Type: ${ARTICLE_TYPE}
 
-Pre-fetched data:
+ARTICLE TYPE TEMPLATE (reference — adapt based on data availability):
+${ARTICLE_TEMPLATE}
+
+PRE-FETCHED DATA:
 ${PRE_CONTEXT}
 
-DESIGN APPROACH — question-driven, not template-driven:
-1. First, analyze the pre-fetched data (especially Reddit, blog, community sections) to identify 3-5 KEY QUESTIONS that real users are asking about this topic. Look for: explicit questions in forum threads, recurring concerns, common confusions, and practical "how do I..." patterns.
-2. Design H2 sections that directly ANSWER these questions. Each section title should hint at the question it addresses.
-3. Use the article type template (in system prompt) as a REFERENCE for ordering and coverage — but do NOT blindly follow it. If the data doesn't support a template section, skip it. If the data reveals an important angle the template misses, add it.
-4. Sections with rich data support should be detailed (3-4 keyPoints). Sections with thin data should be brief (1-2 keyPoints) or merged into another section.
+${DATA_MAP}
 
-RULES:
-1. For each H2, specify:
-   - title: The H2 heading text (should hint at the question it answers)
-   - keyPoints: What this section should cover (2-4 bullet points)
-   - dataSources: Exact URLs from the pre-fetched data that this section should cite
-2. SOURCE MATCHING — match sources to sections by domain expertise:
-   - Architecture/params/technical specs → HuggingFace URLs
-   - Pricing/cost → Novita AI URLs, OpenRouter data, provider URLs
-   - Benchmark/performance → HuggingFace README benchmarks, Artificial Analysis URLs
-   - Getting started/deployment → blog URLs, docs URLs
-   - Community/tips → Reddit URLs, blog URLs
-3. Every URL in dataSources MUST come from the pre-fetched data — do NOT invent URLs
-4. Every data source should be assigned to at least one section
-5. Ensure sections flow logically: What → Why → How → Cost → Conclusion
-6. Always end with a Conclusion/Key Takeaways section and FAQ section
-7. The FAQ section MUST incorporate remaining user questions from the QUESTIONS section that weren't fully addressed in the main body
-
-OUTPUT: Valid JSON only — no markdown fences, no explanation. Schema:
-{
-  "sections": [
-    {
-      "id": "s1",
-      "h2": "Section Title",
-      "keyPoints": ["point 1", "point 2"],
-      "dataSources": [
-        {"url": "https://...", "label": "Source description", "type": "huggingface|novita|reddit|blog|provider|benchmark"}
-      ]
-    }
-  ]
-}
+OUTPUT: Valid JSON only — no markdown fences, no explanation.
 ARCHITECT_PROMPT_EOF
 
       # Run claude -p for architect
@@ -182,8 +195,11 @@ if os.path.isdir(log_data) and not os.path.exists(f'{D}/_context.txt'):
         shutil.copy2(os.path.join(log_data, f), os.path.join(D, f))
 sources = []
 seen = set()
+seen_domains = {}
+LANG_PATHS = ['/nl/', '/it/', '/de/', '/fr/', '/es/', '/pt/', '/ja/', '/ko/', '/zh/', '/ru/']
+
 # From HF (first, so they appear at top)
-for name in ['hf_detail_a.json']:
+for name in ['hf_detail_a.json', 'hf_detail_b.json']:
     path = f'{D}/{name}'
     try:
         with open(path) as f:
@@ -193,13 +209,12 @@ for name in ['hf_detail_a.json']:
             if url not in seen and url not in removed:
                 seen.add(url)
                 sources.append({'url': url, 'label': f\"HF: {data['id']}\", 'type': 'huggingface'})
-            # Also add config.json URL
             cfg_url = f\"https://huggingface.co/{data['id']}/blob/main/config.json\"
             if cfg_url not in seen and cfg_url not in removed:
                 seen.add(cfg_url)
                 sources.append({'url': cfg_url, 'label': f\"config.json ({data['id']})\", 'type': 'huggingface'})
     except: pass
-# From tavily results
+# From tavily results (with domain dedup and language filter)
 for fname in sorted(glob.glob(f'{D}/tavily_*.json')):
     if '_extract' in fname: continue
     try:
@@ -208,9 +223,14 @@ for fname in sorted(glob.glob(f'{D}/tavily_*.json')):
         cat = os.path.basename(fname).replace('.json','').replace('tavily_','')
         for r in data.get('results', []):
             url = r.get('url', '')
-            if url and url not in seen and url not in removed:
-                seen.add(url)
-                sources.append({'url': url, 'label': r.get('title', url), 'type': cat})
+            if not url or url in seen or url in removed: continue
+            from urllib.parse import urlparse as _up
+            domain = _up(url).netloc.replace('www.', '')
+            seen_domains[domain] = seen_domains.get(domain, 0) + 1
+            if seen_domains[domain] > 2: continue
+            if any(p in url.lower() for p in LANG_PATHS): continue
+            seen.add(url)
+            sources.append({'url': url, 'label': r.get('title', url), 'type': cat})
     except: pass
 print(json.dumps(sources, ensure_ascii=False))
 " 2>/dev/null)
@@ -230,6 +250,4 @@ json.dump({
       fi
 
       rm -f "$JOBS_DIR/pending/${JOBID}.processing"
-      continue
-
 }
