@@ -193,6 +193,18 @@ HELPER_EOF
       RESULT="$WRITE_RESULT"
       EXITCODE="$WRITE_EXITCODE"
 
+      # --- Strip preamble text before first <h2>/<h3> tag (Claude sometimes adds reasoning text) ---
+      RESULT=$(python3 -c "
+import sys, re
+content = sys.stdin.read()
+m = re.search(r'<h[2-4][\s>]', content)
+if m and m.start() > 0:
+    import sys as _sys
+    print(f'[preamble stripped: {m.start()} chars]', file=_sys.stderr)
+    content = content[m.start():]
+sys.stdout.write(content)
+" <<< "$RESULT")
+
       # --- Save write result for rewrite phase ---
       echo "$RESULT" > "$JOBS_DIR/logs/${JOBID}.write.txt"
 

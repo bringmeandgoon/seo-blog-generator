@@ -19,6 +19,27 @@ def strip_kw(text):
 model_name = strip_kw(topic)
 print(f"[search_more] Model: '{model_name}', Feedback: '{feedback}'", flush=True)
 
+# --- Step 0: Jina fetch — if feedback contains URLs, fetch them as clean Markdown ---
+def jina_fetch(url):
+    req = ur.Request(url, headers={'Accept': 'text/plain'})
+    try:
+        with ur.urlopen(req, timeout=20) as resp:
+            return resp.read().decode('utf-8', errors='replace')
+    except Exception as e:
+        print(f"[search_more] jina_fetch failed ({url}): {e}", flush=True)
+        return ''
+
+url_pattern = re.compile(r'https?://[^\s\]>\"\']+')
+feedback_urls = url_pattern.findall(feedback)
+jina_parts = []
+for raw_url in feedback_urls:
+    jina_url = f"https://r.jina.ai/{raw_url}"
+    print(f"[search_more] Jina fetching: {raw_url}", flush=True)
+    content = jina_fetch(jina_url)
+    if content:
+        jina_parts.append(f"[URL Source: {raw_url}]\n{content[:4000]}")
+        print(f"[search_more] Jina: got {len(content)} chars from {raw_url}", flush=True)
+
 # --- Step 1: MiniMax M2.5 generates search queries ---
 queries = []
 if ppio_key:
@@ -118,8 +139,10 @@ additional_text = '\n'.join(snippet_parts)
 ctx = open(f"{D}/_context.txt", errors='replace').read()
 ctx = ctx.replace("=== END PRE-FETCHED DATA ===", "")
 ctx += f"\n--- Additional Search (user request: {feedback}) ---\n"
+if jina_parts:
+    ctx += "\n--- URL Sources (fetched via Jina) ---\n"
+    ctx += "\n\n".join(jina_parts) + "\n"
 ctx += additional_text
 ctx += "\n\n=== END PRE-FETCHED DATA ===\n"
 open(f"{D}/_context.txt", 'w').write(ctx)
 print(f"[search_more] Context updated ({len(ctx)} chars total)", flush=True)
-SEARCH_MORE_EOF

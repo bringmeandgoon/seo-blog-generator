@@ -723,4 +723,3 @@ with open(f"{D}/_context.txt", 'w') as f:
 
 total = len('\n'.join(ctx))
 import sys as _sys2; print(f"[pre-search] Context: {total} chars, files: {len([x for x in os.listdir(D) if not x.startswith('_')])}", file=_sys2.stderr)
-PYEOF

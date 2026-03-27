@@ -114,4 +114,3 @@ result = {
     'rawContext': context,
 }
 json.dump(result, open(f"{D}/_review.json", 'w'), ensure_ascii=False)
-REVIEW_EOF

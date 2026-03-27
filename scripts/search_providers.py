@@ -61,4 +61,3 @@ try:
     print(f"[pre-search] Perplexity provider search: {len(results)} results for {len(queries)} queries", flush=True)
 except Exception as e:
     print(f"[pre-search] Provider search failed: {e}", flush=True)
-PROV_SEARCH_EOF

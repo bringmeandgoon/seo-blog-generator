@@ -49,10 +49,16 @@ async function pollJob(jobId, maxWait = 10 * 60 * 1000) {
       return { review: true, sources: data.sources, summary: data.summary, rawContext: data.rawContext, jobId };
     }
 
-    // outline_review removed — architect merged into write agent
+    if (data.status === 'outline_review') {
+      return { outlineReview: true, outline: data.outline, allSources: data.allSources, jobId };
+    }
 
     if (data.status === 'clarification') {
       return { clarification: true, question: data.question, context: data.jobContext };
+    }
+
+    if (data.status === 'write_review') {
+      return { writeReview: true, article: data.article, jobId };
     }
 
     if (data.status === 'done') {

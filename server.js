@@ -324,7 +324,9 @@ app.get('/api/jobs/:jobId', (req, res) => {
     return res.json({ status: 'review', sources: job.sources, summary: job.summary, rawContext: job.rawContext });
   }
 
-  // outline_review removed — architect merged into write agent
+  if (job.status === 'outline_review') {
+    return res.json({ status: 'outline_review', outline: job.outline, allSources: job.allSources });
+  }
 
   if (job.status === 'write_review') {
     return res.json({ status: 'write_review', article: job.article });
@@ -348,7 +350,39 @@ app.get('/api/jobs/:jobId', (req, res) => {
   res.json({ status: job.status });
 });
 
-// Helper: start generate phase and wait for result
+// Helper: start architect phase and wait for outline_review
+function startArchitectAndWait(jobId, topic, outputMode, extraJobData = {}) {
+  const jobFile = join(JOBS_PENDING, `${jobId}.json`);
+  writeFileSync(jobFile, JSON.stringify({ topic, outputMode, phase: 'architect', ...extraJobData }));
+  jobResults.set(jobId, { status: 'processing', createdAt: Date.now() });
+
+  waitForResult(jobId).then(result => {
+    if (result.status === 'outline_review') {
+      jobResults.set(jobId, {
+        status: 'outline_review',
+        topic, outputMode,
+        outline: result.outline,
+        allSources: result.allSources,
+        createdAt: Date.now(),
+      });
+      console.log(`[server] Job ${jobId} outline_review ready`);
+      return;
+    }
+    if (result.status === 'clarification') {
+      jobResults.set(jobId, {
+        status: 'clarification',
+        question: result.question,
+        jobContext: { topic, outputMode },
+      });
+      return;
+    }
+    jobResults.set(jobId, { status: 'error', error: 'Unexpected result from architect' });
+  }).catch(err => {
+    jobResults.set(jobId, { status: 'error', error: err.message });
+  });
+}
+
+// Helper: start write (generate) phase and wait for write_review
 function startGenerateAndWait(jobId, topic, outputMode, extraJobData = {}) {
   const jobFile = join(JOBS_PENDING, `${jobId}.json`);
   writeFileSync(jobFile, JSON.stringify({ topic, outputMode, phase: 'generate', ...extraJobData }));
@@ -428,7 +462,12 @@ app.post('/api/jobs/:jobId/confirm', async (req, res) => {
   const { action, feedback, removedUrls = [], editedOutline, editedContent } = req.body;
   const job = jobResults.get(jobId);
 
-  if (!job || job.status !== 'review') {
+  if (!job) {
+    return res.status(404).json({ error: 'Job not found' });
+  }
+  if (job.status !== 'review' &&
+      !(action === 'confirm_write' && job.status === 'write_review') &&
+      !(action === 'confirm_outline' && job.status === 'outline_review')) {
     return res.status(400).json({ error: 'Job not in review status' });
   }
 
@@ -477,6 +516,13 @@ app.post('/api/jobs/:jobId/confirm', async (req, res) => {
     return res.json({ status: 'ok' });
   }
 
+  if (action === 'confirm_outline' && job.status === 'outline_review') {
+    console.log(`[server] Job ${jobId} outline confirmed → write`);
+    const { editedOutline } = req.body;
+    startGenerateAndWait(jobId, topic, outputMode, { editedOutline });
+    return res.json({ status: 'ok' });
+  }
+
   if (action === 'add_url' && job.status === 'review') {
     const urlToAdd = req.body.url;
     if (!urlToAdd) return res.status(400).json({ error: 'url is required' });
@@ -522,21 +568,21 @@ app.post('/api/jobs/:jobId/confirm', async (req, res) => {
     });
 
   } else {
-    // Default from review: confirm sources → go directly to generate (architect merged into write)
-    console.log(`[server] Job ${jobId} confirmed → generate (architect+write merged)`);
-    startGenerateAndWait(jobId, topic, outputMode, { removedUrls });
+    // Default from review: confirm sources → architect phase
+    console.log(`[server] Job ${jobId} confirmed → architect`);
+    startArchitectAndWait(jobId, topic, outputMode, { removedUrls });
   }
 
   res.json({ status: 'ok' });
 });
 
-// Cleanup stale jobs every 30 min
+// Cleanup stale jobs every 2 hours (write_review needs time for user to review)
 setInterval(() => {
   const now = Date.now();
   for (const [id, job] of jobResults) {
-    if (now - job.createdAt > 30 * 60 * 1000) jobResults.delete(id);
+    if (now - job.createdAt > 2 * 60 * 60 * 1000) jobResults.delete(id);
   }
-}, 30 * 60 * 1000);
+}, 60 * 60 * 1000);
 
 // ---------- SEO Stats (reads from Feishu Bitable) ----------
 

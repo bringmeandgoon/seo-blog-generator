@@ -1,4 +1,4 @@
-import json, os, subprocess, sys
+import json, os, sys, urllib.request as ur
 
 D = '/tmp/blog_data'
 queries = json.loads(os.environ.get('PPLX_QUERIES', '[]'))
@@ -17,26 +17,18 @@ body = json.dumps({
     'search_recency_filter': 'month',
     'return_language': 'en',
     'search_domain_filter': ['-huggingface.co', '-novita.ai', '-apidog.com'],
-})
+}).encode()
 
-# Call Perplexity Search API (explicit proxy for reliability)
-proxy_port = os.environ.get('https_proxy', '') or os.environ.get('http_proxy', '')
-curl_cmd = ['curl', '-sL', '--max-time', '45']
-if proxy_port:
-    curl_cmd += ['-x', proxy_port]
-curl_cmd += [
-     '-H', f'Authorization: Bearer {pplx_key}',
-     '-H', 'Content-Type: application/json',
-     'https://api.perplexity.ai/search',
-     '-d', body]
-result = subprocess.run(curl_cmd, capture_output=True, text=True, timeout=50)
-
-if result.returncode != 0:
-    print(f"[pplx] curl failed: {result.stderr[:200]}", flush=True)
-    sys.exit(0)
-
+# Call Perplexity Search API via urllib (respects proxy env vars, no double-proxy issue)
+req = ur.Request(
+    'https://api.perplexity.ai/search',
+    data=body,
+    headers={'Authorization': f'Bearer {pplx_key}', 'Content-Type': 'application/json'},
+)
 try:
-    data = json.loads(result.stdout)
+    with ur.urlopen(req, timeout=45) as resp:
+        raw = resp.read().decode()
+    data = json.loads(raw)
     results = data.get('results', [])
     print(f"[pplx] {len(results)} results returned", flush=True)
 
@@ -59,7 +51,4 @@ try:
     for i, r in enumerate(results):
         print(f"  [{i}] {r.get('title','')[:60]} | {r.get('url','')}", flush=True)
 except Exception as e:
-    print(f"[pplx] parse error: {e}", flush=True)
-    # Save raw response for debugging
-    open(f"{D}/pplx_raw.txt", 'w').write(result.stdout[:5000])
-PPLX_SEARCH_EOF
+    print(f"[pplx] failed: {e}", flush=True)

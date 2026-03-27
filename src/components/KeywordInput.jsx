@@ -57,7 +57,20 @@ export default function KeywordInput({ onArticlesGenerated }) {
       return;
     }
 
-    // outline_review removed — architect merged into write agent
+    if (result && result.outlineReview) {
+      setOutlineData({ outline: result.outline, allSources: result.allSources, jobId: result.jobId });
+      setReviewData(null);
+      setProgress('');
+      setIsGenerating(false);
+      return;
+    }
+
+    if (result && result.writeReview) {
+      setWriteReviewData({ article: result.article, jobId: result.jobId });
+      setProgress('');
+      setIsGenerating(false);
+      return;
+    }
 
     if (result && result.clarification) {
       setClarification({
@@ -95,19 +108,19 @@ export default function KeywordInput({ onArticlesGenerated }) {
       .filter(s => s);
 
     if (topics.length === 0) {
-      setError('请输入至少一个主题\n例如: minimax m2.1 vram; minimax m2.1 api provider');
+      setError('Please enter at least one topic\nExample: minimax m2.1 vram; minimax m2.1 api provider');
       return;
     }
 
     setIsGenerating(true);
-    setProgress('正在预搜索...');
+    setProgress('Pre-searching...');
 
     try {
       const mode = hasVs ? outputMode : 'article';
       const result = await generateArticlesWithSkill(topics, mode);
       handleResult(result);
     } catch (err) {
-      setError(`生成失败: ${err.message}`);
+      setError(`Generation failed: ${err.message}`);
       setProgress('');
     } finally {
       setIsGenerating(false);
@@ -126,7 +139,7 @@ export default function KeywordInput({ onArticlesGenerated }) {
       const result = await confirmJob(reviewData.jobId, 'generate', '', removedUrls);
       handleResult(result);
     } catch (err) {
-      setError(`生成失败: ${err.message}`);
+      setError(`Generation failed: ${err.message}`);
       setProgress('');
     } finally {
       setIsGenerating(false);
@@ -144,7 +157,7 @@ export default function KeywordInput({ onArticlesGenerated }) {
       const result = await confirmOutline(outlineData.jobId, editedOutline);
       handleResult(result);
     } catch (err) {
-      setError(`生成失败: ${err.message}`);
+      setError(`Generation failed: ${err.message}`);
       setProgress('');
     } finally {
       setIsGenerating(false);
@@ -164,7 +177,7 @@ export default function KeywordInput({ onArticlesGenerated }) {
 
     setError('');
     setIsGenerating(true);
-    setProgress('正在用你的回答重新生成文章...');
+    setProgress('Regenerating with your answer...');
     const { topic, outputMode: cMode } = clarification;
     setClarification(null);
 
@@ -172,7 +185,7 @@ export default function KeywordInput({ onArticlesGenerated }) {
       const result = await generateArticlesWithSkill([topic], cMode, clarificationAnswer.trim());
       handleResult(result);
     } catch (err) {
-      setError(`生成失败: ${err.message}`);
+      setError(`Generation failed: ${err.message}`);
       setProgress('');
     } finally {
       setIsGenerating(false);
@@ -200,7 +213,7 @@ export default function KeywordInput({ onArticlesGenerated }) {
               </div>
               <h2 className="text-xl font-display font-black text-dark-900">Article Draft Ready</h2>
             </div>
-            <p className="text-sm text-dark-500 ml-11">直接在下方编辑文章草稿（可增删内容），确认后点 "Approve & Polish" 进行润色校验。</p>
+            <p className="text-sm text-dark-500 ml-11">Edit the article draft below, then click "Approve &amp; Polish" to rewrite and QC.</p>
           </div>
 
           <div
@@ -226,7 +239,7 @@ export default function KeywordInput({ onArticlesGenerated }) {
               onClick={async () => {
                 setError('');
                 setIsGenerating(true);
-                setProgress('正在润色并校验...');
+                setProgress('Polishing & QC...');
                 const jobId = writeReviewData.jobId;
                 const editedContent = editRef.current?.innerHTML || writeReviewData.article?.content || '';
                 setWriteReviewData(null);
@@ -234,7 +247,7 @@ export default function KeywordInput({ onArticlesGenerated }) {
                   const result = await confirmJob(jobId, 'confirm_write', '', [], editedContent);
                   handleResult(result);
                 } catch (err) {
-                  setError(`润色失败: ${err.message}`);
+                  setError(`Polish failed: ${err.message}`);
                   setProgress('');
                 } finally {
                   setIsGenerating(false);
@@ -344,8 +357,13 @@ export default function KeywordInput({ onArticlesGenerated }) {
           <svg className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          <span>One article per topic · Pre-search → Review sources → Generate</span>
+          <span>Pre-search → Review sources → Generate · One topic per run</span>
         </div>
+        {input.split(/[;；,，]/).filter(s => s.trim()).length > 1 && (
+          <div className="mt-1 text-xs text-amber-600">
+            ⚠ Only the first topic will be processed
+          </div>
+        )}
       </div>
 
       {/* Output mode toggle — only shown when "vs" is detected */}
@@ -435,7 +453,7 @@ export default function KeywordInput({ onArticlesGenerated }) {
             </div>
           </div>
           <div className="text-sm text-primary-600">
-            {progress === '正在润色并校验...' ? '正在润色去 AI 味并进行质量校验...' : outlineData ? 'Claude Code 正在根据 outline 生成文章...' : reviewData ? '正在生成文章大纲...' : '正在搜索数据源，完成后会展示结果供你审核'}
+            {progress === 'Polishing & QC...' ? 'Rewriting for naturalness and running quality checks...' : reviewData ? 'Generating article draft...' : 'Searching data sources, results will be shown for review'}
           </div>
         </div>
       )}
@@ -460,7 +478,7 @@ export default function KeywordInput({ onArticlesGenerated }) {
           {isGenerating ? (
             <>
               <div className="spinner border-white mr-2"></div>
-              Searching... ({input.split(/[;；,，]/).filter(s => s.trim()).length} topics)
+              Searching...
             </>
           ) : (
             <>

@@ -204,7 +204,7 @@ except: pass
   echo "[pre-search] HF: searching unsloth GGUF for '$hf_query'..."
   fetch "https://huggingface.co/api/models?search=unsloth+${_hf_gguf_query}+GGUF&limit=3" > /tmp/_hf_unsloth_search.json 2>/dev/null
   local _unsloth_repo
-    PPLX_QUERIES="$fanout_queries" PPLX_KEY="$pplx_key" python3 "$SCRIPT_DIR/scripts/search_perplexity.py"
+    PPLX_QUERIES="$fanout_queries" PPLX_KEY="$pplx_key" https_proxy="$PROXY" http_proxy="$PROXY" CURL_BIN="$CURL" python3 "$SCRIPT_DIR/scripts/search_perplexity.py"
 
   # OpenRouter model lookup (only if fetched above)
   local or_model_id=""
@@ -253,6 +253,7 @@ except: pass
     echo "[pre-search] OpenRouter: model '$hf_query' not found"
   fi
   fi  # end: openrouter_models.json exists
+  fi  # end: pplx_key
 
   wait
 
@@ -319,4 +320,30 @@ run_search_more() {
         echo "$_ctx" > /tmp/blog_data/_context.txt
       fi
 
-      OR_MODEL_ID="$or_model_id" python3 "$SCRIPT_DIR/scripts/parse_openrouter.py"
+  SEARCH_TOPIC="$TOPIC" SEARCH_FEEDBACK="$FEEDBACK" PPIO_API_KEY="$PPIO_API_KEY" PERPLEXITY_API_KEY="$PERPLEXITY_API_KEY" CURL_BIN="$CURL" python3 "$SCRIPT_DIR/scripts/search_more.py"
+
+  # Save updated data
+  cp -r /tmp/blog_data/* "$JOBS_DIR/logs/${JOBID}_data/" 2>/dev/null
+  cp /tmp/blog_data/_context.txt "$JOBS_DIR/logs/${JOBID}.context"
+
+  # Write updated review
+  CONTEXT_FILE="$JOBS_DIR/logs/${JOBID}.context" extract_review "$JOBID" "$JOBS_DIR/logs/${JOBID}.context"
+}
+
+# ====== Initial search for new jobs ======
+run_initial_search() {
+  local JOBID="$1" TOPIC="$2" IS_VS="$3"
+
+  echo "[worker] [$JOBID] Running pre-search..."
+  pre_search "$TOPIC" "$IS_VS"
+  PRE_CONTEXT=$(cat /tmp/blog_data/_context.txt 2>/dev/null)
+  echo "[worker] [$JOBID] Pre-search done ($(echo "$PRE_CONTEXT" | wc -c | tr -d ' ') bytes)"
+
+  # Save data for later phases
+  mkdir -p "$JOBS_DIR/logs/${JOBID}_data"
+  cp -r /tmp/blog_data/* "$JOBS_DIR/logs/${JOBID}_data/" 2>/dev/null
+  cp /tmp/blog_data/_context.txt "$JOBS_DIR/logs/${JOBID}.context"
+
+  # Write review for frontend
+  CONTEXT_FILE="$JOBS_DIR/logs/${JOBID}.context" extract_review "$JOBID" "$JOBS_DIR/logs/${JOBID}.context"
+}
