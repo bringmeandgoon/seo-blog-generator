@@ -29,6 +29,13 @@ print(re.sub(r'\s+', ' ', t).strip())
 
 CANONICAL MODEL NAME: ${BLOG_MODEL_NAME}
 
+DATA FILES (read to verify factual claims):
+- Novita API pricing → /tmp/blog_data/novita.json
+- Model params/architecture → /tmp/blog_data/hf_detail_a.json, /tmp/blog_data/config_a.json
+- Benchmarks & README → /tmp/blog_data/readme_a.md
+- VRAM/quantization → /tmp/blog_data/hf_gguf_*.json
+- Search results → /tmp/blog_data/tavily_fanout_*.json
+
 === ARTICLE TO REVIEW ===
 ${ARTICLE_CONTENT}
 __REVIEW_EOF__
